@@ -3,6 +3,7 @@ import Heading1 from "@/components/ui-custom/Heading1";
 import CountDown from "@/components/widget/CountDown";
 import PageContainer from "@/components/widget/PageContainer";
 import { SVGS_PATH } from "@/constants/paths";
+import useChoosedProduct from "@/context/useChoosedProduct";
 import useRequest from "@/hooks/useRequest";
 import formatNumber from "@/utils/formatNumber";
 import {
@@ -16,7 +17,6 @@ import {
 } from "@chakra-ui/react";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 
 const HOW_TO_PAY_ID = [
   "Buka aplikasi M-Banking/E-Wallet di smartphone Anda",
@@ -42,15 +42,22 @@ const PAYMENT_SUPPORT_LOGOS = [
 const PaymentPage = () => {
   // Hooks
   const { req, loading, response, error } = useRequest({ id: "generate-qr" });
-  const navigate = useNavigate();
+
+  // Contexts
+  const { choosedProduct } = useChoosedProduct();
 
   // Utils
   function generateqr() {
     const url = `/payment/generate-qr`;
+    const payload = {
+      productCode: choosedProduct?.product?.productCode,
+      qty: choosedProduct?.qty,
+    };
 
     req({
       config: {
         url,
+        data: payload,
       },
     });
   }
@@ -58,25 +65,6 @@ const PaymentPage = () => {
   // Handle generate on page load
   useEffect(() => {
     generateqr();
-  }, []);
-
-  // Handle listen payment status
-  useEffect(() => {
-    const interval = setInterval(() => {
-      fetch(`/api/order-status/`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.status === "PAID") {
-            clearInterval(interval);
-            navigate("/payment-success");
-          } else if (data.status === "EXPIRED" || data.status === "FAILED") {
-            clearInterval(interval);
-            navigate("/payment-failed");
-          }
-        });
-    }, 3000); // polling tiap 3 detik
-
-    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -100,9 +88,9 @@ const PaymentPage = () => {
             </Heading1>
           </CContainer>
 
-          <CContainer bg={"white"} flex={1} pb={10}>
+          <CContainer bg={"white"} flex={1} minH={"586px"}>
             {loading && (
-              <Center m={"auto"} p={5} mt={10}>
+              <Center m={"auto"} p={5}>
                 <Spinner size={"xl"} />
               </Center>
             )}
