@@ -45,10 +45,13 @@ const useRequest = ({
   errorMessage,
   loginPath = "/",
 }: Props) => {
+  //  Hooks
+  const navigate = useNavigate();
+
   // Contexts
   const { l } = useLang();
 
-  // States, Refs
+  // States
   const [loading, setLoading] = useState<boolean>(false);
   const [status, setStatus] = useState<number | undefined>(undefined);
   const [response, setResponse] = useState<any>(undefined);
@@ -66,9 +69,8 @@ const useRequest = ({
       l.default_request_success_toast.description,
   };
 
-  // Utils
+  // Refs
   const abortControllerRef = useRef<AbortController | null>(null);
-  const navigate = useNavigate();
 
   // Make request func
   function req({ config, onResolve }: Interface__Req) {
@@ -212,7 +214,7 @@ const useRequest = ({
         description: fLoadingMessage.description,
       });
     }
-  }, [loading]);
+  }, [loading, response, error]);
 
   return {
     req,

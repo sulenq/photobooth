@@ -2,7 +2,16 @@ import CContainer from "@/components/ui-custom/CContainer";
 import Heading1 from "@/components/ui-custom/Heading1";
 import PageContainer from "@/components/widget/PageContainer";
 import { SVGS_PATH } from "@/constants/paths";
-import { Circle, HStack, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import useRequest from "@/hooks/useRequest";
+import {
+  Circle,
+  HStack,
+  Image,
+  SimpleGrid,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
+import { useEffect } from "react";
 
 const HOW_TO_PAY_ID = [
   "Buka aplikasi M-Banking/E-Wallet di smartphone Anda",
@@ -25,11 +34,24 @@ const PAYMENT_SUPPORT_LOGOS = [
   `ovo_logo.png`,
   `sp_logo.svg`,
 ];
-
 const PaymentPage = () => {
+  // Hooks
+  // const loading = true;
+  const { req, loading } = useRequest({ id: "generate-qr" });
+  useEffect(() => {
+    const url = `/payment/generate-qr`;
+
+    req({
+      config: {
+        url,
+      },
+    });
+  }, []);
+
   return (
     <PageContainer>
       <SimpleGrid columns={[1, null, 2]} gap={10} flex={1}>
+        {/* QR Code */}
         <CContainer
           borderRadius={16}
           overflow={"clip"}
@@ -46,9 +68,14 @@ const PaymentPage = () => {
             </Heading1>
           </CContainer>
 
-          <CContainer bg={"white"} flex={1}></CContainer>
+          <CContainer bg={"white"} flex={1}>
+            {loading && <Spinner size={"xl"} m={"auto"} />}
+
+            {!loading && <></>}
+          </CContainer>
         </CContainer>
 
+        {/* Payment Tutor */}
         <CContainer gap={8}>
           <CContainer borderRadius={16} overflow={"clip"}>
             <CContainer py={4} px={6} bg={"pd"}>
