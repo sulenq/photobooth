@@ -4,9 +4,9 @@ import Heading from "@/components/widget/Heading";
 import NextButton from "@/components/widget/NextButton";
 import PageContainer from "@/components/widget/PageContainer";
 import { IMAGES_PATH } from "@/constants/paths";
+import useChoosedProduct from "@/context/useChoosedProduct";
 import useRequest from "@/hooks/useRequest";
 import { HStack } from "@chakra-ui/react";
-import { useState } from "react";
 
 const ChooseProduct = () => {
   // Hooks
@@ -27,11 +27,11 @@ const ChooseProduct = () => {
   ];
 
   // States
-  const [choosed, setChoosed] = useState<any>(null);
+  const { choosedProduct, setChoosedProduct } = useChoosedProduct();
 
   // Utils
   function handleChoose(product: any) {
-    setChoosed({
+    setChoosedProduct({
       product: product,
       ammount: 1,
     });
@@ -51,15 +51,15 @@ const ChooseProduct = () => {
                 chooseCallback={() => {
                   handleChoose(item);
                 }}
-                choosed={choosed}
-                setChoosed={setChoosed}
+                choosed={choosedProduct}
+                setChoosed={setChoosedProduct}
               />
             );
           })}
         </HStack>
       </CContainer>
 
-      <NextButton to={`/payment`} disabled={choosed === null} />
+      <NextButton to={`/payment`} disabled={choosedProduct === null} />
     </PageContainer>
   );
 };

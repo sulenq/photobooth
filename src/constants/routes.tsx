@@ -8,6 +8,7 @@ import ReportProblemPage from "@/pages/_settings/ReportProblemPage";
 import TermsOfServicePage from "@/pages/_settings/TermsOfServicePage";
 import { Interface__PrivateRoute, Interface__Route } from "./interfaces";
 import ChooseProduct from "@/pages/ChooseProduct";
+import Payment from "@/pages/Payment";
 
 export const ROUTES: Interface__Route[] = [
   {
@@ -19,6 +20,11 @@ export const ROUTES: Interface__Route[] = [
     path: "/choose-product",
     activePath: "/choose-product",
     element: <ChooseProduct />,
+  },
+  {
+    path: "/payment",
+    activePath: "/choose-product",
+    element: <Payment />,
   },
 ];
 
