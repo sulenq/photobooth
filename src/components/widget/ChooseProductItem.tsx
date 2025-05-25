@@ -53,7 +53,7 @@ const ChooseProductItem = (props: Props) => {
             size={"lg"}
             h={"50px"}
             onClick={chooseCallback}
-            disabled={choosed && choosed?.product?.id !== item?.id}
+            // disabled={choosed && choosed?.product?.id !== item?.id}
             {...PRESET_MAIN_BUTTON_MD}
           >
             CHOOSE
