@@ -6,6 +6,7 @@ import { SVGS_PATH } from "@/constants/paths";
 import useRequest from "@/hooks/useRequest";
 import formatNumber from "@/utils/formatNumber";
 import {
+  Center,
   Circle,
   HStack,
   Image,
@@ -80,7 +81,7 @@ const PaymentPage = () => {
 
   return (
     <PageContainer>
-      <SimpleGrid columns={[1, null, 2]} gap={10} flex={1}>
+      <SimpleGrid columns={[1, null, null, 2]} gap={10} flex={1}>
         {/* QR Code */}
         <CContainer
           borderRadius={16}
@@ -100,7 +101,11 @@ const PaymentPage = () => {
           </CContainer>
 
           <CContainer bg={"white"} flex={1} pb={10}>
-            {loading && <Spinner size={"xl"} m={"auto"} />}
+            {loading && (
+              <Center m={"auto"} p={5} mt={10}>
+                <Spinner size={"xl"} />
+              </Center>
+            )}
 
             {!loading && (
               <>
@@ -135,14 +140,6 @@ const PaymentPage = () => {
                         value={response?.data?.result?.response?.payment?.url}
                         size={300}
                       />
-                      {/* <QrCodeRoot
-                        value={response?.data?.result?.response?.payment?.url}
-                        size={"2xl"}
-                      >
-                        <QrCodeFrame>
-                          <QrCodePattern />
-                        </QrCodeFrame>
-                      </QrCodeRoot> */}
                     </CContainer>
 
                     {/* Price */}

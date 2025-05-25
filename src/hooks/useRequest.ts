@@ -1,6 +1,6 @@
 import useLang from "@/context/useLang";
 import { AxiosRequestConfig, AxiosResponse } from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toaster } from "../components/ui/toaster";
 import request from "../utils/request";
@@ -74,6 +74,12 @@ const useRequest = ({
 
   // Make request func
   function req({ config, onResolve }: Interface__Req) {
+    toaster.loading({
+      id: id,
+      title: fLoadingMessage.title,
+      description: fLoadingMessage.description,
+    });
+
     if (!loading) setLoading(true);
     if (error) setError(false);
     if (status) setStatus(undefined);
@@ -206,15 +212,15 @@ const useRequest = ({
       });
   }
 
-  useEffect(() => {
-    if (loading && showLoadingToast) {
-      toaster.loading({
-        id: id,
-        title: fLoadingMessage.title,
-        description: fLoadingMessage.description,
-      });
-    }
-  }, [loading, response, error]);
+  // useEffect(() => {
+  //   if (loading && showLoadingToast) {
+  //     toaster.loading({
+  //       id: id,
+  //       title: fLoadingMessage.title,
+  //       description: fLoadingMessage.description,
+  //     });
+  //   }
+  // }, [loading, response, error]);
 
   return {
     req,
