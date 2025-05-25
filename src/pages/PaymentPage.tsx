@@ -1,8 +1,10 @@
 import CContainer from "@/components/ui-custom/CContainer";
 import Heading1 from "@/components/ui-custom/Heading1";
+import CountDown from "@/components/widget/CountDown";
 import PageContainer from "@/components/widget/PageContainer";
 import { SVGS_PATH } from "@/constants/paths";
 import useRequest from "@/hooks/useRequest";
+import formatNumber from "@/utils/formatNumber";
 import {
   Circle,
   HStack,
@@ -11,7 +13,9 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
+import { QRCodeCanvas } from "qrcode.react";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const HOW_TO_PAY_ID = [
   "Buka aplikasi M-Banking/E-Wallet di smartphone Anda",
@@ -36,9 +40,11 @@ const PAYMENT_SUPPORT_LOGOS = [
 ];
 const PaymentPage = () => {
   // Hooks
-  // const loading = true;
-  const { req, loading } = useRequest({ id: "generate-qr" });
-  useEffect(() => {
+  const { req, loading, response, error } = useRequest({ id: "generate-qr" });
+  const navigate = useNavigate();
+
+  // Utils
+  function generateqr() {
     const url = `/payment/generate-qr`;
 
     req({
@@ -46,6 +52,30 @@ const PaymentPage = () => {
         url,
       },
     });
+  }
+
+  // Handle generate on page load
+  useEffect(() => {
+    generateqr();
+  }, []);
+
+  // Handle listen payment status
+  useEffect(() => {
+    const interval = setInterval(() => {
+      fetch(`/api/order-status/`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.status === "PAID") {
+            clearInterval(interval);
+            navigate("/payment-success");
+          } else if (data.status === "EXPIRED" || data.status === "FAILED") {
+            clearInterval(interval);
+            navigate("/payment-failed");
+          }
+        });
+    }, 3000); // polling tiap 3 detik
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -56,8 +86,9 @@ const PaymentPage = () => {
           borderRadius={16}
           overflow={"clip"}
           border={"2px solid {colors.pd}"}
+          // h={'fit'}
         >
-          <CContainer p={4} bg={"pd"}>
+          <CContainer p={6} bg={"pd"}>
             <Heading1
               className="df"
               color={"p.100"}
@@ -71,7 +102,74 @@ const PaymentPage = () => {
           <CContainer bg={"white"} flex={1}>
             {loading && <Spinner size={"xl"} m={"auto"} />}
 
-            {!loading && <></>}
+            {!loading && (
+              <>
+                {!error && (
+                  <CContainer p={5} gap={10}>
+                    {/* Payment timeout */}
+                    <HStack
+                      p={4}
+                      borderRadius={8}
+                      border={"2px solid {colors.pd}"}
+                      justify={"space-between"}
+                      bg={"p.100"}
+                    >
+                      <Text fontSize={20} fontWeight={"medium"}>
+                        Selesaikan pembayaran sebelum
+                      </Text>
+
+                      <CountDown
+                        initialValue={
+                          response?.data?.result?.response?.payment
+                            ?.payment_due_date
+                        }
+                        options={{
+                          initialValueType: "minutes",
+                        }}
+                      />
+                    </HStack>
+
+                    {/* QR code */}
+                    <CContainer justify={"center"} align={"center"}>
+                      <QRCodeCanvas
+                        value={response?.data?.result?.response?.payment?.url}
+                        size={300}
+                      />
+                      {/* <QrCodeRoot
+                        value={response?.data?.result?.response?.payment?.url}
+                        size={"2xl"}
+                      >
+                        <QrCodeFrame>
+                          <QrCodePattern />
+                        </QrCodeFrame>
+                      </QrCodeRoot> */}
+                    </CContainer>
+
+                    {/* Price */}
+                    <CContainer
+                      border={"2px solid {colors.pd}"}
+                      p={4}
+                      minW={"400px"}
+                      mx={"auto"}
+                      borderRadius={8}
+                      bg={"p.100"}
+                      w={"fit"}
+                    >
+                      <Text
+                        fontSize={32}
+                        fontWeight={"semibold"}
+                        textAlign={"center"}
+                      >
+                        Rp{" "}
+                        {formatNumber(
+                          response?.data?.result?.response?.order?.amount
+                        )}
+                      </Text>
+                    </CContainer>
+                  </CContainer>
+                )}
+              </>
+            )}
           </CContainer>
         </CContainer>
 

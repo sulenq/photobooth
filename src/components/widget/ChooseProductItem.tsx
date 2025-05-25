@@ -22,7 +22,7 @@ const ChooseProductItem = (props: Props) => {
     if (choosed?.product?.id === item?.id) {
       setChoosed?.({
         ...choosed,
-        ammount: choosed?.ammount + 1,
+        qty: choosed?.qty + 1,
       });
     }
   }
@@ -30,7 +30,7 @@ const ChooseProductItem = (props: Props) => {
     if (choosed?.product?.id === item?.id) {
       setChoosed?.({
         ...choosed,
-        ammount: choosed?.ammount - 1,
+        qty: choosed?.qty - 1,
       });
     }
   }
@@ -74,7 +74,7 @@ const ChooseProductItem = (props: Props) => {
               colorPalette={"p"}
               variant={"outline"}
               borderColor={"p.900"}
-              disabled={choosed?.ammount === 1}
+              disabled={choosed?.qty === 1}
               onClick={handleDecrement}
             >
               <Icon color={"p.900"}>
@@ -87,7 +87,7 @@ const ChooseProductItem = (props: Props) => {
               variant={"outline"}
               borderColor={"transparent"}
               textAlign={"center"}
-              inputValue={choosed?.ammount}
+              inputValue={choosed?.qty}
               fontSize={18}
             />
 

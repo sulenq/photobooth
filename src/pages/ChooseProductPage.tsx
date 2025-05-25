@@ -33,7 +33,7 @@ const ChooseProductPage = () => {
   function handleChoose(product: any) {
     setChoosedProduct({
       product: product,
-      ammount: 1,
+      qty: 1,
     });
   }
 
