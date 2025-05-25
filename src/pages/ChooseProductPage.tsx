@@ -8,7 +8,7 @@ import useChoosedProduct from "@/context/useChoosedProduct";
 import useRequest from "@/hooks/useRequest";
 import { HStack } from "@chakra-ui/react";
 
-const ChooseProduct = () => {
+const ChooseProductPage = () => {
   // Hooks
   const {} = useRequest({ id: "choose-product" });
   const data = [
@@ -64,4 +64,4 @@ const ChooseProduct = () => {
   );
 };
 
-export default ChooseProduct;
+export default ChooseProductPage;

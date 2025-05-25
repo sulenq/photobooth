@@ -1,5 +1,14 @@
+import ChooseLayoutPage from "@/pages/ChooseLayoutPage";
+import ChooseProductPage from "@/pages/ChooseProductPage";
+import EditPhotoPage from "@/pages/EditPhotoPage";
+import PaymentPage from "@/pages/PaymentPage";
+import PaymentStatusPage from "@/pages/PaymentStatusPage";
+import PrintSendPage from "@/pages/PrintSendPage";
+import ProcedurePage from "@/pages/ProcedurePage";
 import RootPage from "@/pages/RootPage";
 import SettingsPage from "@/pages/SettingsPage";
+import TakePhotoPage from "@/pages/TakePhotoPage";
+import ThankyouPage from "@/pages/ThankyouPage";
 import DisplaySettingsPage from "@/pages/_settings/DisplaySettingsPage";
 import PermissionsSettingsPage from "@/pages/_settings/PermissionsSettingsPage";
 import PrivacyPolictPage from "@/pages/_settings/PrivacyPolictPage";
@@ -7,8 +16,6 @@ import RegionalSettingsPage from "@/pages/_settings/RegionalSettingsPage";
 import ReportProblemPage from "@/pages/_settings/ReportProblemPage";
 import TermsOfServicePage from "@/pages/_settings/TermsOfServicePage";
 import { Interface__PrivateRoute, Interface__Route } from "./interfaces";
-import ChooseProduct from "@/pages/ChooseProduct";
-import Payment from "@/pages/Payment";
 
 export const ROUTES: Interface__Route[] = [
   {
@@ -19,12 +26,47 @@ export const ROUTES: Interface__Route[] = [
   {
     path: "/choose-product",
     activePath: "/choose-product",
-    element: <ChooseProduct />,
+    element: <ChooseProductPage />,
   },
   {
     path: "/payment",
-    activePath: "/choose-product",
-    element: <Payment />,
+    activePath: "/payment",
+    element: <PaymentPage />,
+  },
+  {
+    path: "/payment-status",
+    activePath: "/payment-status",
+    element: <PaymentStatusPage />,
+  },
+  {
+    path: "/procedure",
+    activePath: "/procedure",
+    element: <ProcedurePage />,
+  },
+  {
+    path: "/take-photo",
+    activePath: "/take-photo",
+    element: <TakePhotoPage />,
+  },
+  {
+    path: "/choose-layout",
+    activePath: "/choose-layout",
+    element: <ChooseLayoutPage />,
+  },
+  {
+    path: "/edit-photo",
+    activePath: "/edit-photo",
+    element: <EditPhotoPage />,
+  },
+  {
+    path: "/print-send",
+    activePath: "/print-send",
+    element: <PrintSendPage />,
+  },
+  {
+    path: "/thankyou",
+    activePath: "/thankyou",
+    element: <ThankyouPage />,
   },
 ];
 

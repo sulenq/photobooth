@@ -1,7 +1,7 @@
 import PageContainer from "@/components/widget/PageContainer";
 
-const PaymentStatus = () => {
+const PaymentStatusPage = () => {
   return <PageContainer></PageContainer>;
 };
 
-export default PaymentStatus;
+export default PaymentStatusPage;
