@@ -11,6 +11,13 @@ export const PRESET_MAIN_BUTTON = {
   colorPalette: "p",
   h: "60px",
   w: "250px",
+  border: "4px solid {colors.p.500}",
+};
+
+export const PRESET_MAIN_BUTTON_MD = {
+  px: 10,
+  bg: "#3b3329",
+  colorPalette: "p",
   border: "2px solid {colors.p.700}",
 };
 
