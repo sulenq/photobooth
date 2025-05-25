@@ -86,7 +86,7 @@ const PaymentPage = () => {
           borderRadius={16}
           overflow={"clip"}
           border={"2px solid {colors.pd}"}
-          // h={'fit'}
+          h={"fit"}
         >
           <CContainer p={6} bg={"pd"}>
             <Heading1
@@ -99,7 +99,7 @@ const PaymentPage = () => {
             </Heading1>
           </CContainer>
 
-          <CContainer bg={"white"} flex={1}>
+          <CContainer bg={"white"} flex={1} pb={10}>
             {loading && <Spinner size={"xl"} m={"auto"} />}
 
             {!loading && (
