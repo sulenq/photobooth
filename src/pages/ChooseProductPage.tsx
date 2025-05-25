@@ -1,4 +1,5 @@
 import CContainer from "@/components/ui-custom/CContainer";
+import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import ChooseProductItem from "@/components/widget/ChooseProductItem";
 import Heading from "@/components/widget/Heading";
 import NextButton from "@/components/widget/NextButton";
@@ -45,11 +46,14 @@ const ChooseProductPage = () => {
       qty: 1,
     });
   }
+  function getProduct() {
+    const url = `/products/get-public`;
+    req({ config: { url } });
+  }
 
   // Handle get product on page load
   useEffect(() => {
-    const url = `/products/get-public`;
-    req({ config: { url } });
+    getProduct();
   }, []);
 
   return (
@@ -85,6 +89,8 @@ const ChooseProductPage = () => {
               </HStack>
             </CContainer>
           )}
+
+          {error && <FeedbackRetry onRetry={getProduct} />}
         </>
       )}
 

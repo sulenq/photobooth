@@ -121,10 +121,10 @@ const useRequest = ({
       })
       .catch((e) => {
         console.log(e);
+        setError(true);
 
         switch (e.code) {
           case "ERR_CANCELED":
-            setError(true);
             setLoading(false);
             break;
         }

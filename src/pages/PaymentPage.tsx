@@ -1,4 +1,5 @@
 import CContainer from "@/components/ui-custom/CContainer";
+import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import Heading1 from "@/components/ui-custom/Heading1";
 import CountDown from "@/components/widget/CountDown";
 import PageContainer from "@/components/widget/PageContainer";
@@ -159,6 +160,8 @@ const PaymentPage = () => {
                     </CContainer>
                   </CContainer>
                 )}
+
+                {error && <FeedbackRetry onRetry={generateqr} />}
               </>
             )}
           </CContainer>

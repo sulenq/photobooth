@@ -9,9 +9,15 @@ import useLang from "@/context/useLang";
 interface Props extends StackProps {
   title?: string;
   description?: string;
+  onRetry?: () => void;
 }
 
-export default function FeedbackRetry({ title, description, ...props }: Props) {
+export default function FeedbackRetry({
+  title,
+  description,
+  onRetry,
+  ...props
+}: Props) {
   // Contexts
   const { themeConfig } = useThemeConfig();
   const { l } = useLang();
@@ -28,7 +34,11 @@ export default function FeedbackRetry({ title, description, ...props }: Props) {
         description={description || l.retry_feedback.description}
         maxW={"300px"}
       >
-        <BButton className="clicky" colorPalette={themeConfig.colorPalette}>
+        <BButton
+          className="clicky"
+          colorPalette={themeConfig.colorPalette}
+          onClick={onRetry}
+        >
           {l.retry}
         </BButton>
       </EmptyState>
