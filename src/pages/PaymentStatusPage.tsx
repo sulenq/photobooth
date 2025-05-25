@@ -97,9 +97,7 @@ const PaymentStatusPage = () => {
                   />
 
                   <NavLink
-                    to={
-                      status === "success" ? `/take-photo` : `/choose-product`
-                    }
+                    to={status === "success" ? `/procedure` : `/choose-product`}
                   >
                     <BButton mx={"auto"} {...PRESET_MAIN_BUTTON}>
                       {status === "success" ? "START PHOTO" : "BACK TO PRODUCT"}
