@@ -1,0 +1,3 @@
+const FEATURES = [];
+
+export { FEATURES };

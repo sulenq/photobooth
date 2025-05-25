@@ -1,0 +1,57 @@
+{
+  "name": "vite-chakra-pwa-template",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview",
+    "l": "node src/locales/_generate.js"
+  },
+  "dependencies": {
+    "@chakra-ui/react": "^3.5.1",
+    "@emotion/react": "^11.13.3",
+    "@phosphor-icons/react": "^2.1.7",
+    "@tabler/icons-react": "^3.28.1",
+    "axios": "^1.7.7",
+    "date-fns": "^4.1.0",
+    "formik": "^2.4.6",
+    "jszip": "^3.10.1",
+    "moment-timezone": "^0.5.47",
+    "next-themes": "^0.4.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.3.0",
+    "react-router-dom": "^6.28.0",
+    "react-virtualized": "^9.22.6",
+    "recharts": "^2.15.0",
+    "yup": "^1.4.0",
+    "zustand": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/moment-timezone": "^0.5.13",
+    "@types/node": "^22.9.0",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.0",
+    "@types/react-virtualized": "^9.22.2",
+    "@typescript-eslint/eslint-plugin": "^7.8.0",
+    "@typescript-eslint/parser": "^7.8.0",
+    "@vite-pwa/assets-generator": "^0.2.4",
+    "@vitejs/plugin-react": "^4.2.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.6",
+    "typescript": "^5.2.2",
+    "vite": "^5.2.10",
+    "vite-plugin-pwa": "^0.20.0",
+    "vite-tsconfig-paths": "^5.1.0",
+    "workbox-core": "^7.1.0",
+    "workbox-window": "^7.1.0"
+  },
+  "overrides": {
+    "sharp": "0.32.6",
+    "sharp-ico": "0.1.5"
+  }
+}
