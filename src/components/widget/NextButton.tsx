@@ -5,8 +5,6 @@ import NavLink from "../ui-custom/NavLink";
 const NextButton = (props: any) => {
   const { to, ...restProps } = props;
 
-  console.log(props.disabled);
-
   return (
     <NavLink to={to}>
       <BButton

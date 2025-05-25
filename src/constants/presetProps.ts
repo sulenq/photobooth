@@ -15,7 +15,6 @@ export const PRESET_MAIN_BUTTON = {
 };
 
 export const PRESET_MAIN_BUTTON_MD = {
-  px: 10,
   bg: "#3b3329",
   colorPalette: "p",
   border: "2px solid {colors.p.700}",

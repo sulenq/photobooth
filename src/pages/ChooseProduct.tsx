@@ -37,8 +37,6 @@ const ChooseProduct = () => {
     });
   }
 
-  console.log(choosed);
-
   return (
     <PageContainer gap={10} justify={"space-between"}>
       <Heading>Choose Product</Heading>
