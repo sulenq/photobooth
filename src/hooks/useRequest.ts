@@ -74,11 +74,12 @@ const useRequest = ({
 
   // Make request func
   function req({ config, onResolve }: Interface__Req) {
-    toaster.loading({
-      id: id,
-      title: fLoadingMessage.title,
-      description: fLoadingMessage.description,
-    });
+    showLoadingToast &&
+      toaster.loading({
+        id: id,
+        title: fLoadingMessage.title,
+        description: fLoadingMessage.description,
+      });
 
     if (!loading) setLoading(true);
     if (error) setError(false);
@@ -107,6 +108,7 @@ const useRequest = ({
         }
 
         showSuccessToast &&
+          showLoadingToast &&
           toaster.update(id, {
             type: "success",
             title: fSuccessMessage.title,

@@ -41,7 +41,12 @@ const PAYMENT_SUPPORT_LOGOS = [
 ];
 const PaymentPage = () => {
   // Hooks
-  const { req, loading, response, error } = useRequest({ id: "generate-qr" });
+  const { req, loading, response, error } = useRequest({
+    id: "generate-qr",
+    showLoadingToast: false,
+    showErrorToast: false,
+    showSuccessToast: false,
+  });
 
   // Contexts
   const { choosedProduct } = useChoosedProduct();
@@ -57,6 +62,7 @@ const PaymentPage = () => {
     req({
       config: {
         url,
+        method: "post",
         data: payload,
       },
     });

@@ -1,7 +1,12 @@
+import Heading from "@/components/widget/Heading";
 import PageContainer from "@/components/widget/PageContainer";
 
 const TakePhotoPage = () => {
-  return <PageContainer></PageContainer>;
+  return (
+    <PageContainer>
+      <Heading>Take Photo</Heading>
+    </PageContainer>
+  );
 };
 
 export default TakePhotoPage;

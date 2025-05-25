@@ -3,31 +3,40 @@ import ChooseProductItem from "@/components/widget/ChooseProductItem";
 import Heading from "@/components/widget/Heading";
 import NextButton from "@/components/widget/NextButton";
 import PageContainer from "@/components/widget/PageContainer";
-import { IMAGES_PATH } from "@/constants/paths";
 import useChoosedProduct from "@/context/useChoosedProduct";
 import useRequest from "@/hooks/useRequest";
-import { HStack } from "@chakra-ui/react";
+import { HStack, Spinner } from "@chakra-ui/react";
+import { useEffect } from "react";
 
 const ChooseProductPage = () => {
   // Hooks
-  const {} = useRequest({ id: "choose-product" });
-  const data = [
-    {
-      id: 1,
-      productPhoto: `${IMAGES_PATH}/product1.png`,
-      productName: "PHOTO ONLY",
-      productPrice: 30000,
-    },
-    {
-      id: 2,
-      productPhoto: `${IMAGES_PATH}/product2.png`,
-      productName: "PHOTO ONLY",
-      productPrice: 45000,
-    },
-  ];
+  const { req, loading, response, error } = useRequest({
+    id: "choose-product",
+    showLoadingToast: false,
+    showErrorToast: false,
+    showSuccessToast: false,
+  });
+
+  // const data = [
+  //   {
+  //     id: 1,
+  //     productPhoto: `${IMAGES_PATH}/product1.png`,
+  //     productName: "PHOTO ONLY",
+  //     productPrice: 30000,
+  //   },
+  //   {
+  //     id: 2,
+  //     productPhoto: `${IMAGES_PATH}/product2.png`,
+  //     productName: "PHOTO ONLY",
+  //     productPrice: 45000,
+  //   },
+  // ];
 
   // States
   const { choosedProduct, setChoosedProduct } = useChoosedProduct();
+
+  // States
+  const data = response?.data?.result?.productList;
 
   // Utils
   function handleChoose(product: any) {
@@ -37,29 +46,51 @@ const ChooseProductPage = () => {
     });
   }
 
-  return (
-    <PageContainer gap={10} justify={"space-between"}>
-      <Heading>Choose Product</Heading>
+  // Handle get product on page load
+  useEffect(() => {
+    const url = `/products/get-public`;
+    req({ config: { url } });
+  }, []);
 
-      <CContainer>
-        <HStack h={"max"} mx={"auto"} gap={10}>
-          {data.map((item, i) => {
-            return (
-              <ChooseProductItem
-                key={i}
-                item={item}
-                chooseCallback={() => {
-                  handleChoose(item);
-                }}
-                choosed={choosedProduct}
-                setChoosed={setChoosedProduct}
-              />
-            );
-          })}
-        </HStack>
+  return (
+    <PageContainer gap={10} justify={"space-between"} p={0}>
+      <CContainer p={5}>
+        <Heading>Choose Product</Heading>
       </CContainer>
 
-      <NextButton to={`/payment`} disabled={choosedProduct === null} />
+      {loading && (
+        <CContainer flex={1} p={5}>
+          <Spinner m={"auto"} size={"xl"} />
+        </CContainer>
+      )}
+
+      {!loading && (
+        <>
+          {!error && (
+            <CContainer overflowX={"auto"} className="noScroll">
+              <HStack h={"max"} mx={"auto"} gap={10}>
+                {data?.map((item: any, i: number) => {
+                  return (
+                    <ChooseProductItem
+                      key={i}
+                      item={item}
+                      chooseCallback={() => {
+                        handleChoose(item);
+                      }}
+                      choosed={choosedProduct}
+                      setChoosed={setChoosedProduct}
+                    />
+                  );
+                })}
+              </HStack>
+            </CContainer>
+          )}
+        </>
+      )}
+
+      <CContainer p={5}>
+        <NextButton to={`/payment`} disabled={choosedProduct === null} />
+      </CContainer>
     </PageContainer>
   );
 };
