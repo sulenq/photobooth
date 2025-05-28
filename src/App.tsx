@@ -128,6 +128,19 @@ function App() {
     }
   }, [ADM]);
 
+  // Disable context menu
+  useEffect(() => {
+    const handleContextMenu = (e: MouseEvent) => {
+      e.preventDefault();
+    };
+
+    document.addEventListener("contextmenu", handleContextMenu);
+
+    return () => {
+      document.removeEventListener("contextmenu", handleContextMenu);
+    };
+  }, []);
+
   return (
     <ChakraProvider value={theme}>
       <Toaster />

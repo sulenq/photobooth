@@ -31,7 +31,7 @@ const Camera = () => {
   // Utils
   function handleStart() {
     startTimer({
-      initialSeconds: 10,
+      initialSeconds: 7 * 60,
       onFinished: () => navigate("/choose-layout"),
     });
   }
@@ -103,13 +103,13 @@ const TakePhotoPage = () => {
   });
 
   return (
-    <PageContainer gap={10}>
+    <PageContainer borderless gap={10}>
       <HStack justify={"space-between"}>
         <SessionTimer w={"250px"} />
 
         <Heading>Take Photo</Heading>
 
-        <NextButton />
+        <NextButton to={"/choose-layout"} />
       </HStack>
 
       <CContainer gap={8}>

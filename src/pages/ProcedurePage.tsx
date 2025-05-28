@@ -43,7 +43,7 @@ const ProcedurePage = () => {
   // Fetch timer data
 
   return (
-    <PageContainer gap={10}>
+    <PageContainer borderless gap={10}>
       <HStack w={"fit"} gap={0} pos={"relative"} mx={"auto"}>
         <Image
           src={`${SVGS_PATH}/bling.svg`}

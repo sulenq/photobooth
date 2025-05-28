@@ -4,6 +4,7 @@
   font-family: "Inter", sans-serif;
   font-optical-sizing: auto;
   box-sizing: border-box !important;
+  user-select: none;
 }
 
 :root {
