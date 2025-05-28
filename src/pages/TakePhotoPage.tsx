@@ -31,7 +31,7 @@ const Camera = () => {
   // Utils
   function handleStart() {
     startTimer({
-      initialSeconds: 7 * 60,
+      initialSeconds: 10,
       onFinished: () => navigate("/print-send"),
     });
   }

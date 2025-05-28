@@ -4,6 +4,7 @@ import Heading1 from "@/components/ui-custom/Heading1";
 import NavLink from "@/components/ui-custom/NavLink";
 import { IMAGES_PATH } from "@/constants/paths";
 import { PRESET_MAIN_BUTTON } from "@/constants/presetProps";
+import { Image } from "@chakra-ui/react";
 
 const RootPage = () => {
   return (
@@ -19,9 +20,11 @@ const RootPage = () => {
         Welcome to
       </Heading1>
 
-      <Heading1 className="df" fontSize={100} fontWeight={"extrabold"}>
+      {/* <Heading1 className="df" fontSize={100} fontWeight={"extrabold"}>
         POPBOX.
-      </Heading1>
+      </Heading1> */}
+
+      <Image src={`${IMAGES_PATH}/logo_dark.png`} />
 
       <NavLink to="/choose-product" align={"center"}>
         <BButton mt={10} {...PRESET_MAIN_BUTTON}>
