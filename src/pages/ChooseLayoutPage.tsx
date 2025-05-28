@@ -29,18 +29,24 @@ const OptionList = () => {
   }
 
   return (
-    <Box flexShrink={0} h={"50%"} bg={"p.900"} p={10}>
+    <CContainer
+      flexShrink={0}
+      h={"50%"}
+      bg={"p.900"}
+      overflow={"clip"}
+      gap={8}
+      pt={6}
+    >
       <Heading1
         className="df"
         color={"p.100"}
         fontWeight={"semibold"}
         textAlign={"center"}
-        mb={8}
       >
         Choose a Template
       </Heading1>
 
-      <Box pos={"relative"} h={"calc(100% - 64px - 20px)"}>
+      <Box pos={"relative"} h={"calc(100% - 64px - 20px)"} pb={10}>
         {/* Controls */}
         <HStack
           position={"absolute"}
@@ -50,6 +56,7 @@ const OptionList = () => {
           justify={"space-between"}
           zIndex={2}
           pointerEvents={"none"}
+          p={10}
         >
           <BButton
             iconButton
@@ -90,7 +97,7 @@ const OptionList = () => {
           overflowX={"auto"}
           className="noScroll"
         >
-          <HStack h={"full"} w={"max"} align={"stretch"} gap={8}>
+          <HStack h={"full"} w={"max"} align={"stretch"} gap={8} px={10}>
             {LAYOUT_OPTIONS.map((item, i) => {
               return (
                 <CContainer
@@ -108,7 +115,7 @@ const OptionList = () => {
           </HStack>
         </Box>
       </Box>
-    </Box>
+    </CContainer>
   );
 };
 
