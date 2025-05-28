@@ -40,6 +40,8 @@ const PROSEDUR = [
 ];
 
 const ProcedurePage = () => {
+  // Fetch timer data
+
   return (
     <PageContainer gap={10}>
       <HStack w={"fit"} gap={0} pos={"relative"} mx={"auto"}>
@@ -59,7 +61,7 @@ const ProcedurePage = () => {
           </Icon>
 
           <Text color={"p.100"} fontSize={32} fontWeight={"semibold"}>
-            07:00
+            00:07:00
           </Text>
         </HStack>
 
@@ -135,7 +137,7 @@ const ProcedurePage = () => {
           })}
         </SimpleGrid>
 
-        <NavLink to="/take-photo">
+        <NavLink to="/take-photo" mx={"auto"}>
           <BButton mt={4} mx={"auto"} {...PRESET_MAIN_BUTTON}>
             NEXT
           </BButton>

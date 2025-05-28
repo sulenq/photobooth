@@ -1,7 +1,7 @@
 import CContainer from "@/components/ui-custom/CContainer";
 import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import ChooseProductItem from "@/components/widget/ChooseProductItem";
-import Heading from "@/components/widget/Heading";
+import Header1 from "@/components/widget/Header1";
 import NextButton from "@/components/widget/NextButton";
 import PageContainer from "@/components/widget/PageContainer";
 import useChoosedProduct from "@/context/useChoosedProduct";
@@ -59,7 +59,7 @@ const ChooseProductPage = () => {
   return (
     <PageContainer gap={10} justify={"space-between"} p={0}>
       <CContainer p={5}>
-        <Heading>Choose Product</Heading>
+        <Header1>Choose Product</Header1>
       </CContainer>
 
       {loading && (

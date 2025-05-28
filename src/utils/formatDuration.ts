@@ -12,7 +12,7 @@ const formatDuration = (
         return formatDurationShort(seconds);
     }
   } else {
-    return "0 detik";
+    return "-- : --";
   }
 };
 

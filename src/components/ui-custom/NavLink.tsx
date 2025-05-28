@@ -23,6 +23,7 @@ const NavLink = (props: Props) => {
       fRef={fRef}
       cursor={"pointer"}
       onClick={handleOnClick}
+      w={"fit"}
       {...restProps}
     >
       {children}

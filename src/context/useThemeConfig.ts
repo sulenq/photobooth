@@ -3,7 +3,7 @@ import { create } from "zustand";
 
 const STORAGE_KEY = "themeConfig";
 
-interface ThemeConfigProps {
+interface Interface__ThemeConfig {
   colorPalette: string;
   primaryColor: string;
   primaryColorHex: string;
@@ -14,7 +14,7 @@ interface ThemeConfigProps {
   };
 }
 
-const DEFAULT: ThemeConfigProps = {
+const DEFAULT: Interface__ThemeConfig = {
   colorPalette: "p",
   primaryColor: "p.500",
   primaryColorHex: "#0062FF",
@@ -26,8 +26,8 @@ const DEFAULT: ThemeConfigProps = {
 };
 
 interface Props {
-  themeConfig: ThemeConfigProps;
-  setThemeConfig: (config: Partial<ThemeConfigProps>) => void;
+  themeConfig: Interface__ThemeConfig;
+  setThemeConfig: (config: Partial<Interface__ThemeConfig>) => void;
 }
 
 export const useThemeConfig = create<Props>((set) => {
