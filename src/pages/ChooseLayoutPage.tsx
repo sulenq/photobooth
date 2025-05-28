@@ -18,7 +18,7 @@ const ChooseLayoutPage = () => {
           <SessionTimer w={"250px"} />
 
           <CContainer h={"full"} w={"fit"}>
-            <Image src={template?.src} h={"full"} objectFit={"contain"} />
+            <Image src={template?.thumbnail} h={"full"} objectFit={"contain"} />
           </CContainer>
 
           <NextButton to={"/edit-photo"} disabled={!template} />
@@ -78,7 +78,7 @@ const ChooseLayoutPage = () => {
 
           {/* Option List */}
           <Box h={"full"} overflowX={"auto"} className="noScroll">
-            <HStack h={"full"} w={"max"} align={"stretch"}>
+            <HStack h={"full"} w={"max"} align={"stretch"} gap={8}>
               {LAYOUT_OPTIONS.map((item, i) => {
                 return (
                   <CContainer

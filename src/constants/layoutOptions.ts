@@ -28,8 +28,8 @@ export const LAYOUT_OPTIONS = [
       id: 3,
       name: "",
     },
-    thumbnail: `${IMAGES_PATH}/templates/thumbnails/1.png`,
-    src: `${IMAGES_PATH}/templates/layouts/1.png`,
+    thumbnail: `${IMAGES_PATH}/templates/thumbnails/3.png`,
+    src: `${IMAGES_PATH}/templates/layouts/3.png`,
   },
   {
     id: 4,
