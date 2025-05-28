@@ -1,18 +1,69 @@
 import CContainer from "@/components/ui-custom/CContainer";
+import { toaster } from "@/components/ui/toaster";
 import Heading from "@/components/widget/Heading";
 import NextButton from "@/components/widget/NextButton";
 import PageContainer from "@/components/widget/PageContainer";
 import SessionTimer from "@/components/widget/SessionTimer";
 import { IMAGES_PATH } from "@/constants/paths";
+import useLang from "@/context/useLang";
 import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionTimer from "@/context/useSessionTimer";
+import { startCamera } from "@/utils/camera";
 import { HStack, Image, SimpleGrid } from "@chakra-ui/react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Camera = () => {
+  // Hooks
+  const navigate = useNavigate();
+  const startTimer = useSessionTimer((s) => s.startTimer);
+
+  // Contexts
+  const { l } = useLang();
+
+  // States
+  const [cameraOpen, setCameraOpen] = useState<boolean>(false);
+
   // Refs
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+
+  // Utils
+  function handleStart() {
+    startTimer({
+      initialSeconds: 7 * 60,
+      onFinished: () => navigate("/print-send"),
+    });
+  }
+
+  // Handle open camera on page load
+  useEffect(() => {
+    startCamera(
+      videoRef,
+      streamRef,
+      () => {
+        setCameraOpen(true);
+      },
+      () => {
+        toaster.error({
+          title: l.camera_fail_toast.title,
+          description: l.camera_fail_toast.description,
+          action: {
+            label: "Close",
+            onClick: () => {},
+          },
+        });
+      }
+    );
+  }, []);
+
+  // Handle start session
+  useEffect(() => {
+    // TODO: Fetch timer rule data
+    const seconds = 7 * 60;
+
+    if (cameraOpen && seconds) handleStart();
+  }, [cameraOpen]);
 
   return (
     <CContainer w={"60%"} mx={"auto"} pos={"relative"}>
@@ -46,29 +97,10 @@ const Camera = () => {
 };
 
 const TakePhotoPage = () => {
-  // Hooks
-  const navigate = useNavigate();
-  const startTimer = useSessionTimer((s) => s.startTimer);
-
   // Contexts
   const photos = useSessionPhotos((s) => {
     s.photos;
   });
-
-  // Utils
-  function handleStart() {
-    startTimer({
-      initialSeconds: 7 * 60,
-      onFinished: () => navigate("/print-send"),
-    });
-  }
-
-  // Handle start session
-  useEffect(() => {
-    // TODO: Fetch timer rule data
-
-    handleStart();
-  }, []);
 
   return (
     <PageContainer gap={10}>

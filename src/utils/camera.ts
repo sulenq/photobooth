@@ -1,8 +1,8 @@
 export function startCamera(
   videoRef: React.RefObject<HTMLVideoElement>,
   streamRef: React.MutableRefObject<MediaStream | null>,
-  onOpen: () => void,
-  onError: (error: Error) => void
+  onOpen?: () => void,
+  onError?: (error: Error) => void
 ) {
   navigator.mediaDevices
     .getUserMedia({ video: true, audio: false })
@@ -11,10 +11,10 @@ export function startCamera(
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
       }
-      onOpen();
+      onOpen?.();
     })
     .catch((error) => {
-      onError(error);
+      onError?.(error);
       console.error("Failed to access camera:", error);
     });
 }
@@ -22,7 +22,7 @@ export function startCamera(
 export function stopCamera(
   videoRef: React.RefObject<HTMLVideoElement>,
   streamRef: React.MutableRefObject<MediaStream | null>,
-  onClose: () => void
+  onClose?: () => void
 ) {
   if (streamRef.current) {
     streamRef.current.getTracks().forEach((track) => track.stop());
@@ -31,5 +31,5 @@ export function stopCamera(
   if (videoRef.current) {
     videoRef.current.srcObject = null;
   }
-  onClose();
+  onClose?.();
 }
