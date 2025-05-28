@@ -32,7 +32,7 @@ const Camera = () => {
   function handleStart() {
     startTimer({
       initialSeconds: 10,
-      onFinished: () => navigate("/print-send"),
+      onFinished: () => navigate("/choose-layout"),
     });
   }
 

@@ -19,6 +19,7 @@ const SessionTimer = (props: Props) => {
       bg={"p.900"}
       justify={"center"}
       w={"fit"}
+      flexShrink={0}
       {...restProps}
     >
       <Icon color={"p.100"}>
