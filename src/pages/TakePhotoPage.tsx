@@ -8,7 +8,7 @@ import { IMAGES_PATH } from "@/constants/paths";
 import useLang from "@/context/useLang";
 import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionTimer from "@/context/useSessionTimer";
-import { startCamera } from "@/utils/camera";
+import { startCamera, stopCamera } from "@/utils/camera";
 import { HStack, Image, SimpleGrid } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -64,6 +64,13 @@ const Camera = () => {
 
     if (cameraOpen && seconds) handleStart();
   }, [cameraOpen]);
+
+  // Handle stop camera when unmount
+  useEffect(() => {
+    return () => {
+      stopCamera(videoRef, streamRef);
+    };
+  }, []);
 
   return (
     <CContainer w={"60%"} mx={"auto"} pos={"relative"}>
