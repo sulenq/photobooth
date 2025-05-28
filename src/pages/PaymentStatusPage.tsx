@@ -19,6 +19,9 @@ const PaymentStatusPage = () => {
   const { invoice_number } = useParams();
   const { req, loading, response, error } = useRequest({
     id: "check-payment-status",
+    showLoadingToast: false,
+    showErrorToast: false,
+    showSuccessToast: false,
   });
 
   // States
