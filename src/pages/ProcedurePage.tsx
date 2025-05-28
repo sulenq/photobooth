@@ -93,7 +93,12 @@ const ProcedurePage = () => {
       </CContainer>
 
       <CContainer gap={4}>
-        <Heading1 className="df" fontWeight={"semibold"} textAlign={"center"}>
+        <Heading1
+          className="df"
+          fontWeight={"semibold"}
+          textAlign={"center"}
+          mb={4}
+        >
           Prosedur
         </Heading1>
 
