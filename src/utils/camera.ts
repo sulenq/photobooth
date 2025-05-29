@@ -4,7 +4,6 @@ export function startCamera(
   onOpen?: () => void,
   onError?: (error: Error) => void
 ) {
-  console.log(videoRef, streamRef);
   navigator.mediaDevices
     .getUserMedia({ video: true, audio: false })
     .then((stream) => {

@@ -6,7 +6,7 @@ import CContainer from "../ui-custom/CContainer";
 import NumberInput from "../ui-custom/NumberInput";
 import { IconMinus, IconPlus } from "@tabler/icons-react";
 import { Dispatch } from "react";
-import parseBase64Image from "@/utils/parseBase64Image";
+import parseBase64 from "@/utils/parseBase64";
 
 interface Props extends StackProps {
   item?: any;
@@ -45,7 +45,7 @@ const ChooseProductItem = (props: Props) => {
       {...restProps}
     >
       <Image
-        src={parseBase64Image(item?.productPhoto)}
+        src={parseBase64(item?.productPhoto)}
         alt={item?.productName}
         aspectRatio={1}
       />

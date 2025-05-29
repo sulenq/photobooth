@@ -1,3 +1,4 @@
+import BButton from "@/components/ui-custom/BButton";
 import CContainer from "@/components/ui-custom/CContainer";
 import { toaster } from "@/components/ui/toaster";
 import Heading from "@/components/widget/Heading";
@@ -9,7 +10,8 @@ import useLang from "@/context/useLang";
 import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionTimer from "@/context/useSessionTimer";
 import { startCamera, stopCamera } from "@/utils/camera";
-import { HStack, Image, SimpleGrid } from "@chakra-ui/react";
+import { HStack, Icon, Image, SimpleGrid } from "@chakra-ui/react";
+import { IconCamera } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -20,6 +22,7 @@ const Camera = () => {
 
   // Contexts
   const { l } = useLang();
+  const addPhoto = useSessionPhotos((s) => s.addPhoto);
 
   // States
   const [cameraOpen, setCameraOpen] = useState<boolean>(false);
@@ -35,6 +38,28 @@ const Camera = () => {
       onFinished: () => navigate("/choose-layout"),
     });
   }
+  const takePhoto = async ({
+    timer,
+  }: {
+    timer: number;
+  }): Promise<string | null> => {
+    const video = videoRef.current;
+    if (!video) return null;
+
+    // wait for the specified timer in seconds
+    await new Promise((resolve) => setTimeout(resolve, timer * 1000));
+
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
+
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    return canvas.toDataURL("image/jpeg");
+  };
 
   // Handle open camera on page load
   useEffect(() => {
@@ -99,15 +124,49 @@ const Camera = () => {
           }}
         />
       </div>
+
+      <HStack
+        pos={"absolute"}
+        left={"50%"}
+        bottom={0}
+        pb={10}
+        justify={"center"}
+        transform={"translateX(-50%)"}
+      >
+        <BButton
+          iconButton
+          w={"fit"}
+          borderRadius={"full"}
+          size={"2xl"}
+          bg={"white"}
+          onClick={() => {
+            takePhoto({ timer: 1 }).then((data) => {
+              if (data) {
+                addPhoto(data);
+              }
+            });
+          }}
+        >
+          <Icon color={"pd"} boxSize={8}>
+            <IconCamera />
+          </Icon>
+        </BButton>
+      </HStack>
     </CContainer>
   );
 };
 
 const TakePhotoPage = () => {
   // Contexts
-  const photos = useSessionPhotos((s) => {
-    s.photos;
-  });
+  const { photos, popPhoto } = useSessionPhotos();
+
+  // States
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+
+  // Handle active index
+  useEffect(() => {
+    if (photos?.length > activeIndex) setActiveIndex(photos.length - 1);
+  }, [photos?.length]);
 
   return (
     <PageContainer borderless gap={10}>
@@ -129,9 +188,32 @@ const TakePhotoPage = () => {
                 key={i}
                 borderRadius={16}
                 border={"4px solid {colors.p.500}"}
-                overflow={"clip"}
+                // overflow={"clip"}
+                pos={"relative"}
               >
                 <Image src={photos?.[i] || `${IMAGES_PATH}/no_img.png`} />
+
+                {activeIndex === i && photos?.[i] && (
+                  <HStack
+                    justify={"center"}
+                    pos={"absolute"}
+                    left={0}
+                    w={"full"}
+                    bottom={"-20px"}
+                  >
+                    <BButton
+                      colorPalette={"p"}
+                      bg={"p.700"}
+                      size={"sm"}
+                      w={"fit"}
+                      onClick={() => {
+                        popPhoto();
+                      }}
+                    >
+                      Retake
+                    </BButton>
+                  </HStack>
+                )}
               </CContainer>
             );
           })}
