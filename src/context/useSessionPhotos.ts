@@ -14,7 +14,10 @@ const useSessionPhotos = create<PhotoStore>((set) => ({
     set((state) => ({
       photos: state.photos.length < 4 ? [...state.photos, photo] : state.photos,
     })),
-  popPhoto: () => set((state) => ({ photos: state.photos.slice(1) })),
+  popPhoto: () =>
+    set((state) => ({
+      photos: state.photos.slice(0, -1), // remove last item
+    })),
   clearPhotos: () => set({ photos: [] }),
 }));
 

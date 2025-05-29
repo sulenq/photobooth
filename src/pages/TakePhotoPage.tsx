@@ -175,6 +175,7 @@ const Camera = () => {
         <BButton
           iconButton
           w={"fit"}
+          disabled={running}
           borderRadius={"full"}
           size={"2xl"}
           bg={"white"}
@@ -242,7 +243,7 @@ const TakePhotoPage = () => {
 
         <Heading>Take Photo</Heading>
 
-        <NextButton to={"/choose-layout"} />
+        <NextButton to={"/choose-layout"} disabled={photos?.length < 4} />
       </HStack>
 
       <CContainer gap={8}>
