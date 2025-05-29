@@ -8,12 +8,40 @@ import SessionTimer from "@/components/widget/SessionTimer";
 import { IMAGES_PATH } from "@/constants/paths";
 import useLang from "@/context/useLang";
 import useSessionPhotos from "@/context/useSessionPhotos";
+import useSessionShutterTimer from "@/context/useSessionShutterTimer";
 import useSessionTimer from "@/context/useSessionTimer";
+import useCountdown from "@/hooks/useCountdown";
 import { startCamera, stopCamera } from "@/utils/camera";
-import { HStack, Icon, Image, SimpleGrid } from "@chakra-ui/react";
+import {
+  HStack,
+  Icon,
+  Image,
+  SimpleGrid,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { IconCamera } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+
+const ShutterTimer = (props: any) => {
+  // Props
+  const { remaining } = props;
+
+  return (
+    <Text
+      fontSize={52}
+      fontWeight={"bold"}
+      pos={"absolute"}
+      left={"50%"}
+      top={"50%"}
+      transform={"translate(-50%, -50%)"}
+      color={"white"}
+    >
+      {remaining}
+    </Text>
+  );
+};
 
 const Camera = () => {
   // Hooks
@@ -23,6 +51,11 @@ const Camera = () => {
   // Contexts
   const { l } = useLang();
   const addPhoto = useSessionPhotos((s) => s.addPhoto);
+  const { sessionShutterTimer, setSessionShutterTimer } =
+    useSessionShutterTimer();
+  const { running, startCountdown, remaining } = useCountdown({
+    initialValue: sessionShutterTimer,
+  });
 
   // States
   const [cameraOpen, setCameraOpen] = useState<boolean>(false);
@@ -47,6 +80,7 @@ const Camera = () => {
     if (!video) return null;
 
     // wait for the specified timer in seconds
+    startCountdown();
     await new Promise((resolve) => setTimeout(resolve, timer * 1000));
 
     const canvas = document.createElement("canvas");
@@ -125,11 +159,16 @@ const Camera = () => {
         />
       </div>
 
-      <HStack
+      {/* Shutter Indicator */}
+      {running && <ShutterTimer remaining={remaining} />}
+
+      {/* Shutter */}
+      <VStack
         pos={"absolute"}
         left={"50%"}
         bottom={0}
-        pb={10}
+        pb={"8px"}
+        w={"full"}
         justify={"center"}
         transform={"translateX(-50%)"}
       >
@@ -140,7 +179,7 @@ const Camera = () => {
           size={"2xl"}
           bg={"white"}
           onClick={() => {
-            takePhoto({ timer: 1 }).then((data) => {
+            takePhoto({ timer: sessionShutterTimer }).then((data) => {
               if (data) {
                 addPhoto(data);
               }
@@ -151,7 +190,35 @@ const Camera = () => {
             <IconCamera />
           </Icon>
         </BButton>
-      </HStack>
+      </VStack>
+
+      {/* Shutter Timer List */}
+      <CContainer
+        align={"center"}
+        gap={2}
+        pos={"absolute"}
+        left={"8px"}
+        bottom={"8px"}
+        w={"fit"}
+      >
+        <Text color={"white"}>Timer</Text>
+
+        <VStack justify={"center"}>
+          {Array.from({ length: 3 }).map((_, i) => {
+            return (
+              <BButton
+                key={i}
+                variant={"outline"}
+                color={i + 3 === sessionShutterTimer ? "pd" : "white"}
+                bg={i + 3 === sessionShutterTimer ? "white" : "transparent"}
+                onClick={() => setSessionShutterTimer(i + 3)}
+              >
+                {i + 3}
+              </BButton>
+            );
+          })}
+        </VStack>
+      </CContainer>
     </CContainer>
   );
 };
@@ -188,8 +255,8 @@ const TakePhotoPage = () => {
                 key={i}
                 borderRadius={16}
                 border={"4px solid {colors.p.500}"}
-                // overflow={"clip"}
                 pos={"relative"}
+                // overflow={"clip"}
               >
                 <Image src={photos?.[i] || `${IMAGES_PATH}/no_img.png`} />
 
