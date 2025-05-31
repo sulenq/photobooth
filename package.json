@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
+    "dev": "concurrently \"vite\" \"npm:electron:dev\"",
+    "electron:dev": "tsc electron/main.ts electron/preload.ts --outDir dist-electron && electron dist-electron/main.js",
+    "build": "vite build && tsc electron/main.ts electron/preload.ts --outDir dist-electron",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "l": "node src/locales/_generate.js"
@@ -35,6 +36,7 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
+    "@types/electron": "^1.6.12",
     "@types/moment-timezone": "^0.5.13",
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.1",
@@ -44,11 +46,14 @@
     "@typescript-eslint/parser": "^7.8.0",
     "@vite-pwa/assets-generator": "^0.2.4",
     "@vitejs/plugin-react": "^4.2.1",
+    "concurrently": "^8.2.2",
+    "electron": "^25.9.8",
     "eslint": "^8.57.0",
     "eslint-plugin-react-hooks": "^4.6.2",
     "eslint-plugin-react-refresh": "^0.4.6",
-    "typescript": "^5.2.2",
+    "typescript": "^5.8.3",
     "vite": "^5.2.10",
+    "vite-electron-builder": "^0.0.0",
     "vite-plugin-pwa": "^0.20.0",
     "vite-tsconfig-paths": "^5.1.0",
     "workbox-core": "^7.1.0",

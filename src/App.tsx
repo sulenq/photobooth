@@ -56,6 +56,15 @@ const EndpointWrapper = ({ children }: { children: React.ReactNode }) => {
 };
 
 function App() {
+  const handlePrint = () => {
+    // window.electronAPI.print("Hello from React!");
+    console.log("electronAPI:", window.electronAPI);
+  };
+
+  useEffect(() => {
+    handlePrint();
+  }, []);
+
   // Contexts
   const { l } = useLang();
   const { setOffline } = useOffline();

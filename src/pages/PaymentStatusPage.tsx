@@ -1,13 +1,14 @@
 import BButton from "@/components/ui-custom/BButton";
 import CContainer from "@/components/ui-custom/CContainer";
+import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import NavLink from "@/components/ui-custom/NavLink";
 import PageContainer from "@/components/widget/PageContainer";
 import { SVGS_PATH } from "@/constants/paths";
 import { PRESET_MAIN_BUTTON } from "@/constants/presetProps";
+import useSessionInvoice from "@/context/useSessionInvoice";
 import useRequest from "@/hooks/useRequest";
 import { Image, Spinner } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { useParams } from "react-router-dom";
 
 const STATUS_IMG = {
   success: `/success.svg`,
@@ -16,7 +17,6 @@ const STATUS_IMG = {
 };
 const PaymentStatusPage = () => {
   // Hooks
-  const { invoice_number } = useParams();
   const { req, loading, response, error } = useRequest({
     id: "check-payment-status",
     showLoadingToast: false,
@@ -24,14 +24,17 @@ const PaymentStatusPage = () => {
     showSuccessToast: false,
   });
 
+  // Contexts
+  const { invoiceNumber } = useSessionInvoice();
+
   // States
   const status = response?.result?.transaction?.status;
 
-  // Handle check status on page load
-  useEffect(() => {
+  // Utils
+  function paymentStatus() {
     const url = `/payment/cek-status`;
     const payload = {
-      invoiceNumber: invoice_number,
+      invoiceNumber: invoiceNumber,
     };
 
     req({
@@ -41,6 +44,11 @@ const PaymentStatusPage = () => {
         data: payload,
       },
     });
+  }
+
+  // Handle check status on page load
+  useEffect(() => {
+    paymentStatus();
   }, []);
 
   return (
@@ -50,6 +58,8 @@ const PaymentStatusPage = () => {
 
         {!loading && (
           <>
+            {error && <FeedbackRetry onRetry={paymentStatus} />}
+
             {!error && (
               <CContainer flex={1} pos={"relative"}>
                 {status === "success" && (

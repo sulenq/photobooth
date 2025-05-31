@@ -1,5 +1,14 @@
 import { ButtonProps, MenuItemProps } from "@chakra-ui/react";
 
+declare global {
+  interface Window {
+    electronAPI: {
+      print: (data: string) => void;
+      sendPhoto: (data: string) => void;
+    };
+  }
+}
+
 export type Type__LanguageOptions = "id" | "en";
 
 export type Type__TimeZoneObject = {

@@ -6,6 +6,7 @@ import NextButton from "@/components/widget/NextButton";
 import PageContainer from "@/components/widget/PageContainer";
 import { SVGS_PATH } from "@/constants/paths";
 import useChoosedProduct from "@/context/useChoosedProduct";
+import useSessionInvoice from "@/context/useSessionInvoice";
 import useRequest from "@/hooks/useRequest";
 import formatNumber from "@/utils/formatNumber";
 import {
@@ -51,6 +52,7 @@ const PaymentPage = () => {
 
   // Contexts
   const { choosedProduct } = useChoosedProduct();
+  const { setInvoiceNumber } = useSessionInvoice();
 
   // Utils
   function generateqr() {
@@ -68,6 +70,11 @@ const PaymentPage = () => {
       },
     });
   }
+
+  // Handle get invoice number
+  useEffect(() => {
+    setInvoiceNumber(response?.data?.result?.response?.order?.invoice_number);
+  }, [response]);
 
   // Handle generate on page load
   useEffect(() => {
