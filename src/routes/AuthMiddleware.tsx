@@ -3,6 +3,7 @@ import useSessionInvoice from "@/context/useSessionInvoice";
 import useRequest from "@/hooks/useRequest";
 import { Spinner } from "@chakra-ui/react";
 import { useEffect } from "react";
+import { Navigate } from "react-router-dom";
 
 const AuthMiddleware = (props: any) => {
   // Props
@@ -11,6 +12,9 @@ const AuthMiddleware = (props: any) => {
   // Hooks
   const { loading, req, response, error } = useRequest({
     id: "invoice-number-status",
+    showLoadingToast: false,
+    showErrorToast: false,
+    showSuccessToast: false,
   });
 
   // Contexts
@@ -20,7 +24,7 @@ const AuthMiddleware = (props: any) => {
   function getInvoiceNumber() {
     req({
       config: {
-        url: `/payment/status`,
+        url: `/payment-status`,
       },
     });
   }
@@ -43,7 +47,13 @@ const AuthMiddleware = (props: any) => {
         </CContainer>
       )}
 
-      {!loading && <>{!error && { children }}</>}
+      {!loading && (
+        <>
+          {error && <Navigate to={"/choose-product"} />}
+
+          {!error && <>{children}</>}
+        </>
+      )}
     </>
   );
 };
