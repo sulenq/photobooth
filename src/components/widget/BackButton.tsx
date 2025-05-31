@@ -31,7 +31,7 @@ const BackButton = (props: Props) => {
       {...PRESET_MAIN_BUTTON_MD}
       {...restProps}
     >
-      <Icon boxSize={"40px"}>
+      <Icon boxSize={"40px"} color={"p.500"}>
         <IconArrowLeft />
       </Icon>
     </BButton>

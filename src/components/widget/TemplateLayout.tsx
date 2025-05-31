@@ -15,11 +15,13 @@ interface Interface__Layout extends StackProps {
 interface DropPhotoSlotProps {
   id: string;
   hNumber: number;
+  // aspectRatio: number;
+  orientation?: "portrait" | "landscape";
+  rotate?: boolean;
   value?: string | null;
-  aspectRatio: number;
 }
 
-const aspectRatio1 = 2 / 3;
+// const aspectRatio1 = 2 / 3;
 // const aspectRatio2 = 3 / 2;
 
 const LayoutContainer = (props: StackProps) => {
@@ -29,16 +31,17 @@ const LayoutContainer = (props: StackProps) => {
   return <CContainer aspectRatio={2 / 3} {...restProps}></CContainer>;
 };
 
-const DropPhotoSlot = ({
-  id,
-  value,
-  hNumber,
-  aspectRatio,
-}: DropPhotoSlotProps) => {
+const DropPhotoSlot = (props: DropPhotoSlotProps) => {
+  const {
+    id,
+    value,
+    hNumber,
+    orientation = "portrait",
+    rotate = false,
+  } = props;
+
   const { setNodeRef, isOver } = useDroppable({ id });
   const canvasRef = useRef<HTMLCanvasElement>(null);
-
-  // Assume useSessionFilter returns current filter object with filter func
   const { filter } = useSessionFilter();
 
   useEffect(() => {
@@ -49,54 +52,85 @@ const DropPhotoSlot = ({
     if (!ctx) return;
 
     const img = new Image();
-    img.crossOrigin = "anonymous"; // prevent CORS issues
+    img.crossOrigin = "anonymous";
     img.src = value;
 
     img.onload = () => {
       img.decode().then(() => {
-        canvas.width = hNumber * aspectRatio;
-        canvas.height = hNumber;
+        // Step 1: calculate final aspect ratio
+        let aspectRatio = orientation === "landscape" ? 3 / 2 : 2 / 3;
+        if (rotate) aspectRatio = 1 / aspectRatio;
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // Step 2: set canvas size
+        let width = hNumber * aspectRatio;
+        let height = hNumber;
+        canvas.width = width;
+        canvas.height = height;
 
-        // hitung draw size
-        const imgAspect = img.width / img.height;
-        const canvasAspect = canvas.width / canvas.height;
+        ctx.clearRect(0, 0, width, height);
 
-        let drawWidth = canvas.width;
-        let drawHeight = canvas.height;
+        if (rotate) {
+          ctx.save();
+          ctx.translate(width / 2, height / 2);
+          ctx.rotate((90 * Math.PI) / 180);
 
-        if (imgAspect > canvasAspect) {
-          drawHeight = canvas.height;
-          drawWidth = img.width * (canvas.height / img.height);
+          const rotatedWidth = height;
+          const rotatedHeight = width;
+
+          const scale = Math.max(
+            rotatedWidth / img.width,
+            rotatedHeight / img.height
+          );
+
+          const drawWidth = img.width * scale;
+          const drawHeight = img.height * scale;
+
+          ctx.drawImage(
+            img,
+            -drawWidth / 2,
+            -drawHeight / 2,
+            drawWidth,
+            drawHeight
+          );
+
+          ctx.restore();
         } else {
-          drawWidth = canvas.width;
-          drawHeight = img.height * (canvas.width / img.width);
+          const scale = Math.max(width / img.width, height / img.height);
+
+          const drawWidth = img.width * scale;
+          const drawHeight = img.height * scale;
+
+          const offsetX = (width - drawWidth) / 2;
+          const offsetY = (height - drawHeight) / 2;
+
+          ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
         }
 
-        const offsetX = (canvas.width - drawWidth) / 2;
-        const offsetY = (canvas.height - drawHeight) / 2;
-
-        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-
-        // kasih jeda biar canvas bisa commit pixel-nya
+        // Apply Caman filter after short delay
         setTimeout(() => {
           window.Caman(canvas, function (this: any) {
             this.revert(true);
             filter.filter.call(this);
             this.render();
           });
-        }, 50); // 10 kadang terlalu cepat
+        }, 50);
       });
     };
-  }, [value, filter]);
+  }, [value, filter, orientation, rotate, hNumber]);
+
+  // Calculate container aspect ratio
+  const calculatedAspectRatio = (() => {
+    let ar = orientation === "landscape" ? 3 / 2 : 2 / 3;
+    if (rotate) ar = 1 / ar;
+    return ar;
+  })();
 
   return (
     <div
       ref={setNodeRef}
       style={{
         height: `${hNumber}px`,
-        aspectRatio,
+        width: `${hNumber * calculatedAspectRatio}px`,
         border: "2px dashed #aaa",
         display: "flex",
         alignItems: "center",
@@ -110,7 +144,10 @@ const DropPhotoSlot = ({
           id={`res-img-${id}`}
           key={value}
           ref={canvasRef}
-          style={{ maxHeight: `${hNumber}px`, width: `166.67px`, aspectRatio }}
+          style={{
+            height: "100%",
+            width: "100%",
+          }}
         />
       ) : (
         <VStack>
@@ -138,13 +175,13 @@ export const Layout1 = (props: Interface__Layout) => {
         <DropPhotoSlot
           id="1"
           value={resPhotos["1"]}
-          aspectRatio={aspectRatio1}
+          // aspectRatio={aspectRatio1}
           hNumber={250}
         />
         <DropPhotoSlot
           id="2"
           value={resPhotos["2"]}
-          aspectRatio={aspectRatio1}
+          // aspectRatio={aspectRatio1}
           hNumber={250}
         />
       </HStack>
@@ -152,14 +189,67 @@ export const Layout1 = (props: Interface__Layout) => {
         <DropPhotoSlot
           id="3"
           value={resPhotos["3"]}
-          aspectRatio={aspectRatio1}
+          // aspectRatio={aspectRatio1}
           hNumber={250}
         />
         <DropPhotoSlot
           id="4"
           value={resPhotos["4"]}
-          aspectRatio={aspectRatio1}
+          // aspectRatio={aspectRatio1}
           hNumber={250}
+        />
+      </HStack>
+    </LayoutContainer>
+  );
+};
+
+export const Layout2 = (props: Interface__Layout) => {
+  // Props
+  const { resPhotos } = props;
+
+  return (
+    <LayoutContainer
+      aspectRatio={TEMPLATE_ASPECT_RATIO}
+      h={TEMPLATE_H}
+      w="fit"
+      justify="center"
+      gap="10px"
+      pt="10px"
+    >
+      <HStack justify="center" gap={8}>
+        <DropPhotoSlot
+          id="1"
+          value={resPhotos["1"]}
+          // aspectRatio={aspectRatio1}
+          hNumber={250}
+          orientation="landscape"
+          rotate
+        />
+        <DropPhotoSlot
+          id="2"
+          value={resPhotos["2"]}
+          // aspectRatio={aspectRatio1}
+          hNumber={250}
+          orientation="landscape"
+          rotate
+        />
+      </HStack>
+      <HStack justify="center" gap={8}>
+        <DropPhotoSlot
+          id="3"
+          value={resPhotos["3"]}
+          // aspectRatio={aspectRatio1}
+          hNumber={250}
+          orientation="landscape"
+          rotate
+        />
+        <DropPhotoSlot
+          id="4"
+          value={resPhotos["4"]}
+          // aspectRatio={aspectRatio1}
+          hNumber={250}
+          // orientation="landscape"
+          // rotate
         />
       </HStack>
     </LayoutContainer>
