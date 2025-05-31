@@ -63,6 +63,7 @@ const ChooseProductItem = (props: Props) => {
           <BButton
             size={"lg"}
             h={"50px"}
+            color={"p.100"}
             onClick={chooseCallback}
             // disabled={choosed && choosed?.product?.id !== item?.id}
             {...PRESET_MAIN_BUTTON_MD}

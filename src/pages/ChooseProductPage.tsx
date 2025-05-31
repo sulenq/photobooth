@@ -94,7 +94,7 @@ const ChooseProductPage = () => {
         </>
       )}
 
-      <CContainer p={5}>
+      <CContainer p={5} align={"center"}>
         <NextButton to={`/payment`} disabled={choosedProduct === null} />
       </CContainer>
     </PageContainer>
