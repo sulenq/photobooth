@@ -9,6 +9,7 @@ export const PRESET_MAIN_BUTTON = {
   px: 10,
   bg: "#3b3329",
   colorPalette: "p",
+  color: "p.100 !important",
   h: "60px",
   w: "250px",
   border: "4px solid {colors.p.500}",

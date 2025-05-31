@@ -6,10 +6,11 @@ import { ButtonProps } from "../ui/button";
 interface Props extends ButtonProps {
   to?: string;
   wrapperProps?: any;
+  label?: string;
 }
 
 const NextButton = (props: Props) => {
-  const { to, wrapperProps, ...restProps } = props;
+  const { to, wrapperProps, label, ...restProps } = props;
 
   return (
     <NavLink to={to} {...wrapperProps}>
@@ -19,7 +20,7 @@ const NextButton = (props: Props) => {
         bg={props.disabled ? "p.500" : "#3b3329"}
         {...restProps}
       >
-        NEXT
+        {label || "NEXT"}
       </BButton>
     </NavLink>
   );
