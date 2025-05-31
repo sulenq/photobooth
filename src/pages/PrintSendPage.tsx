@@ -28,7 +28,7 @@ const PrintSendPage = () => {
 
   return (
     <PageContainer borderless>
-      <HStack mb={10}>
+      <HStack mb={20}>
         <Box w={"250px"} />
 
         <Heading>Print & Send</Heading>
@@ -44,7 +44,7 @@ const PrintSendPage = () => {
           maxW={"65%"}
           mx={"auto"}
         >
-          <CContainer align={"center"} gap={10}>
+          <CContainer align={"center"} gap={8}>
             <CContainer
               pos="relative"
               h={`calc(${TEMPLATE_H})`}
@@ -72,8 +72,8 @@ const PrintSendPage = () => {
             </BButton>
           </CContainer>
 
-          <CContainer gap={10}>
-            <CContainer p={2} bg={"p.900"} borderRadius={16} gap={3}>
+          <CContainer gap={8}>
+            <CContainer p={2} bg={"p.900"} borderRadius={16} gap={3} flex={1}>
               <Text
                 fontSize={20}
                 fontWeight={"bold"}
@@ -89,7 +89,7 @@ const PrintSendPage = () => {
                 bg={"white"}
                 borderRadius={16}
                 p={5}
-                aspectRatio={1}
+                flex={1}
               ></CContainer>
             </CContainer>
 
@@ -104,7 +104,11 @@ const PrintSendPage = () => {
                 Email
               </Text>
 
-              <StringInput bg={"white"} />
+              <StringInput
+                bg={"white"}
+                placeholder="Enter your email address to send file"
+                borderRadius={6}
+              />
 
               <BButton w={"fit"} colorPalette={"p"} ml={"auto"}>
                 Send to Email
