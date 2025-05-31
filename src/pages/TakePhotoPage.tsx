@@ -13,6 +13,7 @@ import useSessionTimer from "@/context/useSessionTimer";
 import useCountdown from "@/hooks/useCountdown";
 import { startCamera, stopCamera } from "@/utils/camera";
 import {
+  Box,
   HStack,
   Icon,
   Image,
@@ -50,7 +51,7 @@ const Camera = () => {
 
   // Contexts
   const { l } = useLang();
-  const addPhoto = useSessionPhotos((s) => s.addPhoto);
+  const { photos, addPhoto } = useSessionPhotos();
   const { sessionShutterTimer, setSessionShutterTimer } =
     useSessionShutterTimer();
   const { running, startCountdown, remaining } = useCountdown({
@@ -68,7 +69,7 @@ const Camera = () => {
   function handleStart() {
     startTimer({
       initialSeconds: 7 * 60,
-      onFinished: () => navigate("/choose-layout"),
+      onFinished: () => navigate("/print-send"),
     });
   }
   const takePhoto = async ({
@@ -137,8 +138,7 @@ const Camera = () => {
         style={{
           position: "relative",
           width: "100%",
-          aspectRatio: 4 / 3,
-          // paddingBottom: "100%",
+          aspectRatio: 3 / 2,
           backgroundColor: "black",
         }}
       >
@@ -150,19 +150,32 @@ const Camera = () => {
             position: "absolute",
             top: 0,
             left: 0,
-            aspectRatio: 4 / 3,
+            aspectRatio: 3 / 2,
             width: "100%",
-            height: "100%",
+            height: "fit",
             transform: "scaleX(-1)", // Mirror
             objectFit: "cover",
           }}
         />
       </div>
 
+      {/* Portrait Guideline */}
+      <Box
+        aspectRatio={2 / 3}
+        h={"full"}
+        w={"auto"}
+        borderLeft={"4px dashed {colors.p.500}"}
+        borderRight={"4px dashed {colors.p.500}"}
+        pos={"absolute"}
+        left={"50%"}
+        top={"50%"}
+        transform={"translate(-50%, -50%)"}
+      />
+
       {/* Shutter Indicator */}
       {running && <ShutterTimer remaining={remaining} />}
 
-      {/* Shutter */}
+      {/* Shutter Button */}
       <VStack
         pos={"absolute"}
         left={"50%"}
@@ -175,10 +188,12 @@ const Camera = () => {
         <BButton
           iconButton
           w={"fit"}
-          disabled={running}
+          loading={running}
+          disabled={photos?.length === 4}
           borderRadius={"full"}
           size={"2xl"}
           bg={"white"}
+          color={"pd"}
           onClick={() => {
             takePhoto({ timer: sessionShutterTimer }).then((data) => {
               if (data) {
@@ -249,17 +264,21 @@ const TakePhotoPage = () => {
       <CContainer gap={8}>
         <Camera />
 
-        <SimpleGrid columns={[1, 2, 4]} gap={8} maxW={"70%"} mx={"auto"}>
+        <SimpleGrid columns={[1, 2, 4]} gap={8} maxW={"60%"} mx={"auto"}>
           {Array.from({ length: 4 }).map((_, i) => {
             return (
               <CContainer
                 key={i}
-                borderRadius={16}
                 border={"4px solid {colors.p.500}"}
                 pos={"relative"}
-                // overflow={"clip"}
+                aspectRatio={3 / 2}
+                borderRadius={16}
               >
-                <Image src={photos?.[i] || `${IMAGES_PATH}/no_img.png`} />
+                <Image
+                  aspectRatio={3 / 2}
+                  src={photos?.[i] || `${IMAGES_PATH}/no_img.png`}
+                  borderRadius={12}
+                />
 
                 {activeIndex === i && photos?.[i] && (
                   <HStack

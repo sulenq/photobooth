@@ -1,23 +1,31 @@
-export function startCamera(
+export const startCamera = async (
   videoRef: React.RefObject<HTMLVideoElement>,
   streamRef: React.MutableRefObject<MediaStream | null>,
-  onOpen?: () => void,
-  onError?: (error: Error) => void
-) {
-  navigator.mediaDevices
-    .getUserMedia({ video: true, audio: false })
-    .then((stream) => {
-      streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-      }
-      onOpen?.();
-    })
-    .catch((error) => {
-      onError?.(error);
-      console.error("Failed to access camera:", error);
+  onSuccess?: () => void,
+  onError?: () => void
+) => {
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: {
+        width: { ideal: 1920 },
+        height: { ideal: 1080 },
+        facingMode: "user",
+      },
+      audio: false,
     });
-}
+
+    streamRef.current = stream;
+    const video = videoRef.current;
+    if (video) {
+      video.srcObject = stream;
+    }
+
+    onSuccess?.();
+  } catch (err) {
+    console.error("Camera error:", err);
+    onError?.();
+  }
+};
 
 export function stopCamera(
   videoRef: React.RefObject<HTMLVideoElement>,

@@ -3,13 +3,16 @@ import BButton from "../ui-custom/BButton";
 import NavLink from "../ui-custom/NavLink";
 import { ButtonProps } from "../ui/button";
 
-interface Props extends ButtonProps {}
+interface Props extends ButtonProps {
+  to?: string;
+  wrapperProps?: any;
+}
 
-const NextButton = (props: any) => {
-  const { to, ...restProps } = props;
+const NextButton = (props: Props) => {
+  const { to, wrapperProps, ...restProps } = props;
 
   return (
-    <NavLink to={to}>
+    <NavLink to={to} {...wrapperProps}>
       <BButton
         mx={"auto"}
         {...PRESET_MAIN_BUTTON}

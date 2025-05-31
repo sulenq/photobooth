@@ -3,7 +3,7 @@ import CContainer from "@/components/ui-custom/CContainer";
 import Heading1 from "@/components/ui-custom/Heading1";
 import NextButton from "@/components/widget/NextButton";
 import SessionTimer from "@/components/widget/SessionTimer";
-import { LAYOUT_OPTIONS } from "@/constants/layoutOptions";
+import { DUMMY_TEMPLATE_OPTIONS } from "@/constants/dummyTemplateOptions";
 import useSessionTemplate from "@/context/useSessionTemplate";
 import { Box, HStack, Icon, Image } from "@chakra-ui/react";
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
@@ -98,7 +98,7 @@ const OptionList = () => {
           className="noScroll"
         >
           <HStack h={"full"} w={"max"} align={"stretch"} gap={8} px={10}>
-            {LAYOUT_OPTIONS.map((item, i) => {
+            {DUMMY_TEMPLATE_OPTIONS.map((item, i) => {
               return (
                 <CContainer
                   key={i}
@@ -108,7 +108,7 @@ const OptionList = () => {
                   className="clicky"
                   onClick={() => setTemplate(item)}
                 >
-                  <Image src={item?.thumbnail} h={"full"} />
+                  <Image src={item?.templateThumbnail} h={"full"} />
                 </CContainer>
               );
             })}
@@ -130,7 +130,11 @@ const ChooseLayoutPage = () => {
           <SessionTimer w={"250px"} />
 
           <CContainer h={"full"} w={"fit"}>
-            <Image src={template?.thumbnail} h={"full"} objectFit={"contain"} />
+            <Image
+              src={template?.templateThumbnail}
+              h={"full"}
+              objectFit={"contain"}
+            />
           </CContainer>
 
           <NextButton to={"/edit-photo"} disabled={!template} />
