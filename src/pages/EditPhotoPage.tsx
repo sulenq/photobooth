@@ -258,7 +258,7 @@ const EditPhotoPage = () => {
 
             <CContainer w="fit" gap={2}>
               <Text fontSize={20} fontWeight="semibold">
-                DRAG & DROP YOUT PHOTO!
+                DRAG & DROP YOUR PHOTO!
               </Text>
 
               <CContainer
