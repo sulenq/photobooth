@@ -24,7 +24,7 @@ const AuthMiddleware = (props: any) => {
   function getInvoiceNumber() {
     req({
       config: {
-        url: `/payment-status`,
+        url: `payment/payment-status`,
       },
     });
   }
