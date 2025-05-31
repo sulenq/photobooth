@@ -1,15 +1,22 @@
 {
-  "name": "vite-chakra-pwa-template",
+  "name": "popbox",
+  "main": "dist-electron/main.js",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "concurrently \"vite\" \"npm:electron:dev\"",
-    "electron:dev": "tsc electron/main.ts electron/preload.ts --outDir dist-electron && electron dist-electron/main.js",
-    "build": "vite build && tsc electron/main.ts electron/preload.ts --outDir dist-electron",
+    "build-electron": "node scripts/build-electron.mjs",
+    "start-electron": "electron dist-electron/main.cjs",
+    "dev-full": "concurrently -k \"npm:dev\" \"npm:watch-electron\" \"npm:start-electron\"",
+    "watch-electron": "chokidar 'electron/**/*.ts' -c 'npm run build-electron'",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "l": "node src/locales/_generate.js"
+    "l": "node src/locales/_generate.js",
+    "electron:dev": "npm run electron:build && electron dist-electron/main.cjs",
+    "electron:build": "tsc -p tsconfig.electron.json && ren dist-electron\\main.js main.cjs",
+    "start": "npm run build && electron dist-electron/main.js",
+    "build": "tsc"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.5.1",
@@ -46,6 +53,8 @@
     "@typescript-eslint/parser": "^7.8.0",
     "@vite-pwa/assets-generator": "^0.2.4",
     "@vitejs/plugin-react": "^4.2.1",
+    "chokidar": "^4.0.3",
+    "chokidar-cli": "^3.0.0",
     "concurrently": "^8.2.2",
     "electron": "^25.9.8",
     "eslint": "^8.57.0",

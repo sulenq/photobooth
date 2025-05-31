@@ -28,7 +28,7 @@ const PaymentStatusPage = () => {
   const { invoiceNumber } = useSessionInvoice();
 
   // States
-  const status = response?.result?.transaction?.status;
+  const status = response?.data?.result?.transaction?.status?.toLowerCase();
 
   // Utils
   function paymentStatus() {

@@ -150,6 +150,7 @@ const PaymentPage = () => {
                         title="Doku Payment"
                         style={{
                           width: "100%",
+                          minHeight: "500px",
                           height: "calc(100dvh - 550px)",
                           border: "none",
                         }}

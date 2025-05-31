@@ -45,17 +45,30 @@ const DriveQR = (props: any) => {
 
   // Utils
   function generateDriveLink() {
-    const url = `/send-drive/go`;
-    const payload = photos;
+    const element = document.getElementById("finalResult");
+    if (!element) {
+      console.error("Element with id 'finalResult' not found");
+      return;
+    }
 
-    req({
-      config: {
-        url,
-        method: "post",
-        data: {
-          images: payload,
+    // Use a higher scale for better resolution
+    html2canvas(element, {
+      scale: 3, // 3x bigger than original element size
+      useCORS: true, // if images cross-origin
+      backgroundColor: null, // preserve transparent background if any
+    }).then((canvas) => {
+      const base64Image = canvas.toDataURL("image/png", 1); // quality 1 for PNG
+
+      const url = `/send-drive/go`;
+      req({
+        config: {
+          url,
+          method: "post",
+          data: {
+            images: [base64Image, ...photos],
+          },
         },
-      },
+      });
     });
   }
 
@@ -89,7 +102,13 @@ const DriveQR = (props: any) => {
         Scan Me to Download
       </Text>
       <Center bg={"white"} borderRadius={16} p={5} flex={1}>
-        {loading && <Spinner size={"xl"} />}
+        {loading && (
+          <CContainer justify={"center"} align={"center"} gap={10}>
+            <Spinner size={"xl"} />
+
+            <Text fontSize={20}>Sedang menyiapkan Google Drive</Text>
+          </CContainer>
+        )}
 
         {!loading && (
           <>
@@ -263,6 +282,9 @@ const Print = () => {
 };
 
 const PrintSendPage = () => {
+  // Contexts
+  // TODO handle session data null maka navigate /take-photo
+
   // States
   const [driveLink, setDriveLink] = useState("");
   const [driveLinkLoading, setGetDriveLinkLoading] = useState<boolean>(false);
