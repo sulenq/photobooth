@@ -2,6 +2,7 @@ import CContainer from "@/components/ui-custom/CContainer";
 import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import Heading1 from "@/components/ui-custom/Heading1";
 import CountDown from "@/components/widget/CountDown";
+import NextButton from "@/components/widget/NextButton";
 import PageContainer from "@/components/widget/PageContainer";
 import { SVGS_PATH } from "@/constants/paths";
 import useChoosedProduct from "@/context/useChoosedProduct";
@@ -16,7 +17,6 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
-import { QRCodeCanvas } from "qrcode.react";
 import { useEffect } from "react";
 
 const HOW_TO_PAY_ID = [
@@ -105,58 +105,73 @@ const PaymentPage = () => {
             {!loading && (
               <>
                 {!error && (
-                  <CContainer p={5} gap={10}>
+                  <CContainer>
                     {/* Payment timeout */}
-                    <HStack
-                      p={4}
-                      borderRadius={8}
-                      border={"2px solid {colors.pd}"}
-                      justify={"space-between"}
-                      bg={"p.100"}
-                    >
-                      <Text fontSize={20} fontWeight={"medium"}>
-                        Selesaikan pembayaran sebelum
-                      </Text>
+                    <CContainer p={5}>
+                      <HStack
+                        p={4}
+                        borderRadius={8}
+                        border={"2px solid {colors.pd}"}
+                        justify={"space-between"}
+                        bg={"p.100"}
+                      >
+                        <Text fontSize={20} fontWeight={"medium"}>
+                          Selesaikan pembayaran sebelum
+                        </Text>
 
-                      <CountDown
-                        initialValue={
-                          response?.data?.result?.response?.payment
-                            ?.payment_due_date
-                        }
-                        options={{
-                          initialValueType: "minutes",
-                        }}
-                      />
-                    </HStack>
+                        <CountDown
+                          initialValue={
+                            response?.data?.result?.response?.payment
+                              ?.payment_due_date
+                          }
+                          options={{
+                            initialValueType: "minutes",
+                          }}
+                        />
+                      </HStack>
+                    </CContainer>
 
                     {/* QR code */}
                     <CContainer justify={"center"} align={"center"}>
-                      <QRCodeCanvas
+                      {/* <QRCodeCanvas
                         value={response?.data?.result?.response?.payment?.url}
                         size={300}
+                      /> */}
+
+                      <iframe
+                        src={response?.data?.result?.response?.payment?.url}
+                        title="Doku Payment"
+                        style={{
+                          width: "100%",
+                          height: "calc(100dvh - 550px)",
+                          border: "none",
+                        }}
+                        allowFullScreen
                       />
                     </CContainer>
 
                     {/* Price */}
-                    <CContainer
-                      border={"2px solid {colors.pd}"}
-                      p={4}
-                      minW={"400px"}
-                      mx={"auto"}
-                      borderRadius={8}
-                      bg={"p.100"}
-                      w={"fit"}
-                    >
-                      <Text
-                        fontSize={32}
-                        fontWeight={"semibold"}
-                        textAlign={"center"}
+                    <CContainer p={5}>
+                      <CContainer
+                        border={"2px solid {colors.pd}"}
+                        p={4}
+                        minW={"400px"}
+                        mx={"auto"}
+                        borderRadius={8}
+                        bg={"p.100"}
+                        w={"fit"}
                       >
-                        Rp{" "}
-                        {formatNumber(
-                          response?.data?.result?.response?.order?.amount
-                        )}
-                      </Text>
+                        <Text
+                          fontSize={32}
+                          fontWeight={"semibold"}
+                          textAlign={"center"}
+                        >
+                          Rp{" "}
+                          {formatNumber(
+                            response?.data?.result?.response?.order?.amount
+                          )}
+                        </Text>
+                      </CContainer>
                     </CContainer>
                   </CContainer>
                 )}
@@ -233,6 +248,12 @@ const PaymentPage = () => {
               })}
             </HStack>
           </CContainer>
+
+          <NextButton
+            to="/payment-status"
+            wrapperProps={{ w: "full" }}
+            w={"full"}
+          />
         </CContainer>
       </SimpleGrid>
     </PageContainer>
