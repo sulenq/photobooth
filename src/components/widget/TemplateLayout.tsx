@@ -108,6 +108,7 @@ const DropPhotoSlot = ({
       {value ? (
         <canvas
           id={`res-img-${id}`}
+          key={value}
           ref={canvasRef}
           style={{ maxHeight: `${hNumber}px`, width: `166.67px`, aspectRatio }}
         />
