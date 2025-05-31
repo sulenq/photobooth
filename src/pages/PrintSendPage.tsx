@@ -160,7 +160,7 @@ const SendEmail = (props: any) => {
   );
 };
 
-const PrintSendPage = () => {
+const Print = () => {
   // Contexts
   const { template } = useSessionTemplate();
   const { resPhotos, setResPhotos } = useSessionResPhotos();
@@ -168,6 +168,41 @@ const PrintSendPage = () => {
   // States
   const LayoutComponent =
     LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
+
+  return (
+    <CContainer align={"center"} gap={8}>
+      <CContainer
+        pos="relative"
+        h={`calc(${TEMPLATE_H})`}
+        w={"fit"}
+        aspectRatio={TEMPLATE_ASPECT_RATIO}
+      >
+        <Image
+          src={template?.template}
+          pos="absolute"
+          left={0}
+          top={0}
+          h={`calc(${TEMPLATE_H})`}
+          aspectRatio={TEMPLATE_ASPECT_RATIO}
+          zIndex={2}
+        />
+
+        <LayoutComponent
+          zIndex={2}
+          resPhotos={resPhotos}
+          setResPhotos={setResPhotos}
+        />
+      </CContainer>
+
+      <BButton {...PRESET_MAIN_BUTTON} w={"full !important"}>
+        PRINT
+      </BButton>
+    </CContainer>
+  );
+};
+
+const PrintSendPage = () => {
+  // States
   const [driveLink, setDriveLink] = useState("");
   const [driveLinkLoading, setGetDriveLinkLoading] = useState<boolean>(false);
 
@@ -190,34 +225,7 @@ const PrintSendPage = () => {
           mx={"auto"}
         >
           {/* Print */}
-          <CContainer align={"center"} gap={8}>
-            <CContainer
-              pos="relative"
-              h={`calc(${TEMPLATE_H})`}
-              w={"fit"}
-              aspectRatio={TEMPLATE_ASPECT_RATIO}
-            >
-              <Image
-                src={template?.template}
-                pos="absolute"
-                left={0}
-                top={0}
-                h={`calc(${TEMPLATE_H})`}
-                aspectRatio={TEMPLATE_ASPECT_RATIO}
-                zIndex={2}
-              />
-
-              <LayoutComponent
-                zIndex={2}
-                resPhotos={resPhotos}
-                setResPhotos={setResPhotos}
-              />
-            </CContainer>
-
-            <BButton {...PRESET_MAIN_BUTTON} w={"full !important"}>
-              PRINT
-            </BButton>
-          </CContainer>
+          <Print />
 
           {/* Drive n Send Email */}
           <CContainer gap={8}>
