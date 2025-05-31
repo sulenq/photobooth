@@ -38,6 +38,9 @@ export const ROUTES: Interface__Route[] = [
     activePath: "/payment-status",
     element: <PaymentStatusPage />,
   },
+];
+
+export const PRIVATE_ROUTES: Interface__PrivateRoute[] = [
   {
     path: "/procedure",
     activePath: "/procedure",
@@ -68,9 +71,7 @@ export const ROUTES: Interface__Route[] = [
     activePath: "/thankyou",
     element: <ThankyouPage />,
   },
-];
 
-export const PRIVATE_ROUTES: Interface__PrivateRoute[] = [
   // Settings
   {
     path: "/settings",

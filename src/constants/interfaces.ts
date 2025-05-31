@@ -24,7 +24,7 @@ export interface Interface__Route {
 }
 export interface Interface__PrivateRoute extends Interface__Route {
   label?: any;
-  titleKey: string;
+  titleKey?: string;
   backPath?: string;
   permissions?: number[];
 }
