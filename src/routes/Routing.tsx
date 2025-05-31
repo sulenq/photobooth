@@ -16,7 +16,11 @@ const Routing = () => {
         <Route
           key={path}
           path={path}
-          element={<AuthMiddleware>{element}</AuthMiddleware>}
+          element={
+            // <AuthMiddleware>
+            element
+            // </AuthMiddleware>
+          }
         />
       ))}
 

@@ -25,31 +25,55 @@ import {
 import { useEffect, useState } from "react";
 import { QRCodeCanvas } from "qrcode.react";
 import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
+import useSessionPhotos from "@/context/useSessionPhotos";
 
-const DriveQR = () => {
+const DriveQR = (props: any) => {
+  // Props
+  const { driveLink, setDriveLink, setGetDriveLinkLoading } = props;
+
   // Hooks
   const { loading, req, response, error } = useRequest({
     id: "generate-drive-qr",
+    showLoadingToast: false,
+    showErrorToast: false,
+    showSuccessToast: false,
   });
 
-  // States
-  const driveLink = response?.data?.driveLink;
+  // Contexts
+  const { photos } = useSessionPhotos();
 
   // Utils
   function generateDriveLink() {
     const url = `/send-drive/go`;
+    const payload = photos;
 
     req({
       config: {
         url,
+        method: "post",
+        data: {
+          images: payload,
+        },
       },
     });
   }
 
   // Handle generate drive link QR on load
   useEffect(() => {
-    driveLink();
+    generateDriveLink();
   }, []);
+  useEffect(() => {
+    const driveLink = response?.data?.driveLink;
+
+    if (driveLink) {
+      setDriveLink(driveLink);
+    }
+  }, [response]);
+
+  // Handle drive link loading
+  useEffect(() => {
+    setGetDriveLinkLoading(loading);
+  }, [loading]);
 
   return (
     <CContainer p={2} bg={"p.900"} borderRadius={16} gap={3} flex={1}>
@@ -78,7 +102,10 @@ const DriveQR = () => {
   );
 };
 
-const SendEmail = () => {
+const SendEmail = (props: any) => {
+  // Props
+  const { driveLink, driveLinkLoading } = props;
+
   // Hooks
   const { loading, req } = useRequest({
     id: "generate-drive-qr",
@@ -90,10 +117,16 @@ const SendEmail = () => {
   // Utils
   function sendEmail() {
     const url = `/send-email/go`;
+    const payload = {
+      email: email,
+      driveLink: driveLink,
+    };
 
     req({
       config: {
         url,
+        method: "post",
+        data: payload,
       },
     });
   }
@@ -119,7 +152,7 @@ const SendEmail = () => {
         colorPalette={"p"}
         ml={"auto"}
         onClick={sendEmail}
-        loading={loading}
+        loading={loading || driveLinkLoading}
       >
         Send to Email
       </BButton>
@@ -135,6 +168,8 @@ const PrintSendPage = () => {
   // States
   const LayoutComponent =
     LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
+  const [driveLink, setDriveLink] = useState("");
+  const [driveLinkLoading, setGetDriveLinkLoading] = useState<boolean>(false);
 
   return (
     <PageContainer>
@@ -154,6 +189,7 @@ const PrintSendPage = () => {
           maxW={"65%"}
           mx={"auto"}
         >
+          {/* Print */}
           <CContainer align={"center"} gap={8}>
             <CContainer
               pos="relative"
@@ -168,6 +204,7 @@ const PrintSendPage = () => {
                 top={0}
                 h={`calc(${TEMPLATE_H})`}
                 aspectRatio={TEMPLATE_ASPECT_RATIO}
+                zIndex={2}
               />
 
               <LayoutComponent
@@ -182,10 +219,18 @@ const PrintSendPage = () => {
             </BButton>
           </CContainer>
 
+          {/* Drive n Send Email */}
           <CContainer gap={8}>
-            <DriveQR />
+            <DriveQR
+              driveLink={driveLink}
+              setDriveLink={setDriveLink}
+              setGetDriveLinkLoading={setGetDriveLinkLoading}
+            />
 
-            <SendEmail />
+            <SendEmail
+              driveLink={driveLink}
+              driveLinkLoading={driveLinkLoading}
+            />
           </CContainer>
         </SimpleGrid>
       </CContainer>
