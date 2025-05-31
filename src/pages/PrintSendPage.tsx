@@ -27,7 +27,7 @@ const PrintSendPage = () => {
   // TODO
 
   return (
-    <PageContainer borderless>
+    <PageContainer>
       <HStack mb={20}>
         <Box w={"250px"} />
 
