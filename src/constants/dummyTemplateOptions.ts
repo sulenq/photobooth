@@ -33,4 +33,12 @@ export const DUMMY_TEMPLATE_OPTIONS = [
     templateThumbnail: `${IMAGES_PATH}/templates/thumbnails/25.png`,
     template: `${IMAGES_PATH}/templates/layouts/25.png`,
   },
+  {
+    id: 5,
+    layout: {
+      id: 5,
+    },
+    templateThumbnail: `${IMAGES_PATH}/templates/thumbnails/31.png`,
+    template: `${IMAGES_PATH}/templates/layouts/31.png`,
+  },
 ];

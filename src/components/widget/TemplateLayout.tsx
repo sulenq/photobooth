@@ -3,7 +3,7 @@ import {
   TEMPLATE_H,
 } from "@/constants/defaultAttributes";
 import useSessionFilter from "@/context/useSessionFilter";
-import { HStack, StackProps, Text, VStack } from "@chakra-ui/react";
+import { Center, HStack, StackProps, Text, VStack } from "@chakra-ui/react";
 import { useDroppable } from "@dnd-kit/core";
 import { useEffect, useRef } from "react";
 import CContainer from "../ui-custom/CContainer";
@@ -21,8 +21,8 @@ interface DropPhotoSlotProps {
   value?: string | null;
 }
 
-// const aspectRatio1 = 2 / 3;
-// const aspectRatio2 = 3 / 2;
+const aspectRatio1 = 2 / 3;
+const aspectRatio2 = 3 / 2;
 
 const LayoutContainer = (props: StackProps) => {
   // Props
@@ -58,7 +58,8 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
     img.onload = () => {
       img.decode().then(() => {
         // Step 1: calculate final aspect ratio
-        let aspectRatio = orientation === "landscape" ? 3 / 2 : 2 / 3;
+        let aspectRatio =
+          orientation === "landscape" ? aspectRatio2 : aspectRatio1;
         if (rotate) aspectRatio = 1 / aspectRatio;
 
         // Step 2: set canvas size
@@ -113,7 +114,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
             filter.filter.call(this);
             this.render();
           });
-        }, 50);
+        }, 10);
       });
     };
   }, [value, filter, orientation, rotate, hNumber]);
@@ -151,7 +152,21 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
         />
       ) : (
         <VStack>
-          <Text fontSize={20}>Drop Here</Text>
+          <Center
+            transform={rotate ? "rotate(90deg)" : ""}
+            p={2}
+            bg={"white"}
+            borderRadius={"full"}
+            aspectRatio={1}
+          >
+            <Text className="df" fontSize={32} fontWeight={"bold"} mt={"-8px"}>
+              {id}
+            </Text>
+          </Center>
+
+          <Text fontSize={20} fontWeight={"semibold"}>
+            Drop Here
+          </Text>
         </VStack>
       )}
     </div>
@@ -202,7 +217,6 @@ export const Layout1 = (props: Interface__Layout) => {
     </LayoutContainer>
   );
 };
-
 export const Layout2 = (props: Interface__Layout) => {
   // Props
   const { resPhotos } = props;
@@ -248,8 +262,8 @@ export const Layout2 = (props: Interface__Layout) => {
           value={resPhotos["4"]}
           // aspectRatio={aspectRatio1}
           hNumber={250}
-          // orientation="landscape"
-          // rotate
+          orientation="landscape"
+          rotate
         />
       </HStack>
     </LayoutContainer>

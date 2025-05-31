@@ -31,7 +31,8 @@ const ShutterTimer = (props: any) => {
 
   return (
     <Text
-      fontSize={52}
+      fontSize={64}
+      className="df"
       fontWeight={"bold"}
       pos={"absolute"}
       left={"50%"}

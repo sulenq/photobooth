@@ -16,6 +16,7 @@ import useSessionResPhotos from "@/context/useSessionResPhotos";
 import useSessionTemplate from "@/context/useSessionTemplate";
 import {
   Box,
+  Center,
   HStack,
   Image as ImageComponent,
   SimpleGrid,
@@ -155,6 +156,17 @@ const FilterList = () => {
               borderRadius={8}
               boxShadow={active ? "0 0 0 2px {colors.p.500}" : ""}
             >
+              {active && (
+                <Center
+                  w={"10px"}
+                  aspectRatio={1}
+                  bg={"p.500"}
+                  pos={"absolute"}
+                  right={4}
+                  top={4}
+                ></Center>
+              )}
+
               <canvas
                 ref={(el) => (canvasRefs.current[item.key] = el)}
                 width={100}
