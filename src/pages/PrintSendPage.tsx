@@ -36,7 +36,7 @@ const PrintSendPage = () => {
         <NextButton to="/thankyou" label="FINISH" />
       </HStack>
 
-      <CContainer>
+      <CContainer my={"auto"}>
         <SimpleGrid
           columns={[1, null, 2]}
           gap={20}

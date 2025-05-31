@@ -230,7 +230,7 @@ const EditPhotoPage = () => {
           <SessionTimer w="250px" />
         </HStack>
 
-        <CContainer flex={1}>
+        <CContainer my={"auto"}>
           <HStack h="full" gap={10} align="start">
             <CContainer flex={1} gap={10}>
               <CContainer gap={2}>
