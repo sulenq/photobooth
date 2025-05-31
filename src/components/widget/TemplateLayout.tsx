@@ -23,6 +23,7 @@ interface DropPhotoSlotProps {
 
 const aspectRatio1 = 2 / 3;
 const aspectRatio2 = 3 / 2;
+const dropPhotoSlotZindex = 1;
 
 const LayoutContainer = (props: StackProps) => {
   // Props
@@ -44,6 +45,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { filter } = useSessionFilter();
 
+  // Hanndle filter
   useEffect(() => {
     if (!value || !window.Caman || !canvasRef.current) return;
 
@@ -127,18 +129,16 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
   })();
 
   return (
-    <div
+    <Center
       ref={setNodeRef}
-      style={{
-        height: `${hNumber}px`,
-        width: `${hNumber * calculatedAspectRatio}px`,
-        border: "2px dashed #aaa",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        overflow: "hidden",
-        backgroundColor: isOver ? "gray" : "transparent",
-      }}
+      h={`${hNumber}px`}
+      w={`${hNumber * calculatedAspectRatio}px`}
+      border={"4px dashed"}
+      borderColor={"#aaa"}
+      // borderColor={"red"}
+      overflow={"hidden"}
+      bg={isOver ? "gray" : "transparent"}
+      zIndex={dropPhotoSlotZindex}
     >
       {value ? (
         <canvas
@@ -169,7 +169,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
           </Text>
         </VStack>
       )}
-    </div>
+    </Center>
   );
 };
 
@@ -264,6 +264,66 @@ export const Layout2 = (props: Interface__Layout) => {
           hNumber={250}
           orientation="landscape"
           rotate
+        />
+      </HStack>
+    </LayoutContainer>
+  );
+};
+export const Layout3 = (props: Interface__Layout) => {
+  // Props
+  const { resPhotos } = props;
+
+  return (
+    <LayoutContainer
+      aspectRatio={TEMPLATE_ASPECT_RATIO}
+      h={TEMPLATE_H}
+      w="fit"
+      justify="center"
+      gap="15px"
+      pb={"34px"}
+    >
+      <HStack justify="center" gap={"12px"}>
+        <DropPhotoSlot
+          id="1"
+          value={resPhotos["1"]}
+          hNumber={126}
+          orientation="landscape"
+        />
+        <DropPhotoSlot
+          id="2"
+          value={resPhotos["2"]}
+          hNumber={126}
+          orientation="landscape"
+        />
+      </HStack>
+
+      <HStack justify="center" gap={"12px"}>
+        <DropPhotoSlot
+          id="2"
+          value={resPhotos["2"]}
+          hNumber={126}
+          orientation="landscape"
+        />
+        <DropPhotoSlot
+          id="3"
+          value={resPhotos["3"]}
+          hNumber={126}
+          orientation="landscape"
+        />
+      </HStack>
+
+      <HStack justify="center" gap={"12px"}>
+        <DropPhotoSlot
+          id="3"
+          value={resPhotos["3"]}
+          hNumber={126}
+          orientation="landscape"
+        />
+        <DropPhotoSlot
+          id="4"
+          value={resPhotos["4"]}
+          hNumber={120}
+          orientation="landscape"
         />
       </HStack>
     </LayoutContainer>

@@ -31,7 +31,7 @@ const ShutterTimer = (props: any) => {
 
   return (
     <Text
-      fontSize={64}
+      fontSize={100}
       className="df"
       fontWeight={"bold"}
       pos={"absolute"}
@@ -45,7 +45,10 @@ const ShutterTimer = (props: any) => {
   );
 };
 
-const Camera = () => {
+const Camera = (props: any) => {
+  // Props
+  const { startCountdown, running, remaining } = props;
+
   // Hooks
   const navigate = useNavigate();
   const startTimer = useSessionTimer((s) => s.startTimer);
@@ -55,9 +58,6 @@ const Camera = () => {
   const { photos, addPhoto } = useSessionPhotos();
   const { sessionShutterTimer, setSessionShutterTimer } =
     useSessionShutterTimer();
-  const { running, startCountdown, remaining } = useCountdown({
-    initialValue: sessionShutterTimer,
-  });
 
   // States
   const [cameraOpen, setCameraOpen] = useState<boolean>(false);
@@ -243,6 +243,10 @@ const Camera = () => {
 const TakePhotoPage = () => {
   // Contexts
   const { photos, popPhoto } = useSessionPhotos();
+  const { sessionShutterTimer } = useSessionShutterTimer();
+  const { running, startCountdown, remaining } = useCountdown({
+    initialValue: sessionShutterTimer,
+  });
 
   // States
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -262,8 +266,12 @@ const TakePhotoPage = () => {
         <NextButton to={"/choose-layout"} disabled={photos?.length < 4} />
       </HStack>
 
-      <CContainer gap={8}>
-        <Camera />
+      <CContainer gap={8} my={"auto"}>
+        <Camera
+          startCountdown={startCountdown}
+          running={running}
+          remaining={remaining}
+        />
 
         <SimpleGrid columns={[1, 2, 4]} gap={8} maxW={"60%"} mx={"auto"}>
           {Array.from({ length: 4 }).map((_, i) => {
@@ -297,6 +305,8 @@ const TakePhotoPage = () => {
                       onClick={() => {
                         popPhoto();
                       }}
+                      color={"white"}
+                      disabled={running}
                     >
                       Retake
                     </BButton>
