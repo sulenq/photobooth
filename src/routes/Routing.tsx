@@ -3,7 +3,6 @@ import MaintenancePage from "@/pages/_error/MaintenancePage";
 import MissingPage from "@/pages/_error/MissingPage";
 import ServerErrorPage from "@/pages/_error/ServerErrorPage";
 import { Route, Routes } from "react-router-dom";
-import AuthMiddleware from "./AuthMiddleware";
 
 const Routing = () => {
   return (

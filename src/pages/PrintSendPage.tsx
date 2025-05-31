@@ -1,5 +1,6 @@
 import BButton from "@/components/ui-custom/BButton";
 import CContainer from "@/components/ui-custom/CContainer";
+import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import StringInput from "@/components/ui-custom/StringInput";
 import Heading from "@/components/widget/Heading";
 import NextButton from "@/components/widget/NextButton";
@@ -10,6 +11,7 @@ import {
 } from "@/constants/defaultAttributes";
 import { LAYOUT_COMPONENTS } from "@/constants/layoutComponents";
 import { PRESET_MAIN_BUTTON } from "@/constants/presetProps";
+import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionResPhotos from "@/context/useSessionResPhotos";
 import useSessionTemplate from "@/context/useSessionTemplate";
 import useRequest from "@/hooks/useRequest";
@@ -22,10 +24,9 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import html2canvas from "html2canvas";
 import { QRCodeCanvas } from "qrcode.react";
-import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
-import useSessionPhotos from "@/context/useSessionPhotos";
+import { useEffect, useRef, useState } from "react";
 
 const DriveQR = (props: any) => {
   // Props
@@ -161,20 +162,76 @@ const SendEmail = (props: any) => {
 };
 
 const Print = () => {
-  // Contexts
   const { template } = useSessionTemplate();
   const { resPhotos, setResPhotos } = useSessionResPhotos();
 
-  // States
+  const printRef = useRef<HTMLDivElement>(null);
+
   const LayoutComponent =
     LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
 
+  function handlePrint() {
+    const element = document.getElementById("finalResult");
+    if (!element) return;
+
+    html2canvas(element, {
+      scale: 2, // biar resolusinya tajem
+      useCORS: true,
+    }).then((canvas) => {
+      const dataUrl = canvas.toDataURL("image/png");
+
+      const printWindow = window.open("", "_blank");
+      if (!printWindow) return;
+
+      printWindow.document.write(`
+          <html>
+            <head>
+              <title>Print</title>
+              <style>
+                @page {
+                  size: 10.2cm 15.2cm;
+                  margin: 0;
+                }
+                html, body {
+                  margin: 0;
+                  padding: 0;
+                  width: 10.2cm;
+                  height: 15.2cm;
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                  background: white;
+                }
+                img {
+                  width: 100%;
+                  height: auto;
+                }
+              </style>
+            </head>
+            <body>
+              <img src="${dataUrl}" />
+            </body>
+          </html>
+        `);
+
+      printWindow.document.close();
+      printWindow.focus();
+
+      setTimeout(() => {
+        printWindow.print();
+        printWindow.close();
+      }, 500);
+    });
+  }
+
   return (
-    <CContainer align={"center"} gap={8}>
+    <CContainer align="center" gap={8}>
       <CContainer
+        id="finalResult"
+        fRef={printRef}
         pos="relative"
         h={`calc(${TEMPLATE_H})`}
-        w={"fit"}
+        w="fit"
         aspectRatio={TEMPLATE_ASPECT_RATIO}
       >
         <Image
@@ -194,7 +251,11 @@ const Print = () => {
         />
       </CContainer>
 
-      <BButton {...PRESET_MAIN_BUTTON} w={"full !important"}>
+      <BButton
+        onClick={handlePrint}
+        {...PRESET_MAIN_BUTTON}
+        w="full !important"
+      >
         PRINT
       </BButton>
     </CContainer>
