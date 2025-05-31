@@ -12,7 +12,120 @@ import { LAYOUT_COMPONENTS } from "@/constants/layoutComponents";
 import { PRESET_MAIN_BUTTON } from "@/constants/presetProps";
 import useSessionResPhotos from "@/context/useSessionResPhotos";
 import useSessionTemplate from "@/context/useSessionTemplate";
-import { Box, HStack, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import useRequest from "@/hooks/useRequest";
+import {
+  Box,
+  Center,
+  HStack,
+  Image,
+  SimpleGrid,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
+import { useEffect, useState } from "react";
+import { QRCodeCanvas } from "qrcode.react";
+import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
+
+const DriveQR = () => {
+  // Hooks
+  const { loading, req, response, error } = useRequest({
+    id: "generate-drive-qr",
+  });
+
+  // States
+  const driveLink = response?.data?.driveLink;
+
+  // Utils
+  function generateDriveLink() {
+    const url = `/send-drive/go`;
+
+    req({
+      config: {
+        url,
+      },
+    });
+  }
+
+  // Handle generate drive link QR on load
+  useEffect(() => {
+    driveLink();
+  }, []);
+
+  return (
+    <CContainer p={2} bg={"p.900"} borderRadius={16} gap={3} flex={1}>
+      <Text
+        fontSize={20}
+        fontWeight={"bold"}
+        color={"white"}
+        textAlign={"center"}
+        mt={1}
+        px={2}
+      >
+        Scan Me to Download
+      </Text>
+      <Center bg={"white"} borderRadius={16} p={5} flex={1}>
+        {loading && <Spinner size={"xl"} />}
+
+        {!loading && (
+          <>
+            {error && <FeedbackRetry onRetry={generateDriveLink} />}
+
+            {!error && <QRCodeCanvas value={driveLink} size={300} />}
+          </>
+        )}
+      </Center>
+    </CContainer>
+  );
+};
+
+const SendEmail = () => {
+  // Hooks
+  const { loading, req } = useRequest({
+    id: "generate-drive-qr",
+  });
+
+  // States
+  const [email, setEmail] = useState("");
+
+  // Utils
+  function sendEmail() {
+    const url = `/send-email/go`;
+
+    req({
+      config: {
+        url,
+      },
+    });
+  }
+
+  return (
+    <CContainer p={2} bg={"p.900"} borderRadius={16} gap={4}>
+      <Text fontSize={20} fontWeight={"bold"} color={"white"} mt={1} px={2}>
+        Email
+      </Text>
+
+      <StringInput
+        bg={"white"}
+        placeholder="Enter your email address to send file"
+        borderRadius={6}
+        onChangeSetter={(input) => {
+          setEmail(input);
+        }}
+        inputValue={email}
+      />
+
+      <BButton
+        w={"fit"}
+        colorPalette={"p"}
+        ml={"auto"}
+        onClick={sendEmail}
+        loading={loading}
+      >
+        Send to Email
+      </BButton>
+    </CContainer>
+  );
+};
 
 const PrintSendPage = () => {
   // Contexts
@@ -22,9 +135,6 @@ const PrintSendPage = () => {
   // States
   const LayoutComponent =
     LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
-
-  // Handle upload to gdrive and generate QR
-  // TODO
 
   return (
     <PageContainer>
@@ -73,47 +183,9 @@ const PrintSendPage = () => {
           </CContainer>
 
           <CContainer gap={8}>
-            <CContainer p={2} bg={"p.900"} borderRadius={16} gap={3} flex={1}>
-              <Text
-                fontSize={20}
-                fontWeight={"bold"}
-                color={"white"}
-                textAlign={"center"}
-                mt={1}
-                px={2}
-              >
-                Scan Me to Download
-              </Text>
+            <DriveQR />
 
-              <CContainer
-                bg={"white"}
-                borderRadius={16}
-                p={5}
-                flex={1}
-              ></CContainer>
-            </CContainer>
-
-            <CContainer p={2} bg={"p.900"} borderRadius={16} gap={4}>
-              <Text
-                fontSize={20}
-                fontWeight={"bold"}
-                color={"white"}
-                mt={1}
-                px={2}
-              >
-                Email
-              </Text>
-
-              <StringInput
-                bg={"white"}
-                placeholder="Enter your email address to send file"
-                borderRadius={6}
-              />
-
-              <BButton w={"fit"} colorPalette={"p"} ml={"auto"}>
-                Send to Email
-              </BButton>
-            </CContainer>
+            <SendEmail />
           </CContainer>
         </SimpleGrid>
       </CContainer>
