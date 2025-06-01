@@ -1,12 +1,11 @@
 import { PRESET_MAIN_BUTTON_MD } from "@/constants/presetProps";
 import formatNumber from "@/utils/formatNumber";
 import { HStack, Icon, Image, StackProps, Text } from "@chakra-ui/react";
+import { IconMinus, IconPlus } from "@tabler/icons-react";
+import { Dispatch } from "react";
 import BButton from "../ui-custom/BButton";
 import CContainer from "../ui-custom/CContainer";
 import NumberInput from "../ui-custom/NumberInput";
-import { IconMinus, IconPlus } from "@tabler/icons-react";
-import { Dispatch } from "react";
-import parseBase64 from "@/utils/parseBase64";
 
 interface Props extends StackProps {
   item?: any;
@@ -44,11 +43,7 @@ const ChooseProductItem = (props: Props) => {
       bg={"white"}
       {...restProps}
     >
-      <Image
-        src={parseBase64(item?.productPhoto)}
-        alt={item?.productName}
-        aspectRatio={1}
-      />
+      <Image src={item?.productPhoto} alt={item?.productName} aspectRatio={1} />
 
       <CContainer p={4} bg={"p.500"}>
         <Text fontSize={24} fontWeight={"bold"}>
