@@ -62,8 +62,8 @@ export const startCaptureCardCamera = async (
   onSuccess?: () => void,
   onError?: (err: unknown) => void
 ): Promise<void> => {
-  const devices = await navigator.mediaDevices.enumerateDevices();
-  console.log("Capture Devices:", devices);
+  // const devices = await navigator.mediaDevices.enumerateDevices();
+  // console.log("Capture Devices:", devices);
 
   try {
     const deviceId = await getCaptureCardDeviceId();
