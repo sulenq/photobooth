@@ -133,6 +133,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
       ref={setNodeRef}
       h={`${hNumber}px`}
       w={`${hNumber * calculatedAspectRatio}px`}
+      flexShrink={0}
       border={"4px dashed"}
       borderColor={"#aaa"}
       // borderColor={"red"}
@@ -158,6 +159,9 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
             bg={"white"}
             borderRadius={"full"}
             aspectRatio={1}
+            w={"50px"}
+            h={"50px"}
+            flexShrink={0}
           >
             <Text className="df" fontSize={32} fontWeight={"bold"} mt={"-8px"}>
               {id}
