@@ -121,7 +121,7 @@ const Camera = (props: any) => {
   // Handle start session
   useEffect(() => {
     // TODO: Fetch timer rule data
-    const seconds = 10;
+    const seconds = 60;
 
     if (cameraOpen && seconds) {
       clearResPhotos();

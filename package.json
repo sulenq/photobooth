@@ -7,7 +7,7 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
     "serve": "vite preview",
-"electron": "wait-on tcp:3000 && cross-env IS_DEV=true electron . --enable-logging",
+"electron": "wait-on tcp:3000 && cross-env IS_DEV=true electron .",
     "electron:pack": "electron-builder --dir",
     "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run electron\"",
     "electron:builder": "electron-builder",
