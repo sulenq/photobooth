@@ -36,6 +36,8 @@ const ChooseProductPage = () => {
   // States
   const { choosedProduct, setChoosedProduct } = useChoosedProduct();
 
+  console.log(choosedProduct);
+
   // States
   const data = response?.data?.result?.productList;
 

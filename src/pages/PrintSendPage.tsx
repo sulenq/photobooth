@@ -11,6 +11,7 @@ import {
 } from "@/constants/defaultAttributes";
 import { LAYOUT_COMPONENTS } from "@/constants/layoutComponents";
 import { PRESET_MAIN_BUTTON } from "@/constants/presetProps";
+import useChoosedProduct from "@/context/useChoosedProduct";
 import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionResPhotos from "@/context/useSessionResPhotos";
 import useSessionTemplate from "@/context/useSessionTemplate";
@@ -184,78 +185,34 @@ const SendEmail = (props: any) => {
 };
 
 const Print = () => {
-  // Contexts
   const { template } = useSessionTemplate();
   const { photos } = useSessionPhotos();
   const { resPhotos, setResPhotos } = useSessionResPhotos();
   const { sessionTimeout } = useSessionTimeout();
+  const { choosedProduct } = useChoosedProduct();
 
-  // States
   const LayoutComponent =
     LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
 
-  // Refs
   const printRef = useRef<HTMLDivElement>(null);
 
-  // Utils
   function handlePrint() {
     const element = document.getElementById("finalResult");
     if (!element) return;
 
     html2canvas(element, {
-      scale: 4, // biar resolusinya tajem
+      scale: 4,
       useCORS: true,
     }).then((canvas) => {
       const dataUrl = canvas.toDataURL("image/png");
+      const copies = choosedProduct?.qty || 1;
 
-      const printWindow = window.open("", "_blank");
-      if (!printWindow) return;
-
-      printWindow.document.write(`
-          <html>
-            <head>
-              <title>Print</title>
-              <style>
-                @page {
-                  size: 10.2cm 15.2cm;
-                  margin: 0;
-                }
-                html, body {
-                  margin: 0;
-                  padding: 0;
-                  width: 10.2cm;
-                  height: 15.2cm;
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                  background: white;
-                }
-                img {
-                  width: 100%;
-                  height: auto;
-                }
-              </style>
-            </head>
-            <body>
-              <img src="${dataUrl}" />
-            </body>
-          </html>
-        `);
-
-      printWindow.document.close();
-      printWindow.focus();
-
-      setTimeout(() => {
-        printWindow.print();
-        printWindow.close();
-      }, 500);
+      // Send to main process: base64 image + copies
+      window.electron.ipcRenderer.invoke("print-photo", dataUrl, copies);
     });
   }
 
-  // Handle assign photos automaticaly when time run out
   useEffect(() => {
-    // console.log("sessionTimeout", sessionTimeout);
-
     if (!photos || photos.length === 0) return;
 
     setResPhotos(() => {

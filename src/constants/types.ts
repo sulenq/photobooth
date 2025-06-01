@@ -2,9 +2,23 @@ import { ButtonProps, MenuItemProps } from "@chakra-ui/react";
 
 declare global {
   interface Window {
-    electronAPI: {
-      print: (data: string) => void;
-      sendPhoto: (data: string) => void;
+    electron: {
+      ipcRenderer: {
+        send: (channel: string, ...args: any[]) => void;
+        invoke: <T = any>(channel: string, ...args: any[]) => Promise<T>;
+        on: (
+          channel: string,
+          listener: (event: any, ...args: any[]) => void
+        ) => void;
+        once: (
+          channel: string,
+          listener: (event: any, ...args: any[]) => void
+        ) => void;
+        removeListener: (
+          channel: string,
+          listener: (...args: any[]) => void
+        ) => void;
+      };
     };
   }
 }
