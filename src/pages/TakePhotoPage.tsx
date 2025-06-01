@@ -67,9 +67,9 @@ const Camera = (props: any) => {
   const streamRef = useRef<MediaStream | null>(null);
 
   // Utils
-  function handleStart() {
+  function handleStart(initialSeconds: number) {
     startTimer({
-      initialSeconds: 7 * 60,
+      initialSeconds: initialSeconds,
       onFinished: () => navigate("/print-send"),
     });
   }
@@ -121,9 +121,9 @@ const Camera = (props: any) => {
   // Handle start session
   useEffect(() => {
     // TODO: Fetch timer rule data
-    const seconds = 7 * 60;
+    const seconds = 10;
 
-    if (cameraOpen && seconds) handleStart();
+    if (cameraOpen && seconds) handleStart(seconds);
   }, [cameraOpen]);
 
   // Handle stop camera when unmount

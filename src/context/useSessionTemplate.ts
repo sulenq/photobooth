@@ -1,3 +1,4 @@
+import { DUMMY_TEMPLATE_OPTIONS } from "@/constants/dummyTemplateOptions";
 import { create } from "zustand";
 
 interface Props {
@@ -7,7 +8,7 @@ interface Props {
 
 const useSessionTemplate = create<Props>((set) => {
   return {
-    template: null,
+    template: DUMMY_TEMPLATE_OPTIONS[0],
     setTemplate: (newState) => set({ template: newState }),
   };
 });
