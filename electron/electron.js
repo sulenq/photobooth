@@ -34,6 +34,8 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  app.commandLine.appendSwitch("overscroll-history-navigation", "0");
+
   createWindow();
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

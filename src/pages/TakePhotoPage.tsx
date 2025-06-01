@@ -80,32 +80,20 @@ const Camera = (props: any) => {
       },
     });
   }
-  const takePhoto = async ({
-    timer,
-  }: {
-    timer: number;
-  }): Promise<string | null> => {
+  const takePhoto = async (): Promise<string | null> => {
     const video = videoRef.current;
     if (!video) return null;
 
-    // wait for the specified timer in seconds
-    startCountdown();
-    await new Promise((resolve) => setTimeout(resolve, timer * 1000));
+    const canvas = document.createElement("canvas");
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
 
-    if (!sessionTimeout) {
-      const canvas = document.createElement("canvas");
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return null;
 
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return null;
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      return canvas.toDataURL("image/jpeg");
-    }
-
-    return "";
+    return canvas.toDataURL("image/jpeg");
   };
 
   // Handle open camera on page load
@@ -148,7 +136,7 @@ const Camera = (props: any) => {
     };
   }, []);
 
-  console.log("sessionTimeout", sessionTimeout);
+  // console.log("sessionTimeout", sessionTimeout);
 
   return (
     <CContainer w={"60%"} mx={"auto"} pos={"relative"}>
@@ -213,11 +201,17 @@ const Camera = (props: any) => {
           bg={"white"}
           color={"pd"}
           onClick={() => {
-            takePhoto({ timer: sessionShutterTimer }).then((data) => {
-              if (data) {
-                addPhoto(data);
-              }
-            });
+            if (!sessionTimeout) {
+              startCountdown();
+
+              setTimeout(() => {
+                takePhoto().then((data) => {
+                  if (data) {
+                    addPhoto(data);
+                  }
+                });
+              }, sessionShutterTimer * 1000);
+            }
           }}
         >
           <Icon color={"pd"} boxSize={8}>

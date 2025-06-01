@@ -7,12 +7,6 @@
   user-select: none;
 }
 
-html,
-body {
-  touch-action: none;
-  overscroll-behavior: none;
-}
-
 :root {
   font-synthesis: none;
   text-rendering: optimizeLegibility;
