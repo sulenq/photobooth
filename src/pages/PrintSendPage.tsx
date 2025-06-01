@@ -208,14 +208,21 @@ const Print = () => {
     if (!element) return;
 
     html2canvas(element, {
-      scale: 4,
+      width: element.offsetWidth,
+      height: element.offsetHeight,
+      scale: 3,
       useCORS: true,
+      backgroundColor: "#FFFFFF",
     }).then((canvas) => {
       const dataUrl = canvas.toDataURL("image/png");
       const copies = choosedProduct?.qty || 1;
 
+      console.log("Calling print-photo with", copies, dataUrl?.slice(0, 30));
+
       // Send to main process: base64 image + copies
-      window.electron.ipcRenderer.invoke("print-photo", dataUrl, copies);
+      // window.electronAPI.ipcRenderer.invoke("print-photo", dataUrl, copies);
+
+      window.electronAPI.printPhoto(dataUrl, copies);
     });
   }
 
