@@ -1,3 +1,5 @@
+import { MutableRefObject, RefObject } from "react";
+
 export const startCamera = async (
   videoRef: React.RefObject<HTMLVideoElement>,
   streamRef: React.MutableRefObject<MediaStream | null>,
@@ -41,3 +43,46 @@ export function stopCamera(
   }
   onClose?.();
 }
+
+export const getCaptureCardDeviceId = async () => {
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  const videoDevices = devices.filter((d) => d.kind === "videoinput");
+
+  const captureCard = videoDevices.find((d) =>
+    // d.label.toLowerCase().includes("usb video capture")
+    d?.label.includes("USB Video")
+  );
+
+  return captureCard?.deviceId;
+};
+
+export const startCaptureCardCamera = async (
+  videoRef: RefObject<HTMLVideoElement>,
+  streamRef: MutableRefObject<MediaStream | null>,
+  onSuccess?: () => void,
+  onError?: (err: unknown) => void
+): Promise<void> => {
+  const devices = await navigator.mediaDevices.enumerateDevices();
+  console.log("Capture Devices:", devices);
+
+  try {
+    const deviceId = await getCaptureCardDeviceId();
+    if (!deviceId) throw new Error("Capture card not found");
+
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { deviceId: { exact: deviceId } },
+      audio: false,
+    });
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = stream;
+    }
+
+    streamRef.current = stream;
+
+    onSuccess?.();
+  } catch (err) {
+    console.error("[startCaptureCardCamera]", err);
+    onError?.(err);
+  }
+};
