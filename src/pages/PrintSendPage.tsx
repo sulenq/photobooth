@@ -77,7 +77,7 @@ const DriveQR = (props: any) => {
   // Handle generate drive link QR on load
   useEffect(() => {
     setTimeout(() => {
-      generateDriveLink();
+      // generateDriveLink();
     }, 100);
   }, []);
   useEffect(() => {
@@ -185,18 +185,25 @@ const SendEmail = (props: any) => {
 };
 
 const Print = () => {
+  // Contexts
   const { template } = useSessionTemplate();
   const { photos } = useSessionPhotos();
   const { resPhotos, setResPhotos } = useSessionResPhotos();
   const { sessionTimeout } = useSessionTimeout();
   const { choosedProduct } = useChoosedProduct();
 
+  // States
   const LayoutComponent =
     LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
 
+  // Refs
   const printRef = useRef<HTMLDivElement>(null);
 
+  // Utils
   function handlePrint() {
+    console.log("call handlePrint()");
+    console.log("choosedProduct:", choosedProduct);
+
     const element = document.getElementById("finalResult");
     if (!element) return;
 
@@ -212,6 +219,7 @@ const Print = () => {
     });
   }
 
+  // Handle auto set res photo
   useEffect(() => {
     if (!photos || photos.length === 0) return;
 

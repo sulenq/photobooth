@@ -1,90 +1,49 @@
-const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
+const { app, BrowserWindow } = require("electron");
+
+const isDev = process.env.IS_DEV == "true" ? true : false;
 
 function createWindow() {
-  const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+  const mainWindow = new BrowserWindow({
+    width: 1024,
+    height: 650,
+    autoHideMenuBar: true,
+    resizable: true,
+    frame: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
-      nodeIntegration: false,
-      contextIsolation: true,
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   });
 
-  if (process.env.NODE_ENV === "development") {
-    win.loadURL("http://localhost:3000");
-  } else {
-    win.loadFile(path.join(__dirname, "../build/index.html"));
+  mainWindow.webContents.setWindowOpenHandler((edata) => {
+    shell.openExternal(edata.url);
+    return { action: "deny" };
+  });
+
+  mainWindow.loadURL(
+    isDev
+      ? "http://localhost:3000"
+      : `file://${path.join(__dirname, "../dist/index.html")}`
+  );
+  // Open the DevTools.
+  if (isDev) {
+    //mainWindow.webContents.openDevTools();
   }
 }
 
 app.whenReady().then(() => {
-  createWindow();
+  app.commandLine.appendSwitch("overscroll-history-navigation", "0");
 
-  app.on("activate", () => {
+  createWindow();
+  app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });
 
 app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
-});
-
-// Print handler
-ipcMain.handle("print-photo", async (event, base64Image, copies = 1) => {
-  return new Promise((resolve, reject) => {
-    const printWin = new BrowserWindow({
-      show: false,
-      webPreferences: { offscreen: true },
-    });
-
-    const html = `
-      <html>
-        <body style="margin:0; padding:0;">
-          <img src="${base64Image}" style="width:100%; height:auto;" />
-        </body>
-      </html>
-    `;
-
-    printWin.loadURL(
-      `data:text/html;charset=utf-8,${encodeURIComponent(html)}`
-    );
-
-    printWin.webContents.on("did-finish-load", () => {
-      let printedCount = 0;
-
-      function printNext() {
-        if (printedCount >= copies) {
-          printWin.close();
-          resolve(true);
-          return;
-        }
-
-        printWin.webContents.print(
-          {
-            silent: true,
-            deviceName: "DNP DS-RX1 HS",
-            printBackground: true,
-          },
-          (success, errorType) => {
-            if (!success) {
-              reject(new Error(errorType));
-              printWin.close();
-              return;
-            }
-            printedCount++;
-            printNext();
-          }
-        );
-      }
-
-      printNext();
-    });
-
-    printWin.webContents.on("did-fail-load", () => {
-      printWin.close();
-      reject(new Error("Failed to load print window"));
-    });
-  });
+  if (process.platform !== "darwin") {
+    app.quit();
+  }
 });
