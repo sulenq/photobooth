@@ -14,6 +14,7 @@ import { PRESET_MAIN_BUTTON } from "@/constants/presetProps";
 import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionResPhotos from "@/context/useSessionResPhotos";
 import useSessionTemplate from "@/context/useSessionTemplate";
+import useSessionTimeout from "@/context/useSessionTimeout";
 import useRequest from "@/hooks/useRequest";
 import {
   Box,
@@ -183,20 +184,26 @@ const SendEmail = (props: any) => {
 };
 
 const Print = () => {
+  // Contexts
   const { template } = useSessionTemplate();
+  const { photos } = useSessionPhotos();
   const { resPhotos, setResPhotos } = useSessionResPhotos();
+  const { sessionTimeout } = useSessionTimeout();
 
-  const printRef = useRef<HTMLDivElement>(null);
-
+  // States
   const LayoutComponent =
     LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
 
+  // Refs
+  const printRef = useRef<HTMLDivElement>(null);
+
+  // Utils
   function handlePrint() {
     const element = document.getElementById("finalResult");
     if (!element) return;
 
     html2canvas(element, {
-      scale: 2, // biar resolusinya tajem
+      scale: 4, // biar resolusinya tajem
       useCORS: true,
     }).then((canvas) => {
       const dataUrl = canvas.toDataURL("image/png");
@@ -244,6 +251,28 @@ const Print = () => {
       }, 500);
     });
   }
+
+  // Handle assign photos automaticaly when time run out
+  useEffect(() => {
+    // console.log("sessionTimeout", sessionTimeout);
+
+    if (!photos || photos.length === 0) return;
+
+    setResPhotos(() => {
+      const newSlots: any = {
+        1: null,
+        2: null,
+        3: null,
+        4: null,
+      };
+
+      for (let i = 0; i < 4; i++) {
+        newSlots[i + 1] = photos[i % photos.length];
+      }
+
+      return newSlots;
+    });
+  }, [sessionTimeout, photos]);
 
   return (
     <CContainer align="center" gap={8}>

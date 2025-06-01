@@ -14,6 +14,7 @@ import useSessionFilter from "@/context/useSessionFilter";
 import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionResPhotos from "@/context/useSessionResPhotos";
 import useSessionTemplate from "@/context/useSessionTemplate";
+import useSessionTimeout from "@/context/useSessionTimeout";
 import {
   Box,
   Center,
@@ -200,6 +201,7 @@ const EditPhotoPage = () => {
   const { photos } = useSessionPhotos();
   const { template } = useSessionTemplate();
   const { resPhotos, setResPhotos } = useSessionResPhotos();
+  const setSessionTimeout = useSessionTimeout((s) => s.setSessionTimeout);
 
   // States
   const sensors = useSensors(
@@ -228,6 +230,8 @@ const EditPhotoPage = () => {
       }));
     }
   }
+
+  console.log(resPhotos);
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
@@ -298,6 +302,12 @@ const EditPhotoPage = () => {
               <NextButton
                 to="/print-send"
                 wrapperProps={{ mx: "auto", mt: 4 }}
+                disabled={
+                  !Object.values(resPhotos).every((val) => val !== null)
+                }
+                onClick={() => {
+                  setSessionTimeout(false);
+                }}
               />
             </CContainer>
           </HStack>

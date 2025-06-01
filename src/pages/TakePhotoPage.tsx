@@ -8,10 +8,12 @@ import SessionTimer from "@/components/widget/SessionTimer";
 import { IMAGES_PATH } from "@/constants/paths";
 import useLang from "@/context/useLang";
 import useSessionPhotos from "@/context/useSessionPhotos";
+import useSessionResPhotos from "@/context/useSessionResPhotos";
 import useSessionShutterTimer from "@/context/useSessionShutterTimer";
+import useSessionTimeout from "@/context/useSessionTimeout";
 import useSessionTimer from "@/context/useSessionTimer";
 import useCountdown from "@/hooks/useCountdown";
-import { startCaptureCardCamera, stopCamera } from "@/utils/camera";
+import { startCamera, stopCamera } from "@/utils/camera";
 import {
   Box,
   HStack,
@@ -56,8 +58,10 @@ const Camera = (props: any) => {
   // Contexts
   const { l } = useLang();
   const { photos, addPhoto } = useSessionPhotos();
+  const clearResPhotos = useSessionResPhotos((s) => s.clearResPhotos);
   const { sessionShutterTimer, setSessionShutterTimer } =
     useSessionShutterTimer();
+  const { sessionTimeout, setSessionTimeout } = useSessionTimeout();
 
   // States
   const [cameraOpen, setCameraOpen] = useState<boolean>(false);
@@ -70,7 +74,10 @@ const Camera = (props: any) => {
   function handleStart(initialSeconds: number) {
     startTimer({
       initialSeconds: initialSeconds,
-      onFinished: () => navigate("/print-send"),
+      onFinished: () => {
+        setSessionTimeout(true);
+        navigate("/print-send");
+      },
     });
   }
   const takePhoto = async ({
@@ -85,21 +92,26 @@ const Camera = (props: any) => {
     startCountdown();
     await new Promise((resolve) => setTimeout(resolve, timer * 1000));
 
-    const canvas = document.createElement("canvas");
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    if (!sessionTimeout) {
+      const canvas = document.createElement("canvas");
+      canvas.width = video.videoWidth;
+      canvas.height = video.videoHeight;
 
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return null;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return null;
 
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
-    return canvas.toDataURL("image/jpeg");
+      return canvas.toDataURL("image/jpeg");
+    }
+
+    return "";
   };
 
   // Handle open camera on page load
   useEffect(() => {
-    startCaptureCardCamera(
+    setSessionTimeout(false);
+    startCamera(
       videoRef,
       streamRef,
       () => {
@@ -123,7 +135,10 @@ const Camera = (props: any) => {
     // TODO: Fetch timer rule data
     const seconds = 10;
 
-    if (cameraOpen && seconds) handleStart(seconds);
+    if (cameraOpen && seconds) {
+      clearResPhotos();
+      handleStart(seconds);
+    }
   }, [cameraOpen]);
 
   // Handle stop camera when unmount
@@ -132,6 +147,8 @@ const Camera = (props: any) => {
       stopCamera(videoRef, streamRef);
     };
   }, []);
+
+  console.log("sessionTimeout", sessionTimeout);
 
   return (
     <CContainer w={"60%"} mx={"auto"} pos={"relative"}>

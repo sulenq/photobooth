@@ -1,4 +1,3 @@
-// store/photoStore.ts
 import { create } from "zustand";
 
 type SlotKey = 1 | 2 | 3 | 4;
@@ -10,6 +9,7 @@ interface PhotoStore {
   setResPhotos: (
     update: PhotoSlots | ((prev: PhotoSlots) => PhotoSlots)
   ) => void;
+  clearResPhotos: () => void;
 }
 
 const initialSlots: PhotoSlots = {
@@ -24,14 +24,16 @@ const useSessionResPhotos = create<PhotoStore>((set) => ({
 
   setResPhotos: (update) => {
     if (typeof update === "function") {
-      // if update is callback, execute it with current state first
       set((state) => ({
         resPhotos: update(state.resPhotos),
       }));
     } else {
-      // else treat as direct value
       set({ resPhotos: update });
     }
+  },
+
+  clearResPhotos: () => {
+    set({ resPhotos: { ...initialSlots } });
   },
 }));
 
