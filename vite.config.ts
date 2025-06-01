@@ -1,14 +1,17 @@
 import { VitePWA } from "vite-plugin-pwa";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
-import tsconfigPaths from "vite-tsconfig-paths";
+// import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vitejs.dev/config/
 export default defineConfig({
   logLevel: "info",
+  server: {
+    port: 3000,
+  },
   plugins: [
     react(),
-    tsconfigPaths(),
+    // tsconfigPaths(),
     VitePWA({
       registerType: "autoUpdate",
       injectRegister: false,

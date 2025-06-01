@@ -1,22 +1,19 @@
 {
   "name": "popbox",
-  "main": "dist-electron/main.js",
+  "main": "electron/electron.js",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
-    "dev": "concurrently \"vite\" \"npm:electron:dev\"",
-    "build-electron": "node scripts/build-electron.mjs",
-    "start-electron": "electron dist-electron/main.cjs",
-    "dev-full": "concurrently -k \"npm:dev\" \"npm:watch-electron\" \"npm:start-electron\"",
-    "watch-electron": "chokidar 'electron/**/*.ts' -c 'npm run build-electron'",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "l": "node src/locales/_generate.js",
-    "electron:dev": "npm run electron:build && electron dist-electron/main.cjs",
-    "electron:build": "tsc -p tsconfig.electron.json && ren dist-electron\\main.js main.cjs",
-    "start": "npm run build && electron dist-electron/main.js",
-    "build": "tsc"
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "serve": "vite preview",
+    "electron": "wait-on tcp:3000 && cross-env IS_DEV=true electron .",
+    "electron:pack": "electron-builder --dir",
+    "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run electron\"",
+    "electron:builder": "electron-builder",
+    "build:for:electron": "tsc --noEmit && cross-env ELECTRON=true vite build",
+    "app:build": "npm run build:for:electron && npm run electron:builder",
+    "l": "node src/locales/_generate.js"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.5.1",
@@ -25,6 +22,7 @@
     "@phosphor-icons/react": "^2.1.7",
     "@tabler/icons-react": "^3.28.1",
     "axios": "^1.7.7",
+    "cross-env": "^7.0.3",
     "date-fns": "^4.1.0",
     "formik": "^2.4.6",
     "gifshot": "^0.4.5",
@@ -39,6 +37,7 @@
     "react-router-dom": "^6.28.0",
     "react-virtualized": "^9.22.6",
     "recharts": "^2.15.0",
+    "wait-on": "^8.0.3",
     "yup": "^1.4.0",
     "zustand": "^5.0.1"
   },
@@ -53,8 +52,6 @@
     "@typescript-eslint/parser": "^7.8.0",
     "@vite-pwa/assets-generator": "^0.2.4",
     "@vitejs/plugin-react": "^4.2.1",
-    "chokidar": "^4.0.3",
-    "chokidar-cli": "^3.0.0",
     "concurrently": "^8.2.2",
     "electron": "^25.9.8",
     "eslint": "^8.57.0",
@@ -67,6 +64,26 @@
     "vite-tsconfig-paths": "^5.1.0",
     "workbox-core": "^7.1.0",
     "workbox-window": "^7.1.0"
+  },
+  "build": {
+    "appId": "com.devname.package",
+    "productName": "Project Name",
+    "copyright": "Copyright © 2023 ${author}",
+    "mac": {
+      "category": "public.app-category.utilities"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist_electron"
+    }
   },
   "overrides": {
     "sharp": "0.32.6",

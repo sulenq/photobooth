@@ -74,7 +74,9 @@ const DriveQR = (props: any) => {
 
   // Handle generate drive link QR on load
   useEffect(() => {
-    generateDriveLink();
+    setTimeout(() => {
+      generateDriveLink();
+    }, 100);
   }, []);
   useEffect(() => {
     const driveLink = response?.data?.driveLink;
