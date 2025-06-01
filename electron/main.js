@@ -1,5 +1,9 @@
 const path = require("path");
 const { app, BrowserWindow } = require("electron");
+const { ipcMain, nativeImage } = require("electron");
+const fs = require("fs");
+const os = require("os");
+const { exec } = require("child_process");
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
 
@@ -37,6 +41,30 @@ app.whenReady().then(() => {
   app.commandLine.appendSwitch("overscroll-history-navigation", "0");
 
   createWindow();
+
+  // Handle print photo
+  ipcMain.handle("print-photo", async (event, base64Image, copies) => {
+    try {
+      const image = nativeImage.createFromDataURL(base64Image);
+      const tempPath = path.join(os.tmpdir(), `photobooth_print.png`);
+      fs.writeFileSync(tempPath, image.toPNG());
+
+      for (let i = 0; i < copies; i++) {
+        // Ganti command ini sesuai OS. Di Windows bisa pakai `print` atau `start`
+        exec(`start /min "" "${tempPath}"`, (err, stdout, stderr) => {
+          if (err) {
+            console.error("Print error:", err);
+          }
+        });
+      }
+
+      return "ok";
+    } catch (err) {
+      console.error("Print failed:", err);
+      return "error";
+    }
+  });
+
   app.on("activate", function () {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
