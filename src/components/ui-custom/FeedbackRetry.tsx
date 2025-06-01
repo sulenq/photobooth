@@ -10,12 +10,14 @@ interface Props extends StackProps {
   title?: string;
   description?: string;
   onRetry?: () => void;
+  addonButton?: any;
 }
 
 export default function FeedbackRetry({
   title,
   description,
   onRetry,
+  addonButton,
   ...props
 }: Props) {
   // Contexts
@@ -34,13 +36,18 @@ export default function FeedbackRetry({
         description={description || l.retry_feedback.description}
         maxW={"300px"}
       >
-        <BButton
-          className="clicky"
-          colorPalette={themeConfig.colorPalette}
-          onClick={onRetry}
-        >
-          {l.retry}
-        </BButton>
+        <CContainer gap={2}>
+          <BButton
+            className="clicky"
+            colorPalette={themeConfig.colorPalette}
+            onClick={onRetry}
+            w={"full"}
+          >
+            Retry
+          </BButton>
+
+          {addonButton}
+        </CContainer>
       </EmptyState>
     </CContainer>
   );

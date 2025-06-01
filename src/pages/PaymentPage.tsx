@@ -2,6 +2,7 @@ import CContainer from "@/components/ui-custom/CContainer";
 import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import Heading1 from "@/components/ui-custom/Heading1";
 import CountDown from "@/components/widget/CountDown";
+import Header1 from "@/components/widget/Header1";
 import NextButton from "@/components/widget/NextButton";
 import PageContainer from "@/components/widget/PageContainer";
 import { SVGS_PATH } from "@/constants/paths";
@@ -82,7 +83,9 @@ const PaymentPage = () => {
   }, []);
 
   return (
-    <PageContainer>
+    <PageContainer borderless gap={10}>
+      <Header1 backLink={"/choose-product"}>PAYMENT</Header1>
+
       <SimpleGrid columns={[1, null, null, 2]} gap={10} flex={1}>
         {/* QR Code */}
         <CContainer

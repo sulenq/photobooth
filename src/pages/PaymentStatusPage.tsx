@@ -58,7 +58,27 @@ const PaymentStatusPage = () => {
 
         {!loading && (
           <>
-            {error && <FeedbackRetry onRetry={paymentStatus} />}
+            {error && (
+              <FeedbackRetry
+                onRetry={paymentStatus}
+                description="Kalau sudah bayar klik 'Retry', jika belum klik 'Choose Product'"
+                addonButton={
+                  <>
+                    <NavLink to="/choose-product" w={"full"}>
+                      <BButton
+                        maxW={"300px"}
+                        variant={"outline"}
+                        border={"2px solid {colors.p.900}"}
+                        color={"p.900"}
+                        colorPalette={"p"}
+                      >
+                        Choose Product
+                      </BButton>
+                    </NavLink>
+                  </>
+                }
+              />
+            )}
 
             {!error && (
               <CContainer flex={1} pos={"relative"}>
