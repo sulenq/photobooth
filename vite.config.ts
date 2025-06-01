@@ -1,6 +1,7 @@
 import { VitePWA } from "vite-plugin-pwa";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 // import tsconfigPaths from "vite-tsconfig-paths";
 
 // https://vitejs.dev/config/
@@ -8,6 +9,11 @@ export default defineConfig({
   logLevel: "info",
   server: {
     port: 3000,
+  },
+  resolve: {
+    alias: {
+      "@": path.resolve(__dirname, "src"), // ⬅️ bikin '@/' jadi ke folder src
+    },
   },
   plugins: [
     react(),
