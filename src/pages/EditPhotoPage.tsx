@@ -34,15 +34,19 @@ import {
 import { CSSProperties, useEffect, useRef } from "react";
 
 const DraggablePhoto = ({ id, src, borderRadius, border }: any) => {
+  // Contexts
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id,
       data: { src },
     });
 
+  // States
   const dndStyle: CSSProperties = {
     transform: transform
-      ? `translate(${transform.x}px, ${transform.y}px)`
+      ? `translate(${transform.x}px, ${transform.y}px) scale(${
+          isDragging ? 0.3 : 1
+        })`
       : undefined,
     cursor: isDragging ? "grabbing" : "grab",
     zIndex: isDragging ? 999 : 99,
@@ -53,7 +57,7 @@ const DraggablePhoto = ({ id, src, borderRadius, border }: any) => {
       zIndex={99}
       fRef={setNodeRef}
       style={dndStyle}
-      touchAction={"none"}
+      touchAction="none"
       aspectRatio={3 / 2}
       {...listeners}
       {...attributes}
