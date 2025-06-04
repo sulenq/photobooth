@@ -27,7 +27,7 @@ interface DropPhotoSlotProps {
 const aspectRatio1 = 2 / 3;
 const aspectRatio2 = 3 / 2;
 const dropPhotoSlotZindex = 1;
-const dropPhotoSlotBorderColor = "green";
+const dropPhotoSlotBorder = "";
 
 const LayoutContainer = (props: StackProps) => {
   // Props
@@ -143,11 +143,11 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
       h={h || `${hNumber}px`}
       w={w || `${hNumber * calculatedAspectRatio}px`}
       flexShrink={0}
-      border={"2px dashed"}
-      borderColor={dropPhotoSlotBorderColor}
+      border={dropPhotoSlotBorder}
       overflow={"hidden"}
-      bg={isOver ? "gray" : "transparent"}
+      bg={isOver ? "gray" : "black"}
       zIndex={dropPhotoSlotZindex}
+      transform={"scale(1.01)"}
     >
       {value ? (
         <canvas

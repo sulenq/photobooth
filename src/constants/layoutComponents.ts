@@ -1,8 +1,6 @@
 import { Layout1, Layout2, Layout3 } from "@/components/widget/TemplateLayout";
 import { SlotKey } from "./types";
 
-type TemplateId = 1 | 2 | 3 | 4 | 5;
-
 type SlotNumberingMap = Record<SlotKey, number>;
 
 type LayoutComponentConfig = {
@@ -10,7 +8,7 @@ type LayoutComponentConfig = {
   slotNumberingMap: SlotNumberingMap;
 };
 
-export const LAYOUT_COMPONENTS: Record<TemplateId, LayoutComponentConfig> = {
+export const LAYOUT_COMPONENTS: Record<string, LayoutComponentConfig> = {
   1: {
     component: Layout1,
     slotNumberingMap: {

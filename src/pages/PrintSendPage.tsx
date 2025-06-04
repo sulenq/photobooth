@@ -36,11 +36,16 @@ interface DriveQRProps {
   setGetDriveLinkLoading: (loading: boolean) => void;
 }
 
-const DriveQR = ({
-  driveLink,
-  setDriveLink,
-  setGetDriveLinkLoading,
-}: DriveQRProps) => {
+interface SendEmailProps {
+  driveLink: string;
+  driveLinkLoading: boolean;
+}
+
+const DriveQR = (props: DriveQRProps) => {
+  // Props
+  const { driveLink, setDriveLink, setGetDriveLinkLoading } = props;
+
+  // Hooks
   const { loading, req, response, error } = useRequest({
     id: "generate-drive-qr",
     showLoadingToast: false,
@@ -48,8 +53,10 @@ const DriveQR = ({
     showSuccessToast: false,
   });
 
+  // Contexts
   const { photos } = useSessionPhotos();
 
+  // Utils
   function generateDriveLink() {
     const element = document.getElementById("finalResult");
     if (!element) return;
@@ -73,15 +80,18 @@ const DriveQR = ({
     });
   }
 
+  // Handle generate qr drive on page load
   useEffect(() => {
-    setTimeout(() => generateDriveLink(), 100);
+    // setTimeout(() => generateDriveLink(), 100);
   }, []);
 
+  // Handle qr drive response
   useEffect(() => {
     const link = response?.data?.driveLink;
     if (link) setDriveLink(link);
   }, [response]);
 
+  // Handle qr drive loading
   useEffect(() => {
     setGetDriveLinkLoading(loading);
   }, [loading]);
@@ -102,7 +112,9 @@ const DriveQR = ({
         {loading ? (
           <CContainer justify="center" align="center" gap={10}>
             <Spinner size="xl" />
-            <Text fontSize={20}>Sedang menyiapkan Google Drive</Text>
+            <Text fontSize={20} textAlign={"center"}>
+              Sedang menyiapkan Google Drive
+            </Text>
           </CContainer>
         ) : error ? (
           <FeedbackRetry onRetry={generateDriveLink} />
@@ -114,15 +126,12 @@ const DriveQR = ({
   );
 };
 
-interface SendEmailProps {
-  driveLink: string;
-  driveLinkLoading: boolean;
-}
-
 const SendEmail = ({ driveLink, driveLinkLoading }: SendEmailProps) => {
+  // Hooks
   const { loading, req } = useRequest({ id: "generate-drive-qr" });
   const [email, setEmail] = useState("");
 
+  // Utils
   function sendEmail() {
     req({
       config: {
@@ -159,17 +168,20 @@ const SendEmail = ({ driveLink, driveLinkLoading }: SendEmailProps) => {
 };
 
 const Print = () => {
+  // Contexts
   const { template } = useSessionTemplate();
   const { photos } = useSessionPhotos();
   const { resPhotos, setResPhotos } = useSessionResPhotos();
   const { sessionTimeout } = useSessionTimeout();
   const { choosedProduct } = useChoosedProduct();
 
+  // States
   const layoutData =
     LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
   const LayoutComponent = layoutData.component;
   const printRef = useRef<HTMLDivElement>(null);
 
+  // Utils
   function handlePrint() {
     const element = document.getElementById("finalResult");
     if (!element) return;
@@ -188,6 +200,7 @@ const Print = () => {
     });
   }
 
+  // Handle auto assign res photos
   useEffect(() => {
     if (!photos?.length) return;
 
@@ -218,7 +231,7 @@ const Print = () => {
         aspectRatio={TEMPLATE_ASPECT_RATIO}
       >
         <Image
-          src={template?.template}
+          src={template?.production}
           pos="absolute"
           left={0}
           top={0}
@@ -232,6 +245,7 @@ const Print = () => {
           zIndex={2}
         />
       </CContainer>
+
       <BButton
         onClick={handlePrint}
         {...PRESET_MAIN_BUTTON}
@@ -244,6 +258,7 @@ const Print = () => {
 };
 
 const PrintSendPage = () => {
+  // States
   const [driveLink, setDriveLink] = useState("");
   const [driveLinkLoading, setGetDriveLinkLoading] = useState<boolean>(false);
 
@@ -264,12 +279,14 @@ const PrintSendPage = () => {
           mx="auto"
         >
           <Print />
+
           <CContainer gap={8}>
             <DriveQR
               driveLink={driveLink}
               setDriveLink={setDriveLink}
               setGetDriveLinkLoading={setGetDriveLinkLoading}
             />
+
             <SendEmail
               driveLink={driveLink}
               driveLinkLoading={driveLinkLoading}
