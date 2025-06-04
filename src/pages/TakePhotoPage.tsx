@@ -155,7 +155,7 @@ const Camera = (props: any) => {
     setFilter(FILTERS[0]);
     clearResPhotos();
 
-    const seconds = sessionTimerInitialSeconds; // session timer
+    const seconds = 63; // session timer
 
     if (cameraOpen && seconds) {
       clearResPhotos();
