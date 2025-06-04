@@ -1,18 +1,23 @@
 import BButton from "@/components/ui-custom/BButton";
 import CContainer from "@/components/ui-custom/CContainer";
+import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import { toaster } from "@/components/ui/toaster";
 import Heading from "@/components/widget/Heading";
 import NextButton from "@/components/widget/NextButton";
 import PageContainer from "@/components/widget/PageContainer";
 import SessionTimer from "@/components/widget/SessionTimer";
+import { FILTERS } from "@/constants/filters";
 import { IMAGES_PATH } from "@/constants/paths";
 import useLang from "@/context/useLang";
+import useSessionFilter from "@/context/useSessionFilter";
 import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionResPhotos from "@/context/useSessionResPhotos";
 import useSessionShutterTimer from "@/context/useSessionShutterTimer";
+import useSessionTemplate from "@/context/useSessionTemplate";
 import useSessionTimeout from "@/context/useSessionTimeout";
 import useSessionTimer from "@/context/useSessionTimer";
 import useCountdown from "@/hooks/useCountdown";
+import useRequest from "@/hooks/useRequest";
 import { startCamera, stopCamera } from "@/utils/camera";
 import {
   Box,
@@ -54,24 +59,37 @@ const Camera = (props: any) => {
   // Hooks
   const navigate = useNavigate();
   const startTimer = useSessionTimer((s) => s.startTimer);
+  const { req, response, error } = useRequest({
+    id: "get-session-timer",
+    showLoadingToast: false,
+    showErrorToast: false,
+    showSuccessToast: false,
+  });
 
   // Contexts
   const { l } = useLang();
-  const { photos, addPhoto } = useSessionPhotos();
+  const { photos, addPhoto, clearPhotos } = useSessionPhotos();
+  const { defaultTemplate, setTemplate } = useSessionTemplate();
   const clearResPhotos = useSessionResPhotos((s) => s.clearResPhotos);
   const { sessionShutterTimer, setSessionShutterTimer } =
     useSessionShutterTimer();
   const { sessionTimeout, setSessionTimeout } = useSessionTimeout();
+  const { setFilter } = useSessionFilter();
 
   // States
   const [cameraOpen, setCameraOpen] = useState<boolean>(false);
+  const sessionTimerInitialSeconds = response?.data?.result?.value * 60;
 
   // Refs
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
 
   // Utils
-  function handleStart(initialSeconds: number) {
+  function getSessionTimer() {
+    const url = `/rules/photo-duration`;
+    req({ config: { url } });
+  }
+  function handleStartTimer(initialSeconds: number) {
     startTimer({
       initialSeconds: initialSeconds,
       onFinished: () => {
@@ -101,38 +119,47 @@ const Camera = (props: any) => {
     return canvas.toDataURL("image/jpeg");
   };
 
+  // Handle get sesion timer on page load
+  useEffect(() => {
+    getSessionTimer();
+  }, []);
+
   // Handle open camera on page load
   useEffect(() => {
-    setSessionTimeout(false);
-    startCamera(
-      videoRef,
-      streamRef,
-      () => {
-        setCameraOpen(true);
-      },
-      () => {
-        toaster.error({
-          title: l.camera_fail_toast.title,
-          description: l.camera_fail_toast.description,
-          action: {
-            label: "Close",
-            onClick: () => {},
-          },
-        });
-      }
-    );
-  }, []);
+    if (sessionTimerInitialSeconds) {
+      startCamera(
+        videoRef,
+        streamRef,
+        () => {
+          setCameraOpen(true);
+        },
+        () => {
+          toaster.error({
+            title: l.camera_fail_toast.title,
+            description: l.camera_fail_toast.description,
+            action: {
+              label: "Close",
+              onClick: () => {},
+            },
+          });
+        }
+      );
+    }
+  }, [sessionTimerInitialSeconds]);
 
   // Handle start session
   useEffect(() => {
-    // TODO: Fetch session timer rule data
-    // TODO: reset all context to default
+    setSessionTimeout(false);
+    clearPhotos();
+    setTemplate(defaultTemplate);
+    setFilter(FILTERS[0]);
+    clearResPhotos();
 
-    const seconds = 10;
+    const seconds = sessionTimerInitialSeconds; // session timer
 
     if (cameraOpen && seconds) {
       clearResPhotos();
-      handleStart(seconds);
+      handleStartTimer(seconds);
     }
   }, [cameraOpen]);
 
@@ -145,113 +172,123 @@ const Camera = (props: any) => {
 
   return (
     <CContainer w={"60%"} mx={"auto"} pos={"relative"}>
-      <div
-        style={{
-          position: "relative",
-          width: "100%",
-          aspectRatio: 3 / 2,
-          backgroundColor: "black",
-        }}
-      >
-        <video
-          ref={videoRef}
-          autoPlay
-          playsInline
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            aspectRatio: 3 / 2,
-            width: "100%",
-            height: "fit",
-            transform: "scaleX(-1)", // Mirror
-            objectFit: "cover",
-          }}
-        />
-      </div>
+      {error && <FeedbackRetry onRetry={getSessionTimer} />}
 
-      {/* Portrait Guideline */}
-      <Box
-        aspectRatio={2 / 3}
-        h={"full"}
-        w={"auto"}
-        borderLeft={"2px dashed {colors.p.500}"}
-        borderRight={"2px dashed {colors.p.500}"}
-        pos={"absolute"}
-        left={"50%"}
-        top={"50%"}
-        transform={"translate(-50%, -50%)"}
-      />
+      {!error && (
+        <>
+          <div
+            style={{
+              position: "relative",
+              width: "100%",
+              aspectRatio: 3 / 2,
+              backgroundColor: "black",
+            }}
+          >
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                aspectRatio: 3 / 2,
+                width: "100%",
+                height: "fit",
+                transform: "scaleX(-1)", // Mirror
+                objectFit: "cover",
+              }}
+            />
+          </div>
 
-      {/* Shutter Indicator */}
-      {running && <ShutterTimer remaining={remaining} />}
+          {/* Portrait Guideline */}
+          <Box
+            aspectRatio={2 / 3}
+            h={"full"}
+            w={"auto"}
+            borderLeft={"2px dashed {colors.p.500}"}
+            borderRight={"2px dashed {colors.p.500}"}
+            pos={"absolute"}
+            left={"50%"}
+            top={"50%"}
+            transform={"translate(-50%, -50%)"}
+          />
 
-      {/* Shutter Button */}
-      <VStack
-        pos={"absolute"}
-        left={"50%"}
-        bottom={0}
-        pb={"8px"}
-        w={"full"}
-        justify={"center"}
-        transform={"translateX(-50%)"}
-      >
-        <BButton
-          iconButton
-          w={"fit"}
-          loading={running}
-          disabled={photos?.length === 4}
-          borderRadius={"full"}
-          size={"2xl"}
-          bg={"white"}
-          color={"pd"}
-          onClick={() => {
-            if (!sessionTimeout) {
-              startCountdown();
+          {cameraOpen && (
+            <>
+              {/* Shutter Indicator */}
+              {running && <ShutterTimer remaining={remaining} />}
 
-              setTimeout(() => {
-                takePhoto().then((data) => {
-                  if (data) {
-                    addPhoto(data);
-                  }
-                });
-              }, sessionShutterTimer * 1000);
-            }
-          }}
-        >
-          <Icon color={"pd"} boxSize={8}>
-            <IconCamera />
-          </Icon>
-        </BButton>
-      </VStack>
-
-      {/* Shutter Timer List */}
-      <CContainer
-        align={"center"}
-        gap={2}
-        pos={"absolute"}
-        left={"8px"}
-        bottom={"8px"}
-        w={"fit"}
-      >
-        <Text color={"white"}>Timer</Text>
-
-        <VStack justify={"center"}>
-          {Array.from({ length: 3 }).map((_, i) => {
-            return (
-              <BButton
-                key={i}
-                variant={"outline"}
-                color={i + 3 === sessionShutterTimer ? "pd" : "white"}
-                bg={i + 3 === sessionShutterTimer ? "white" : "transparent"}
-                onClick={() => setSessionShutterTimer(i + 3)}
+              {/* Shutter Button */}
+              <VStack
+                pos={"absolute"}
+                left={"50%"}
+                bottom={0}
+                pb={"8px"}
+                w={"full"}
+                justify={"center"}
+                transform={"translateX(-50%)"}
               >
-                {i + 3}
-              </BButton>
-            );
-          })}
-        </VStack>
-      </CContainer>
+                <BButton
+                  iconButton
+                  w={"fit"}
+                  loading={running}
+                  disabled={photos?.length === 4}
+                  borderRadius={"full"}
+                  size={"2xl"}
+                  bg={"white"}
+                  color={"pd"}
+                  onClick={() => {
+                    if (!sessionTimeout) {
+                      startCountdown();
+
+                      setTimeout(() => {
+                        takePhoto().then((data) => {
+                          if (data) {
+                            addPhoto(data);
+                          }
+                        });
+                      }, sessionShutterTimer * 1000);
+                    }
+                  }}
+                >
+                  <Icon color={"pd"} boxSize={8}>
+                    <IconCamera />
+                  </Icon>
+                </BButton>
+              </VStack>
+            </>
+          )}
+
+          {/* Shutter Timer List */}
+          <CContainer
+            align={"center"}
+            gap={2}
+            pos={"absolute"}
+            left={"8px"}
+            bottom={"8px"}
+            w={"fit"}
+          >
+            <Text color={"white"}>Timer</Text>
+
+            <VStack justify={"center"}>
+              {Array.from({ length: 3 }).map((_, i) => {
+                return (
+                  <BButton
+                    key={i}
+                    variant={"outline"}
+                    color={i + 3 === sessionShutterTimer ? "pd" : "white"}
+                    bg={i + 3 === sessionShutterTimer ? "white" : "transparent"}
+                    onClick={() => setSessionShutterTimer(i + 3)}
+                  >
+                    {i + 3}
+                  </BButton>
+                );
+              })}
+            </VStack>
+          </CContainer>
+        </>
+      )}
     </CContainer>
   );
 };

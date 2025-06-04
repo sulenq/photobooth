@@ -3,6 +3,7 @@ import { create } from "zustand";
 
 interface Props {
   template: any;
+  defaultTemplate: any;
   setTemplate: (newState: any) => void;
 }
 
@@ -15,6 +16,7 @@ const DEFAULT = {
 const useSessionTemplate = create<Props>((set) => {
   return {
     template: DEFAULT,
+    defaultTemplate: DEFAULT,
     setTemplate: (newState) => set({ template: newState }),
   };
 });
