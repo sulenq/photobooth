@@ -91,6 +91,11 @@ const Camera = (props: any) => {
     const ctx = canvas.getContext("2d");
     if (!ctx) return null;
 
+    // Flip canvas horizontally (mirror effect)
+    ctx.translate(canvas.width, 0);
+    ctx.scale(-1, 1);
+
+    // Draw the mirrored image
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
 
     return canvas.toDataURL("image/jpeg");
@@ -120,8 +125,9 @@ const Camera = (props: any) => {
 
   // Handle start session
   useEffect(() => {
-    // TODO: Fetch timer rule data
-    const seconds = 60;
+    // TODO: Fetch session timer rule data
+
+    const seconds = 1000;
 
     if (cameraOpen && seconds) {
       clearResPhotos();
