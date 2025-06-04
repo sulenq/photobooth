@@ -45,46 +45,6 @@ app.whenReady().then(() => {
   createWindow();
 
   // Handle print photo
-  // ipcMain.handle("print-photo", async (event, base64Image, copies) => {
-  //   try {
-  //     console.log("[print-photo] invoked");
-  //     const image = nativeImage.createFromDataURL(base64Image);
-  //     const tempPath = path.join(os.tmpdir(), `photobooth_print.png`);
-  //     console.log("[print-photo] saving image to:", tempPath);
-  //     fs.writeFileSync(tempPath, image.toPNG());
-
-  //     for (let i = 0; i < copies; i++) {
-  //       console.log(`[print-photo] printing copy ${i + 1}`);
-  //       // exec(`start /min "" "${tempPath}"`, (err, stdout, stderr) => {
-  //       //   if (err) {
-  //       //     console.error("[print-photo] exec error:", err);
-  //       //   }
-  //       //   if (stderr) {
-  //       //     console.error("[print-photo] stderr:", stderr);
-  //       //   }
-  //       //   if (stdout) {
-  //       //     console.log("[print-photo] stdout:", stdout);
-  //       //   }
-  //       // });
-  //       exec(`mspaint /pt "${tempPath}"`, (err, stdout, stderr) => {
-  //         if (err) {
-  //           console.error("[print-photo] exec error:", err);
-  //         }
-  //         if (stderr) {
-  //           console.error("[print-photo] stderr:", stderr);
-  //         }
-  //         if (stdout) {
-  //           console.log("[print-photo] stdout:", stdout);
-  //         }
-  //       });
-  //     }
-
-  //     return "ok";
-  //   } catch (err) {
-  //     console.error("[print-photo] exception:", err);
-  //     return "error";
-  //   }
-  // });
   ipcMain.handle("print-photo", async (_event, base64, qty) => {
     const base64Data = base64.replace(/^data:image\/png;base64,/, "");
     const filePath = path.join(app.getPath("temp"), `photo.png`);
