@@ -3,12 +3,17 @@ import MaintenancePage from "@/pages/_error/MaintenancePage";
 import MissingPage from "@/pages/_error/MissingPage";
 import ServerErrorPage from "@/pages/_error/ServerErrorPage";
 import { Route, Routes } from "react-router-dom";
+import PublicRouteMiddleware from "./PublicRouteMiddleware";
 
 const Routing = () => {
   return (
     <Routes>
       {ROUTES.map(({ path, element }) => (
-        <Route key={path} path={path} element={element} />
+        <Route
+          key={path}
+          path={path}
+          element={<PublicRouteMiddleware>{element}</PublicRouteMiddleware>}
+        />
       ))}
 
       {PRIVATE_ROUTES.map(({ path, element }) => (
@@ -16,9 +21,9 @@ const Routing = () => {
           key={path}
           path={path}
           element={
-            // <AuthMiddleware>
+            // <PrivateRouteMiddleware>
             element
-            // </AuthMiddleware>
+            // </PrivateRouteMiddleware>
           }
         />
       ))}

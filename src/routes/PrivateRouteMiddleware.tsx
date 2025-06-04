@@ -5,7 +5,7 @@ import { Spinner } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 
-const AuthMiddleware = (props: any) => {
+const PrivateRouteMiddleware = (props: any) => {
   // Props
   const { children } = props;
 
@@ -58,4 +58,4 @@ const AuthMiddleware = (props: any) => {
   );
 };
 
-export default AuthMiddleware;
+export default PrivateRouteMiddleware;

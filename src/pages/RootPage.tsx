@@ -4,16 +4,9 @@ import Heading1 from "@/components/ui-custom/Heading1";
 import NavLink from "@/components/ui-custom/NavLink";
 import { IMAGES_PATH } from "@/constants/paths";
 import { PRESET_MAIN_BUTTON } from "@/constants/presetProps";
-import useSessionInvoice from "@/context/useSessionInvoice";
 import { Image } from "@chakra-ui/react";
-import { useEffect } from "react";
 
 const RootPage = () => {
-  const { setInvoiceNumber } = useSessionInvoice();
-  useEffect(() => {
-    setInvoiceNumber(null);
-  }, []);
-
   return (
     <CContainer
       minH={"100dvh"}
