@@ -128,7 +128,7 @@ const Camera = (props: any) => {
     // TODO: Fetch session timer rule data
     // TODO: reset all context to default
 
-    const seconds = 9999;
+    const seconds = 10;
 
     if (cameraOpen && seconds) {
       clearResPhotos();
