@@ -191,7 +191,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
       overflow="hidden"
       bg={shouldShowDropHere ? "red.400" : "transparent"}
       zIndex={dropPhotoSlotZindex}
-      transform="scale(1.01)"
+      transform="scale(1.05)"
     >
       {!isOver && !isDraggingGlobal && value && (
         <canvas
