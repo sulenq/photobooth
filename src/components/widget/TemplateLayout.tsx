@@ -346,3 +346,85 @@ export const Layout3 = (props: Interface__Layout) => {
     </LayoutContainer>
   );
 };
+export const Layout4 = (props: Interface__Layout) => {
+  // Props
+  const { resPhotos } = props;
+
+  return (
+    <LayoutContainer
+      aspectRatio={TEMPLATE_ASPECT_RATIO}
+      h={TEMPLATE_H}
+      w="fit"
+      pt={"calc(160px / 3)"}
+      gap={"calc(60px / 3)"}
+    >
+      <HStack justify="center" gap={"calc(120px / 3)"}>
+        <DropPhotoSlot
+          id="1"
+          numbering={1}
+          value={resPhotos["1"]}
+          hNumber={320 / 3}
+          orientation="landscape"
+        />
+        <DropPhotoSlot
+          id="2"
+          numbering={1}
+          value={resPhotos["1"]}
+          hNumber={320 / 3}
+          orientation="landscape"
+        />
+      </HStack>
+
+      <HStack justify="center" gap={"calc(120px / 3)"}>
+        <DropPhotoSlot
+          id="3"
+          numbering={2}
+          value={resPhotos["2"]}
+          hNumber={320 / 3}
+          orientation="landscape"
+        />
+        <DropPhotoSlot
+          id="4"
+          numbering={2}
+          value={resPhotos["2"]}
+          hNumber={320 / 3}
+          orientation="landscape"
+        />
+      </HStack>
+
+      <HStack justify="center" gap={"calc(120px / 3)"}>
+        <DropPhotoSlot
+          id="5"
+          numbering={3}
+          value={resPhotos["3"]}
+          hNumber={320 / 3}
+          orientation="landscape"
+        />
+        <DropPhotoSlot
+          id="6"
+          numbering={3}
+          value={resPhotos["3"]}
+          hNumber={320 / 3}
+          orientation="landscape"
+        />
+      </HStack>
+
+      <HStack justify="center" gap={"calc(120px / 3)"}>
+        <DropPhotoSlot
+          id="7"
+          numbering={4}
+          value={resPhotos["4"]}
+          hNumber={320 / 3}
+          orientation="landscape"
+        />
+        <DropPhotoSlot
+          id="8"
+          numbering={4}
+          value={resPhotos["4"]}
+          hNumber={320 / 3}
+          orientation="landscape"
+        />
+      </HStack>
+    </LayoutContainer>
+  );
+};
