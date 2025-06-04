@@ -264,10 +264,9 @@ const EditPhotoPage = () => {
               <FilterList />
 
               <Text fontWeight={"medium"}>
-                Tips: untuk drag & drop ke tempat yang kecil, dragnya dari ujung
-                tengah kiri yaa, kemudian arahkan ujung tengah kirinya ke area
-                drop zone hingga dropzone berwarna merah yang artinya foto akan
-                di drop disitu.
+                Tips: untuk drag & drop ke tempat yang kecil, drag ke drop zone
+                hingga drop zone berwarna merah yang artinya foto akan di drop
+                disitu.
               </Text>
             </CContainer>
 
