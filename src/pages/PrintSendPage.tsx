@@ -26,6 +26,7 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
+import { DndContext } from "@dnd-kit/core";
 import html2canvas from "html2canvas";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
@@ -82,6 +83,7 @@ const DriveQR = (props: DriveQRProps) => {
 
   // Handle generate qr drive on page load
   useEffect(() => {
+    // TODO: unvoment on prod
     // setTimeout(() => generateDriveLink(), 100);
   }, []);
 
@@ -263,38 +265,40 @@ const PrintSendPage = () => {
   const [driveLinkLoading, setGetDriveLinkLoading] = useState<boolean>(false);
 
   return (
-    <PageContainer>
-      <HStack mb={20}>
-        <Box w="250px" />
-        <Heading>Print & Send</Heading>
-        <NextButton to="/thankyou" label="FINISH" />
-      </HStack>
+    <DndContext>
+      <PageContainer>
+        <HStack mb={20}>
+          <Box w="250px" />
+          <Heading>Print & Send</Heading>
+          <NextButton to="/thankyou" label="FINISH" />
+        </HStack>
 
-      <CContainer my="auto">
-        <SimpleGrid
-          columns={[1, null, 2]}
-          gap={20}
-          w="full"
-          maxW="65%"
-          mx="auto"
-        >
-          <Print />
+        <CContainer my="auto">
+          <SimpleGrid
+            columns={[1, null, 2]}
+            gap={20}
+            w="full"
+            maxW="65%"
+            mx="auto"
+          >
+            <Print />
 
-          <CContainer gap={8}>
-            <DriveQR
-              driveLink={driveLink}
-              setDriveLink={setDriveLink}
-              setGetDriveLinkLoading={setGetDriveLinkLoading}
-            />
+            <CContainer gap={8}>
+              <DriveQR
+                driveLink={driveLink}
+                setDriveLink={setDriveLink}
+                setGetDriveLinkLoading={setGetDriveLinkLoading}
+              />
 
-            <SendEmail
-              driveLink={driveLink}
-              driveLinkLoading={driveLinkLoading}
-            />
-          </CContainer>
-        </SimpleGrid>
-      </CContainer>
-    </PageContainer>
+              <SendEmail
+                driveLink={driveLink}
+                driveLinkLoading={driveLinkLoading}
+              />
+            </CContainer>
+          </SimpleGrid>
+        </CContainer>
+      </PageContainer>
+    </DndContext>
   );
 };
 
