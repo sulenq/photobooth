@@ -177,7 +177,7 @@ const Print = () => {
 
   // States
   const layoutData =
-    LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
+    LAYOUT_COMPONENTS[template.layoutId as keyof typeof LAYOUT_COMPONENTS];
   const LayoutComponent = layoutData.component;
   const printRef = useRef<HTMLDivElement>(null);
 

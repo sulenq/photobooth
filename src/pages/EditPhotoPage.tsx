@@ -201,9 +201,9 @@ const EditPhotoPage = () => {
     })
   );
   const layoutData =
-    LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
-  const LayoutComponent = layoutData.component;
-  const slotNumberingMap = layoutData.slotNumberingMap;
+    LAYOUT_COMPONENTS[template.layoutId as keyof typeof LAYOUT_COMPONENTS];
+  const LayoutComponent = layoutData?.component;
+  const slotNumberingMap = layoutData?.slotNumberingMap;
 
   // Utils
   function handleDragEnd(event: any) {
