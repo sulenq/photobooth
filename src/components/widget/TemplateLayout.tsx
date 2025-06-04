@@ -777,16 +777,10 @@ export const Layout7 = (props: Interface__Layout) => {
           />
         </CContainer>
 
-        <CContainer>
+        <CContainer pt={"calc(120px / 3)"}>
           <HStack align={"start"} flex={1} gap={0}>
             {/* B */}
-            <CContainer
-              w={"fit"}
-              gap={"10px"}
-              pt={"40px"}
-              h={"full"}
-              ml={"6px"}
-            >
+            <CContainer w={"fit"} gap={"10px"} h={"full"} ml={"calc(18px / 3)"}>
               <CContainer
                 w={"calc(346px / 3)"}
                 px={"calc(30px / 3)"}
@@ -859,7 +853,12 @@ export const Layout7 = (props: Interface__Layout) => {
             </CContainer>
 
             {/* C */}
-            <CContainer w={"fit"} gap={"9px"} pt={"40px"} h={"full"} ml={"4px"}>
+            <CContainer
+              w={"fit"}
+              gap={"calc(30px / 3)"}
+              h={"full"}
+              ml={"calc(14px / 3)"}
+            >
               <CContainer
                 w={"calc(207px / 3)"}
                 px={"calc(13px / 3)"}
