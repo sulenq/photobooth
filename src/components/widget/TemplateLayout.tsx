@@ -3,7 +3,14 @@ import {
   TEMPLATE_H,
 } from "@/constants/defaultAttributes";
 import useSessionFilter from "@/context/useSessionFilter";
-import { Center, HStack, StackProps, Text, VStack } from "@chakra-ui/react";
+import {
+  Center,
+  HStack,
+  SimpleGrid,
+  StackProps,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { useDroppable } from "@dnd-kit/core";
 import { useEffect, useRef } from "react";
 import CContainer from "../ui-custom/CContainer";
@@ -22,6 +29,7 @@ interface DropPhotoSlotProps {
   orientation?: "portrait" | "landscape";
   rotate?: boolean;
   value?: string | null;
+  size?: "xs" | "sm" | "md";
 }
 
 const aspectRatio1 = 2 / 3;
@@ -46,13 +54,41 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
     h,
     w,
     orientation = "portrait",
+    size = "md",
     rotate = false,
   } = props;
 
   // Hooks
-  const { setNodeRef, isOver } = useDroppable({ id });
+  const { setNodeRef, isOver } = useDroppable({
+    id,
+    data: {
+      numbering,
+    },
+  });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { filter } = useSessionFilter();
+
+  // States
+  const numberingGap = {
+    xs: 0,
+    sm: 1,
+    md: 2,
+  };
+  const numberingFontSize = {
+    xs: 16,
+    sm: 20,
+    md: 32,
+  };
+  const numberingBoxSize = {
+    xs: "16px",
+    sm: "28px",
+    md: "50px",
+  };
+  const dropLabelFontSize = {
+    xs: 10,
+    sm: 14,
+    md: 20,
+  };
 
   // Hanndle filter
   useEffect(() => {
@@ -145,7 +181,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
       flexShrink={0}
       border={dropPhotoSlotBorder}
       overflow={"hidden"}
-      bg={isOver ? "gray" : "transparent"}
+      bg={isOver ? "#ddd" : "transparent"}
       zIndex={dropPhotoSlotZindex}
       transform={"scale(1.01)"}
     >
@@ -160,23 +196,28 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
           }}
         />
       ) : (
-        <VStack>
+        <VStack gap={numberingGap[size]}>
           <Center
             transform={rotate ? "rotate(90deg)" : ""}
             p={2}
             bg={"white"}
             borderRadius={"full"}
             aspectRatio={1}
-            w={"50px"}
-            h={"50px"}
+            w={numberingBoxSize[size]}
+            h={numberingBoxSize[size]}
             flexShrink={0}
           >
-            <Text className="df" fontSize={32} fontWeight={"bold"} mt={"-8px"}>
+            <Text
+              className="df"
+              fontSize={numberingFontSize[size]}
+              fontWeight={"bold"}
+              mb={"10px"}
+            >
               {numbering}
             </Text>
           </Center>
 
-          <Text fontSize={20} fontWeight={"semibold"}>
+          <Text fontSize={dropLabelFontSize[size]} fontWeight={"semibold"}>
             Drop Here
           </Text>
         </VStack>
@@ -425,6 +466,511 @@ export const Layout4 = (props: Interface__Layout) => {
           orientation="landscape"
         />
       </HStack>
+    </LayoutContainer>
+  );
+};
+// TODO: lanjut layout 5
+export const Layout5 = (props: Interface__Layout) => {
+  // Props
+  const { resPhotos } = props;
+
+  return (
+    <LayoutContainer
+      aspectRatio={TEMPLATE_ASPECT_RATIO}
+      h={TEMPLATE_H}
+      w="fit"
+      pt={"calc(160px / 3)"}
+      gap={"calc(60px / 3)"}
+    >
+      <SimpleGrid>
+        <CContainer px={"calc(45px / 3)"} gap={"calc(100px / 3)"}>
+          <DropPhotoSlot
+            id="1"
+            numbering={1}
+            value={resPhotos["1"]}
+            hNumber={340 / 3}
+            orientation="landscape"
+          />
+          <DropPhotoSlot
+            id="2"
+            numbering={2}
+            value={resPhotos["2"]}
+            hNumber={340 / 3}
+            orientation="landscape"
+          />
+          <DropPhotoSlot
+            id="3"
+            numbering={3}
+            value={resPhotos["3"]}
+            hNumber={340 / 3}
+            orientation="landscape"
+          />
+        </CContainer>
+
+        <CContainer bg={"red"}></CContainer>
+      </SimpleGrid>
+    </LayoutContainer>
+  );
+};
+export const Layout6 = (props: Interface__Layout) => {
+  // Props
+  const { resPhotos } = props;
+
+  return (
+    <LayoutContainer
+      aspectRatio={TEMPLATE_ASPECT_RATIO}
+      h={TEMPLATE_H}
+      w="fit"
+      zIndex={99}
+    >
+      <SimpleGrid columns={2} flex={1}>
+        {/* A */}
+        <CContainer
+          px={"calc(65px / 3)"}
+          pt={"calc(190px / 3)"}
+          gap={"calc(95px / 3)"}
+        >
+          <DropPhotoSlot
+            id="1"
+            numbering={1}
+            value={resPhotos["1"]}
+            hNumber={705 / 3}
+          />
+          <DropPhotoSlot
+            id="2"
+            numbering={2}
+            value={resPhotos["2"]}
+            hNumber={705 / 3}
+          />
+        </CContainer>
+
+        <CContainer>
+          <HStack align={"start"} flex={1} gap={0}>
+            {/* B */}
+            <CContainer
+              w={"fit"}
+              gap={"10px"}
+              pt={"40px"}
+              h={"full"}
+              ml={"6px"}
+            >
+              <CContainer
+                w={"calc(346px / 3)"}
+                px={"calc(30px / 3)"}
+                pt={"calc(75px / 3)"}
+                pb={"calc(30px / 3)"}
+                gap={"calc(40px / 3)"}
+              >
+                <DropPhotoSlot
+                  id="3"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+
+                <DropPhotoSlot
+                  id="4"
+                  numbering={3}
+                  value={resPhotos["3"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+
+                <DropPhotoSlot
+                  id="5"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+              </CContainer>
+
+              <CContainer
+                w={"calc(346px / 3)"}
+                px={"calc(30px / 3)"}
+                pt={"calc(75px / 3)"}
+                pb={"calc(30px / 3)"}
+                gap={"calc(40px / 3)"}
+              >
+                <DropPhotoSlot
+                  id="6"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+
+                <DropPhotoSlot
+                  id="7"
+                  numbering={3}
+                  value={resPhotos["3"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+
+                <DropPhotoSlot
+                  id="8"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+              </CContainer>
+            </CContainer>
+
+            {/* C */}
+            <CContainer w={"fit"} gap={"9px"} pt={"40px"} h={"full"} ml={"4px"}>
+              <CContainer
+                w={"calc(207px / 3)"}
+                px={"calc(13px / 3)"}
+                pt={"calc(54px / 3)"}
+                pb={"calc(15px / 3)"}
+                gap={"calc(15px / 3)"}
+                align={"center"}
+              >
+                <DropPhotoSlot
+                  id="9"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="10"
+                  numbering={3}
+                  value={resPhotos["3"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="11"
+                  numbering={4}
+                  value={resPhotos["4"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+              </CContainer>
+
+              <CContainer
+                w={"calc(207px / 3)"}
+                px={"calc(13px / 3)"}
+                pt={"calc(54px / 3)"}
+                pb={"calc(15px / 3)"}
+                gap={"calc(15px / 3)"}
+                align={"center"}
+              >
+                <DropPhotoSlot
+                  id="12"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="13"
+                  numbering={3}
+                  value={resPhotos["3"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="14"
+                  numbering={4}
+                  value={resPhotos["4"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+              </CContainer>
+
+              <CContainer
+                w={"calc(207px / 3)"}
+                px={"calc(13px / 3)"}
+                pt={"calc(54px / 3)"}
+                pb={"calc(15px / 3)"}
+                gap={"calc(15px / 3)"}
+                align={"center"}
+              >
+                <DropPhotoSlot
+                  id="15"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="16"
+                  numbering={3}
+                  value={resPhotos["3"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="17"
+                  numbering={4}
+                  value={resPhotos["4"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+              </CContainer>
+            </CContainer>
+          </HStack>
+        </CContainer>
+      </SimpleGrid>
+    </LayoutContainer>
+  );
+};
+export const Layout7 = (props: Interface__Layout) => {
+  // Props
+  const { resPhotos } = props;
+
+  return (
+    <LayoutContainer
+      aspectRatio={TEMPLATE_ASPECT_RATIO}
+      h={TEMPLATE_H}
+      w="fit"
+      zIndex={99}
+    >
+      <SimpleGrid columns={2} flex={1}>
+        {/* A */}
+        <CContainer
+          px={"calc(65px / 3)"}
+          pt={"calc(190px / 3)"}
+          gap={"calc(95px / 3)"}
+        >
+          <DropPhotoSlot
+            id="1"
+            numbering={1}
+            value={resPhotos["1"]}
+            hNumber={705 / 3}
+            orientation="landscape"
+            rotate
+          />
+          <DropPhotoSlot
+            id="2"
+            numbering={2}
+            value={resPhotos["2"]}
+            hNumber={705 / 3}
+            orientation="landscape"
+            rotate
+          />
+        </CContainer>
+
+        <CContainer>
+          <HStack align={"start"} flex={1} gap={0}>
+            {/* B */}
+            <CContainer
+              w={"fit"}
+              gap={"10px"}
+              pt={"40px"}
+              h={"full"}
+              ml={"6px"}
+            >
+              <CContainer
+                w={"calc(346px / 3)"}
+                px={"calc(30px / 3)"}
+                pt={"calc(75px / 3)"}
+                pb={"calc(30px / 3)"}
+                gap={"calc(40px / 3)"}
+              >
+                <DropPhotoSlot
+                  id="3"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+
+                <DropPhotoSlot
+                  id="4"
+                  numbering={3}
+                  value={resPhotos["3"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+
+                <DropPhotoSlot
+                  id="5"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+              </CContainer>
+
+              <CContainer
+                w={"calc(346px / 3)"}
+                px={"calc(30px / 3)"}
+                pt={"calc(75px / 3)"}
+                pb={"calc(30px / 3)"}
+                gap={"calc(40px / 3)"}
+              >
+                <DropPhotoSlot
+                  id="6"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+
+                <DropPhotoSlot
+                  id="7"
+                  numbering={3}
+                  value={resPhotos["3"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+
+                <DropPhotoSlot
+                  id="8"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={190 / 3}
+                  orientation="landscape"
+                  size="sm"
+                />
+              </CContainer>
+            </CContainer>
+
+            {/* C */}
+            <CContainer w={"fit"} gap={"9px"} pt={"40px"} h={"full"} ml={"4px"}>
+              <CContainer
+                w={"calc(207px / 3)"}
+                px={"calc(13px / 3)"}
+                pt={"calc(54px / 3)"}
+                pb={"calc(15px / 3)"}
+                gap={"calc(15px / 3)"}
+                align={"center"}
+              >
+                <DropPhotoSlot
+                  id="9"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="10"
+                  numbering={3}
+                  value={resPhotos["3"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="11"
+                  numbering={4}
+                  value={resPhotos["4"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+              </CContainer>
+
+              <CContainer
+                w={"calc(207px / 3)"}
+                px={"calc(13px / 3)"}
+                pt={"calc(54px / 3)"}
+                pb={"calc(15px / 3)"}
+                gap={"calc(15px / 3)"}
+                align={"center"}
+              >
+                <DropPhotoSlot
+                  id="12"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="13"
+                  numbering={3}
+                  value={resPhotos["3"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="14"
+                  numbering={4}
+                  value={resPhotos["4"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+              </CContainer>
+
+              <CContainer
+                w={"calc(207px / 3)"}
+                px={"calc(13px / 3)"}
+                pt={"calc(54px / 3)"}
+                pb={"calc(15px / 3)"}
+                gap={"calc(15px / 3)"}
+                align={"center"}
+              >
+                <DropPhotoSlot
+                  id="15"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="16"
+                  numbering={3}
+                  value={resPhotos["3"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+
+                <DropPhotoSlot
+                  id="17"
+                  numbering={4}
+                  value={resPhotos["4"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
+              </CContainer>
+            </CContainer>
+          </HStack>
+        </CContainer>
+      </SimpleGrid>
     </LayoutContainer>
   );
 };

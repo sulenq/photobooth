@@ -33,13 +33,7 @@ import {
 } from "@dnd-kit/core";
 import { CSSProperties, useEffect, useRef } from "react";
 
-const DraggablePhoto = ({
-  id,
-  src,
-  aspectRatio,
-  borderRadius,
-  border,
-}: any) => {
+const DraggablePhoto = ({ id, src, borderRadius, border }: any) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id,
@@ -55,24 +49,23 @@ const DraggablePhoto = ({
   };
 
   return (
-    <Box
+    <CContainer
       zIndex={99}
-      ref={setNodeRef}
+      fRef={setNodeRef}
       style={dndStyle}
       touchAction={"none"}
-      w={"220px"}
+      aspectRatio={3 / 2}
       {...listeners}
       {...attributes}
     >
       <ImageComponent
         id={id}
         src={src}
-        w={"220px"}
-        aspectRatio={aspectRatio}
+        aspectRatio={3 / 2}
         borderRadius={borderRadius}
         border={border}
       />
-    </Box>
+    </CContainer>
   );
 };
 
@@ -126,7 +119,7 @@ const FilterList = () => {
   return (
     <CContainer gap={2}>
       <Text fontSize={20} fontWeight="semibold">
-        CHOOSE & DRAG PHOTO TO YOUR TEMPLATE
+        CHOOSE FILTER
       </Text>
 
       <SimpleGrid columns={[1, 2, 4]} gap={4} p={5} bg={"#303030"}>
@@ -204,36 +197,27 @@ const EditPhotoPage = () => {
   const layoutData =
     LAYOUT_COMPONENTS[template.layoutId as keyof typeof LAYOUT_COMPONENTS];
   const LayoutComponent = layoutData?.component;
-  const slotNumberingMap = layoutData?.slotNumberingMap;
+  // const slotNumberingMap = layoutData?.slotNumberingMap;
 
   // Utils
   function handleDragEnd(event: any) {
     const { over, active } = event;
     if (!over || !active) return;
 
-    const droppedSlotId = Number(over.id);
     const draggedSrc = active.data.current?.src;
+    const targetNumbering = over.data.current?.numbering;
+    // console.log(targetNumbering);
+    if (!draggedSrc || targetNumbering == null) return;
 
-    if (!draggedSrc) return;
-
-    // Pastikan slotNumberingMap ada dan sesuai slot yang di-drop
-    if (!slotNumberingMap || !(droppedSlotId in slotNumberingMap)) return;
-
-    const targetNumbering = slotNumberingMap[droppedSlotId];
-    console.log(targetNumbering);
-
-    setResPhotos((prev) => {
-      const updated = { ...prev };
-
-      updated[targetNumbering] = draggedSrc;
-
-      return updated;
-    });
+    setResPhotos((prev) => ({
+      ...prev,
+      [targetNumbering]: draggedSrc,
+    }));
   }
 
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
-      <PageContainer h="100dvh" borderless gap={10} overflowX="clip">
+      <PageContainer h="100dvh" borderless gap={10}>
         <HStack>
           <Box w="250px">
             <BackButton />
@@ -247,6 +231,7 @@ const EditPhotoPage = () => {
         <CContainer my={"auto"}>
           <HStack h="full" gap={10} align="start">
             <CContainer flex={1} gap={10}>
+              {/* Stock photos  */}
               <CContainer gap={2}>
                 <Text fontSize={20} fontWeight="semibold">
                   CHOOSE & DRAG PHOTO TO YOUR TEMPLATE
@@ -254,25 +239,37 @@ const EditPhotoPage = () => {
 
                 <HStack>
                   {photos.map((item, i) => (
-                    <CContainer key={i}>
-                      <DraggablePhoto
-                        id={`photo-${i}`}
-                        src={item}
-                        aspectRatio={4 / 3}
-                        borderRadius={8}
-                        border={"4px solid {colors.p.500}"}
-                      />
-                    </CContainer>
+                    <DraggablePhoto
+                      key={i}
+                      id={`photo-${i}`}
+                      src={item}
+                      borderRadius={8}
+                      border={"4px solid {colors.p.500}"}
+                    />
                   ))}
                 </HStack>
+
+                {/* <HStack>
+                  {Array.from({ length: 4 }).map((_, i) => (
+                    <DropZonePhoto key={i} numbering={i + 1} />
+                  ))}
+                </HStack> */}
               </CContainer>
 
+              {/* Filter list */}
               <FilterList />
+
+              <Text fontWeight={"medium"}>
+                Tips: untuk drag & drop ke tempat yang kecil, dragnya dari ujung
+                tengah kiri yaa, kemudian arahkan ujung tengah kirinya ke area
+                drop zone.
+              </Text>
             </CContainer>
 
+            {/* Res photos */}
             <CContainer w="fit" gap={2}>
               <Text fontSize={20} fontWeight="semibold">
-                CHOOSE FILTER
+                RESULT HERE
               </Text>
 
               <CContainer
