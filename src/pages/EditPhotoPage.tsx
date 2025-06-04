@@ -33,27 +33,13 @@ import {
 } from "@dnd-kit/core";
 import { CSSProperties, useEffect, useRef } from "react";
 
-declare global {
-  interface Window {
-    Caman: any;
-  }
-}
-
-interface DraggablePhotoProps {
-  id: string;
-  src: string;
-  aspectRatio: number;
-  borderRadius?: number;
-  border?: string;
-}
-
 const DraggablePhoto = ({
   id,
   src,
   aspectRatio,
   borderRadius,
   border,
-}: DraggablePhotoProps) => {
+}: any) => {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id,

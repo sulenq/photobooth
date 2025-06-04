@@ -2,6 +2,8 @@ import { ButtonProps, MenuItemProps } from "@chakra-ui/react";
 
 declare global {
   interface Window {
+    Caman: any;
+
     electron: {
       ipcRenderer: {
         send: (channel: string, ...args: any[]) => void;
