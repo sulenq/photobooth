@@ -1,8 +1,18 @@
 import Heading from "@/components/widget/Heading";
 import PageContainer from "@/components/widget/PageContainer";
 import { Text } from "@chakra-ui/react";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ThankyouPage = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setTimeout(() => {
+      navigate("/");
+    }, 10000);
+  }, []);
+
   return (
     <PageContainer align={"center"} justify={"center"} gap={20}>
       <Heading headingProps={{ fontSize: 80, maxW: "1000px" }}>
