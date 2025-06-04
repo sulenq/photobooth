@@ -192,7 +192,7 @@ const DriveQR = (props: DriveQRProps) => {
 
   // Handle generate qr drive on page load
   useEffect(() => {
-    generateDriveLink();
+    if (videoBase64) generateDriveLink();
   }, [videoBase64]);
 
   // Handle qr drive response
