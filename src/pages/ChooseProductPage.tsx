@@ -18,25 +18,8 @@ const ChooseProductPage = () => {
     showSuccessToast: false,
   });
 
-  // const data = [
-  //   {
-  //     id: 1,
-  //     productPhoto: `${IMAGES_PATH}/product1.png`,
-  //     productName: "PHOTO ONLY",
-  //     productPrice: 30000,
-  //   },
-  //   {
-  //     id: 2,
-  //     productPhoto: `${IMAGES_PATH}/product2.png`,
-  //     productName: "PHOTO ONLY",
-  //     productPrice: 45000,
-  //   },
-  // ];
-
   // States
   const { choosedProduct, setChoosedProduct } = useChoosedProduct();
-
-  console.log(choosedProduct);
 
   // States
   const data = response?.data?.result?.productList;
@@ -74,7 +57,7 @@ const ChooseProductPage = () => {
         <>
           {!error && (
             <CContainer overflowX={"auto"} className="noScroll">
-              <HStack h={"max"} mx={"auto"} gap={10}>
+              <HStack h={"max"} mx={"auto"} gap={10} px={10}>
                 {data?.map((item: any, i: number) => {
                   return (
                     <ChooseProductItem
