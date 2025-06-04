@@ -42,6 +42,7 @@ const PAYMENT_SUPPORT_LOGOS = [
   `ovo_logo.png`,
   `sp_logo.svg`,
 ];
+
 const PaymentPage = () => {
   // Hooks
   const { req, loading, response, error } = useRequest({
