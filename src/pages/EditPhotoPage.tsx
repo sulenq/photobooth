@@ -201,7 +201,6 @@ const EditPhotoPage = () => {
   const layoutData =
     LAYOUT_COMPONENTS[template.layoutId as keyof typeof LAYOUT_COMPONENTS];
   const LayoutComponent = layoutData?.component;
-  // const slotNumberingMap = layoutData?.slotNumberingMap;
 
   // Utils
   function handleDragEnd(event: any) {
@@ -288,7 +287,7 @@ const EditPhotoPage = () => {
                   top={0}
                   h={`calc(${TEMPLATE_H})`}
                   aspectRatio={TEMPLATE_ASPECT_RATIO}
-                  zIndex={2}
+                  zIndex={1}
                 />
 
                 <LayoutComponent
