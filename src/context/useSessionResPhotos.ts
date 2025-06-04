@@ -1,7 +1,6 @@
-import { SlotKey } from "@/constants/types";
 import { create } from "zustand";
 
-type PhotoSlots = Record<SlotKey, string | null>;
+type PhotoSlots = Record<number, string | null>;
 
 interface PhotoStore {
   resPhotos: PhotoSlots;

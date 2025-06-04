@@ -26,6 +26,7 @@ const RootPage = () => {
 
       <Image src={`${IMAGES_PATH}/logo_dark.png`} />
 
+      {/* TODO: to /choose-product */}
       <NavLink to="/take-photo" align={"center"}>
         <BButton mt={10} {...PRESET_MAIN_BUTTON}>
           START PHOTO

@@ -145,7 +145,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
       flexShrink={0}
       border={dropPhotoSlotBorder}
       overflow={"hidden"}
-      bg={isOver ? "gray" : "black"}
+      bg={isOver ? "gray" : "transparent"}
       zIndex={dropPhotoSlotZindex}
       transform={"scale(1.01)"}
     >
@@ -238,16 +238,15 @@ export const Layout2 = (props: Interface__Layout) => {
       aspectRatio={TEMPLATE_ASPECT_RATIO}
       h={TEMPLATE_H}
       w="fit"
-      justify="center"
-      gap="10px"
-      pt="10px"
+      pt={"calc(190px / 3)"}
+      gap={"calc(95px / 3)"}
     >
-      <HStack justify="center" gap={8}>
+      <HStack justify="center" gap={"calc(130px / 3)"}>
         <DropPhotoSlot
           id="1"
           numbering={1}
           value={resPhotos["1"]}
-          hNumber={250}
+          hNumber={705 / 3}
           orientation="landscape"
           rotate
         />
@@ -255,17 +254,18 @@ export const Layout2 = (props: Interface__Layout) => {
           id="2"
           numbering={2}
           value={resPhotos["2"]}
-          hNumber={250}
+          hNumber={705 / 3}
           orientation="landscape"
           rotate
         />
       </HStack>
-      <HStack justify="center" gap={8}>
+
+      <HStack justify="center" gap={"calc(130px / 3)"}>
         <DropPhotoSlot
           id="3"
           numbering={3}
           value={resPhotos["3"]}
-          hNumber={250}
+          hNumber={705 / 3}
           orientation="landscape"
           rotate
         />
@@ -273,7 +273,7 @@ export const Layout2 = (props: Interface__Layout) => {
           id="4"
           numbering={4}
           value={resPhotos["4"]}
-          hNumber={250}
+          hNumber={705 / 3}
           orientation="landscape"
           rotate
         />
@@ -290,57 +290,56 @@ export const Layout3 = (props: Interface__Layout) => {
       aspectRatio={TEMPLATE_ASPECT_RATIO}
       h={TEMPLATE_H}
       w="fit"
-      justify="center"
-      gap="15px"
-      pb={"34px"}
+      pt={"calc(240px / 3)"}
+      gap={"calc(100px / 3)"}
     >
-      <HStack justify="center" gap={"12px"}>
+      <HStack justify="center" gap={"calc(90px / 3)"}>
         <DropPhotoSlot
           id="1"
           numbering={1}
           value={resPhotos["1"]}
-          hNumber={126}
+          hNumber={340 / 3}
           orientation="landscape"
         />
         <DropPhotoSlot
           id="2"
           numbering={2}
           value={resPhotos["2"]}
-          hNumber={126}
+          hNumber={340 / 3}
           orientation="landscape"
         />
       </HStack>
 
-      <HStack justify="center" gap={"12px"}>
+      <HStack justify="center" gap={"calc(90px / 3)"}>
         <DropPhotoSlot
           id="3"
           numbering={2}
           value={resPhotos["2"]}
-          hNumber={126}
+          hNumber={340 / 3}
           orientation="landscape"
         />
         <DropPhotoSlot
           id="4"
           numbering={3}
           value={resPhotos["3"]}
-          hNumber={126}
+          hNumber={340 / 3}
           orientation="landscape"
         />
       </HStack>
 
-      <HStack justify="center" gap={"12px"}>
+      <HStack justify="center" gap={"calc(90px / 3)"}>
         <DropPhotoSlot
           id="5"
           numbering={3}
           value={resPhotos["3"]}
-          hNumber={126}
+          hNumber={340 / 3}
           orientation="landscape"
         />
         <DropPhotoSlot
           id="6"
           numbering={4}
           value={resPhotos["4"]}
-          hNumber={120}
+          hNumber={340 / 3}
           orientation="landscape"
         />
       </HStack>

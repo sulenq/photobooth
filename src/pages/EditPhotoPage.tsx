@@ -10,7 +10,6 @@ import {
 } from "@/constants/defaultAttributes";
 import { FILTERS } from "@/constants/filters";
 import { LAYOUT_COMPONENTS } from "@/constants/layoutComponents";
-import { SlotKey } from "@/constants/types";
 import useSessionFilter from "@/context/useSessionFilter";
 import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionResPhotos from "@/context/useSessionResPhotos";
@@ -61,12 +60,14 @@ const DraggablePhoto = ({
       ref={setNodeRef}
       style={dndStyle}
       touchAction={"none"}
+      w={"220px"}
       {...listeners}
       {...attributes}
     >
       <ImageComponent
         id={id}
         src={src}
+        w={"220px"}
         aspectRatio={aspectRatio}
         borderRadius={borderRadius}
         border={border}
@@ -81,14 +82,14 @@ const FilterList = () => {
   const { filter, setFilter } = useSessionFilter();
 
   // States
-  const base64 = photos[0];
+  const imgSrc = photos[0];
 
   // Refs
   const canvasRefs = useRef<Record<string, HTMLCanvasElement | null>>({});
 
   // Handle render filter
   useEffect(() => {
-    if (!base64 || !window.Caman) return;
+    if (!imgSrc || !window.Caman) return;
 
     FILTERS.forEach(({ key, filter }) => {
       const canvas = canvasRefs.current[key];
@@ -96,7 +97,7 @@ const FilterList = () => {
 
       const img = new Image();
       img.crossOrigin = "anonymous";
-      img.src = base64;
+      img.src = imgSrc;
 
       img.onload = () => {
         canvas.width = img.width;
@@ -119,8 +120,8 @@ const FilterList = () => {
         }
       };
     });
-  }, [base64]);
-  if (!base64) return null;
+  }, [imgSrc]);
+  if (!imgSrc) return null;
 
   return (
     <CContainer gap={2}>
@@ -210,22 +211,21 @@ const EditPhotoPage = () => {
     const { over, active } = event;
     if (!over || !active) return;
 
-    const droppedSlotId = over.id;
+    const droppedSlotId = Number(over.id);
     const draggedSrc = active.data.current?.src;
-    if (!draggedSrc || !slotNumberingMap[Number(droppedSlotId) as SlotKey])
-      return;
 
-    const targetNumbering = slotNumberingMap[Number(droppedSlotId) as SlotKey];
+    if (!draggedSrc) return;
+
+    // Pastikan slotNumberingMap ada dan sesuai slot yang di-drop
+    if (!slotNumberingMap || !(droppedSlotId in slotNumberingMap)) return;
+
+    const targetNumbering = slotNumberingMap[droppedSlotId];
+    console.log(targetNumbering);
 
     setResPhotos((prev) => {
       const updated = { ...prev };
 
-      for (const [slotId, numbering] of Object.entries(slotNumberingMap)) {
-        if (numbering === targetNumbering) {
-          const numericId = Number(slotId) as SlotKey;
-          updated[numericId] = draggedSrc;
-        }
-      }
+      updated[targetNumbering] = draggedSrc;
 
       return updated;
     });

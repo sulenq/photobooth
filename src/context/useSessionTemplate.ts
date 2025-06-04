@@ -1,4 +1,4 @@
-import { DUMMY_TEMPLATE_OPTIONS } from "@/constants/dummyTemplateOptions";
+import { IMAGES_PATH } from "@/constants/paths";
 import { create } from "zustand";
 
 interface Props {
@@ -6,9 +6,15 @@ interface Props {
   setTemplate: (newState: any) => void;
 }
 
+const DEFAULT = {
+  id: -1,
+  layoutId: 3,
+  production: `${IMAGES_PATH}/templates/layouts/default.png`,
+};
+
 const useSessionTemplate = create<Props>((set) => {
   return {
-    template: DUMMY_TEMPLATE_OPTIONS[0],
+    template: DEFAULT,
     setTemplate: (newState) => set({ template: newState }),
   };
 });
