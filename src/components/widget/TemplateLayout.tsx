@@ -45,7 +45,6 @@ const LayoutContainer = (props: StackProps) => {
 };
 
 const DropPhotoSlot = (props: DropPhotoSlotProps) => {
-  // Props
   const {
     id,
     numbering,
@@ -58,41 +57,29 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
     rotate = false,
   } = props;
 
-  // Hooks
   const { setNodeRef, isOver } = useDroppable({
     id,
-    data: {
-      numbering,
-    },
+    data: { numbering },
   });
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { filter } = useSessionFilter();
 
-  // States
-  const numberingGap = {
-    xs: 0,
-    sm: 1,
-    md: 2,
-  };
-  const numberingFontSize = {
-    xs: 16,
-    sm: 20,
-    md: 32,
-  };
-  const numberingBoxSize = {
-    xs: "16px",
-    sm: "28px",
-    md: "50px",
-  };
-  const dropLabelFontSize = {
-    xs: 10,
-    sm: 14,
-    md: 20,
-  };
+  const numberingGap = { xs: 0, sm: 1, md: 2 };
+  const numberingFontSize = { xs: 16, sm: 20, md: 32 };
+  const numberingBoxSize = { xs: "16px", sm: "28px", md: "50px" };
+  const dropLabelFontSize = { xs: 10, sm: 14, md: 20 };
 
-  // Hanndle filter
+  const calculatedAspectRatio = (() => {
+    let ar = orientation === "landscape" ? aspectRatio2 : aspectRatio1;
+    return rotate ? 1 / ar : ar;
+  })();
+
+  const shouldShowDropHere = isOver && !!value;
+
   useEffect(() => {
-    if (!value || !window.Caman || !canvasRef.current) return;
+    if (!value || !canvasRef.current || !window.Caman || shouldShowDropHere)
+      return;
 
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -102,76 +89,55 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
     img.crossOrigin = "anonymous";
     img.src = value;
 
-    img.onload = () => {
-      img.decode().then(() => {
-        // Step 1: calculate final aspect ratio
-        let aspectRatio =
-          orientation === "landscape" ? aspectRatio2 : aspectRatio1;
-        if (rotate) aspectRatio = 1 / aspectRatio;
+    img.onload = async () => {
+      await img.decode();
 
-        // Step 2: set canvas size
-        let width = hNumber * aspectRatio;
-        let height = hNumber;
-        canvas.width = width;
-        canvas.height = height;
+      let aspectRatio = orientation === "landscape" ? 3 / 2 : 2 / 3;
+      if (rotate) aspectRatio = 1 / aspectRatio;
 
-        ctx.clearRect(0, 0, width, height);
+      let width = hNumber * aspectRatio;
+      let height = hNumber;
+      canvas.width = width;
+      canvas.height = height;
 
-        if (rotate) {
-          ctx.save();
-          ctx.translate(width / 2, height / 2);
-          ctx.rotate((90 * Math.PI) / 180);
+      ctx.clearRect(0, 0, width, height);
 
-          const rotatedWidth = height;
-          const rotatedHeight = width;
+      if (rotate) {
+        ctx.save();
+        ctx.translate(width / 2, height / 2);
+        ctx.rotate(Math.PI / 2);
 
-          const scale = Math.max(
-            rotatedWidth / img.width,
-            rotatedHeight / img.height
-          );
+        const scale = Math.max(height / img.width, width / img.height);
+        const drawWidth = img.width * scale;
+        const drawHeight = img.height * scale;
 
-          const drawWidth = img.width * scale;
-          const drawHeight = img.height * scale;
+        ctx.drawImage(
+          img,
+          -drawWidth / 2,
+          -drawHeight / 2,
+          drawWidth,
+          drawHeight
+        );
+        ctx.restore();
+      } else {
+        const scale = Math.max(width / img.width, height / img.height);
+        const drawWidth = img.width * scale;
+        const drawHeight = img.height * scale;
+        const offsetX = (width - drawWidth) / 2;
+        const offsetY = (height - drawHeight) / 2;
 
-          ctx.drawImage(
-            img,
-            -drawWidth / 2,
-            -drawHeight / 2,
-            drawWidth,
-            drawHeight
-          );
+        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
+      }
 
-          ctx.restore();
-        } else {
-          const scale = Math.max(width / img.width, height / img.height);
-
-          const drawWidth = img.width * scale;
-          const drawHeight = img.height * scale;
-
-          const offsetX = (width - drawWidth) / 2;
-          const offsetY = (height - drawHeight) / 2;
-
-          ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-        }
-
-        // Apply Caman filter after short delay
-        setTimeout(() => {
-          window.Caman(canvas, function (this: any) {
-            this.revert(true);
-            filter.filter.call(this);
-            this.render();
-          });
-        }, 10);
-      });
+      setTimeout(() => {
+        window.Caman(canvas, function (this: any) {
+          this.revert(true);
+          filter.filter.call(this);
+          this.render();
+        });
+      }, 10);
     };
-  }, [value, filter, orientation, rotate, hNumber]);
-
-  // Calculate container aspect ratio
-  const calculatedAspectRatio = (() => {
-    let ar = orientation === "landscape" ? 3 / 2 : 2 / 3;
-    if (rotate) ar = 1 / ar;
-    return ar;
-  })();
+  }, [value, filter, orientation, rotate, hNumber, shouldShowDropHere]);
 
   return (
     <Center
@@ -180,28 +146,18 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
       w={w || `${hNumber * calculatedAspectRatio}px`}
       flexShrink={0}
       border={dropPhotoSlotBorder}
-      overflow={"hidden"}
-      bg={isOver ? "#ddd" : "transparent"}
+      overflow="hidden"
+      bg={shouldShowDropHere ? "red.400" : "transparent"}
       zIndex={dropPhotoSlotZindex}
-      transform={"scale(1.01)"}
+      transform="scale(1.01)"
     >
-      {value ? (
-        <canvas
-          id={`res-img-${id}`}
-          key={value}
-          ref={canvasRef}
-          style={{
-            height: "100%",
-            width: "100%",
-          }}
-        />
-      ) : (
+      {shouldShowDropHere ? (
         <VStack gap={numberingGap[size]}>
           <Center
             transform={rotate ? "rotate(90deg)" : ""}
             p={2}
-            bg={"white"}
-            borderRadius={"full"}
+            bg="white"
+            borderRadius="full"
             aspectRatio={1}
             w={numberingBoxSize[size]}
             h={numberingBoxSize[size]}
@@ -210,14 +166,45 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
             <Text
               className="df"
               fontSize={numberingFontSize[size]}
-              fontWeight={"bold"}
-              mb={"10px"}
+              fontWeight="bold"
+              mb="10px"
             >
               {numbering}
             </Text>
           </Center>
-
-          <Text fontSize={dropLabelFontSize[size]} fontWeight={"semibold"}>
+          <Text fontSize={dropLabelFontSize[size]} fontWeight="semibold">
+            Drop Here?
+          </Text>
+        </VStack>
+      ) : value ? (
+        <canvas
+          id={`res-img-${id}`}
+          key={value}
+          ref={canvasRef}
+          style={{ height: "100%", width: "100%" }}
+        />
+      ) : (
+        <VStack gap={numberingGap[size]}>
+          <Center
+            transform={rotate ? "rotate(90deg)" : ""}
+            p={2}
+            bg="white"
+            borderRadius="full"
+            aspectRatio={1}
+            w={numberingBoxSize[size]}
+            h={numberingBoxSize[size]}
+            flexShrink={0}
+          >
+            <Text
+              className="df"
+              fontSize={numberingFontSize[size]}
+              fontWeight="bold"
+              mb="10px"
+            >
+              {numbering}
+            </Text>
+          </Center>
+          <Text fontSize={dropLabelFontSize[size]} fontWeight="semibold">
             Drop Here
           </Text>
         </VStack>
