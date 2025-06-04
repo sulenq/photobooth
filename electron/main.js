@@ -1,9 +1,11 @@
 const path = require("path");
 const { app, BrowserWindow } = require("electron");
-const { ipcMain, nativeImage } = require("electron");
+const { ipcMain } = require("electron");
 const fs = require("fs");
-const os = require("os");
 const { exec } = require("child_process");
+const {
+  generateVideoFromBase64Images,
+} = require("./utils/generateVideoFromBase64Images");
 
 const isDev = process.env.IS_DEV == "true" ? true : false;
 
@@ -83,7 +85,6 @@ app.whenReady().then(() => {
   //     return "error";
   //   }
   // });
-
   ipcMain.handle("print-photo", async (_event, base64, qty) => {
     const base64Data = base64.replace(/^data:image\/png;base64,/, "");
     const filePath = path.join(app.getPath("temp"), `photo.png`);
@@ -94,6 +95,25 @@ app.whenReady().then(() => {
       exec(
         `rundll32.exe C:\\Windows\\System32\\shimgvw.dll,ImageView_PrintTo "${filePath}" "DS-RX1"`
       );
+    }
+  });
+
+  // Handle generate video from images (return base64)
+  ipcMain.handle("generate-video", async (_event, base64Images) => {
+    const outputPath = path.join(app.getPath("temp"), "output.mp4");
+
+    try {
+      await generateVideoFromBase64Images(base64Images, outputPath);
+
+      const videoBuffer = fs.readFileSync(outputPath);
+      const videoBase64 = videoBuffer.toString("base64");
+
+      fs.unlinkSync(outputPath);
+
+      return videoBase64;
+    } catch (error) {
+      console.error("Generate video error:", error);
+      throw error;
     }
   });
 

@@ -57,7 +57,18 @@ const DriveQR = (props: DriveQRProps) => {
   // Contexts
   const { photos } = useSessionPhotos();
 
+  // States
+  const [videoBase64, setVideoBase64] = useState<string | null>(null);
+
   // Utils
+  async function generateGifVideo() {
+    try {
+      const videoBase64 = await window.electronAPI.generateVideo(photos);
+      setVideoBase64(`data:video/mp4;base64,${videoBase64}`);
+    } catch (err) {
+      console.error("Gagal generate video:", err);
+    }
+  }
   function generateDriveLink() {
     const element = document.getElementById("finalResult");
     if (!element) return;
@@ -74,18 +85,22 @@ const DriveQR = (props: DriveQRProps) => {
           url: `/send-drive/go`,
           method: "post",
           data: {
-            images: [base64Image, ...photos],
+            images: [base64Image, ...photos, videoBase64],
           },
         },
       });
     });
   }
 
+  // Handle generate video from session Photos
+  useEffect(() => {
+    generateGifVideo();
+  }, []);
+
   // Handle generate qr drive on page load
   useEffect(() => {
-    // TODO: unvoment on prod
-    // setTimeout(() => generateDriveLink(), 100);
-  }, []);
+    generateDriveLink();
+  }, [videoBase64]);
 
   // Handle qr drive response
   useEffect(() => {
@@ -111,17 +126,21 @@ const DriveQR = (props: DriveQRProps) => {
         Scan Me to Download
       </Text>
       <Center bg="white" borderRadius={16} p={5} flex={1}>
-        {loading ? (
+        {loading && (
           <CContainer justify="center" align="center" gap={10}>
             <Spinner size="xl" />
-            <Text fontSize={20} textAlign={"center"}>
+            <Text fontSize={18} textAlign={"center"}>
               Sedang menyiapkan Google Drive
             </Text>
           </CContainer>
-        ) : error ? (
-          <FeedbackRetry onRetry={generateDriveLink} />
-        ) : (
-          <QRCodeCanvas value={driveLink} size={300} />
+        )}
+
+        {!loading && (
+          <>
+            {error && <FeedbackRetry onRetry={generateGifVideo} />}
+
+            {!error && <QRCodeCanvas value={driveLink} size={300} />}
+          </>
         )}
       </Center>
     </CContainer>
