@@ -126,8 +126,9 @@ const Camera = (props: any) => {
   // Handle start session
   useEffect(() => {
     // TODO: Fetch session timer rule data
+    // TODO: reset all context to default
 
-    const seconds = 1000;
+    const seconds = 9999;
 
     if (cameraOpen && seconds) {
       clearResPhotos();
@@ -141,8 +142,6 @@ const Camera = (props: any) => {
       stopCamera(videoRef, streamRef);
     };
   }, []);
-
-  // console.log("sessionTimeout", sessionTimeout);
 
   return (
     <CContainer w={"60%"} mx={"auto"} pos={"relative"}>

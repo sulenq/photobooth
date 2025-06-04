@@ -17,6 +17,8 @@ interface DropPhotoSlotProps {
   id: string;
   numbering: number;
   hNumber: number;
+  h?: string;
+  w?: string;
   orientation?: "portrait" | "landscape";
   rotate?: boolean;
   value?: string | null;
@@ -25,6 +27,7 @@ interface DropPhotoSlotProps {
 const aspectRatio1 = 2 / 3;
 const aspectRatio2 = 3 / 2;
 const dropPhotoSlotZindex = 1;
+const dropPhotoSlotBorderColor = "green";
 
 const LayoutContainer = (props: StackProps) => {
   // Props
@@ -40,6 +43,8 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
     numbering,
     value,
     hNumber,
+    h,
+    w,
     orientation = "portrait",
     rotate = false,
   } = props;
@@ -135,12 +140,11 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
   return (
     <Center
       ref={setNodeRef}
-      h={`${hNumber}px`}
-      w={`${hNumber * calculatedAspectRatio}px`}
+      h={h || `${hNumber}px`}
+      w={w || `${hNumber * calculatedAspectRatio}px`}
       flexShrink={0}
-      border={"4px dashed"}
-      borderColor={"#aaa"}
-      // borderColor={"red"}
+      border={"2px dashed"}
+      borderColor={dropPhotoSlotBorderColor}
       overflow={"hidden"}
       bg={isOver ? "gray" : "transparent"}
       zIndex={dropPhotoSlotZindex}
@@ -190,36 +194,36 @@ export const Layout1 = (props: Interface__Layout) => {
       aspectRatio={TEMPLATE_ASPECT_RATIO}
       h={TEMPLATE_H}
       w="fit"
-      justify="center"
-      gap="10px"
-      pt="10px"
+      pt={"calc(190px / 3)"}
+      gap={"calc(95px / 3)"}
     >
-      <HStack justify="center" gap={8}>
+      <HStack justify="center" gap={"calc(130px / 3)"}>
         <DropPhotoSlot
           id="1"
           numbering={1}
           value={resPhotos["1"]}
-          hNumber={250}
+          hNumber={705 / 3}
         />
         <DropPhotoSlot
           id="2"
           numbering={2}
           value={resPhotos["2"]}
-          hNumber={250}
+          hNumber={705 / 3}
         />
       </HStack>
-      <HStack justify="center" gap={8}>
+
+      <HStack justify="center" gap={"calc(130px / 3)"}>
         <DropPhotoSlot
           id="3"
           numbering={3}
           value={resPhotos["3"]}
-          hNumber={250}
+          hNumber={705 / 3}
         />
         <DropPhotoSlot
           id="4"
           numbering={4}
           value={resPhotos["4"]}
-          hNumber={250}
+          hNumber={705 / 3}
         />
       </HStack>
     </LayoutContainer>
