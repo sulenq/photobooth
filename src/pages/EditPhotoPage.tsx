@@ -231,8 +231,6 @@ const EditPhotoPage = () => {
     }
   }
 
-  console.log(resPhotos);
-
   return (
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <PageContainer h="100dvh" borderless gap={10} overflowX="clip">
@@ -274,7 +272,7 @@ const EditPhotoPage = () => {
 
             <CContainer w="fit" gap={2}>
               <Text fontSize={20} fontWeight="semibold">
-                DRAG & DROP YOUR PHOTO!
+                CHOOSE FILTER
               </Text>
 
               <CContainer
