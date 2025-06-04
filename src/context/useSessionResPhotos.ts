@@ -1,6 +1,5 @@
+import { SlotKey } from "@/constants/types";
 import { create } from "zustand";
-
-type SlotKey = 1 | 2 | 3 | 4;
 
 type PhotoSlots = Record<SlotKey, string | null>;
 

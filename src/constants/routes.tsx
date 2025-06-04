@@ -1,4 +1,4 @@
-import ChooseLayoutPage from "@/pages/ChooseLayoutPage";
+import ChooseTemplatePage from "@/pages/ChooseTemplatePage";
 import ChooseProductPage from "@/pages/ChooseProductPage";
 import EditPhotoPage from "@/pages/EditPhotoPage";
 import PaymentPage from "@/pages/PaymentPage";
@@ -54,7 +54,7 @@ export const PRIVATE_ROUTES: Interface__PrivateRoute[] = [
   {
     path: "/choose-layout",
     activePath: "/choose-layout",
-    element: <ChooseLayoutPage />,
+    element: <ChooseTemplatePage />,
   },
   {
     path: "/edit-photo",

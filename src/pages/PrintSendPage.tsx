@@ -30,11 +30,17 @@ import html2canvas from "html2canvas";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
 
-const DriveQR = (props: any) => {
-  // Props
-  const { driveLink, setDriveLink, setGetDriveLinkLoading } = props;
+interface DriveQRProps {
+  driveLink: string;
+  setDriveLink: (link: string) => void;
+  setGetDriveLinkLoading: (loading: boolean) => void;
+}
 
-  // Hooks
+const DriveQR = ({
+  driveLink,
+  setDriveLink,
+  setGetDriveLinkLoading,
+}: DriveQRProps) => {
   const { loading, req, response, error } = useRequest({
     id: "generate-drive-qr",
     showLoadingToast: false,
@@ -42,29 +48,22 @@ const DriveQR = (props: any) => {
     showSuccessToast: false,
   });
 
-  // Contexts
   const { photos } = useSessionPhotos();
 
-  // Utils
   function generateDriveLink() {
     const element = document.getElementById("finalResult");
-    if (!element) {
-      console.error("Element with id 'finalResult' not found");
-      return;
-    }
+    if (!element) return;
 
-    // Use a higher scale for better resolution
     html2canvas(element, {
-      scale: 3, // 3x bigger than original element size
-      useCORS: true, // if images cross-origin
-      backgroundColor: null, // preserve transparent background if any
+      scale: 3,
+      useCORS: true,
+      backgroundColor: null,
     }).then((canvas) => {
-      const base64Image = canvas.toDataURL("image/png", 1); // quality 1 for PNG
+      const base64Image = canvas.toDataURL("image/png", 1);
 
-      const url = `/send-drive/go`;
       req({
         config: {
-          url,
+          url: `/send-drive/go`,
           method: "post",
           data: {
             images: [base64Image, ...photos],
@@ -74,21 +73,15 @@ const DriveQR = (props: any) => {
     });
   }
 
-  // Handle generate drive link QR on load
   useEffect(() => {
-    setTimeout(() => {
-      generateDriveLink();
-    }, 100);
+    setTimeout(() => generateDriveLink(), 100);
   }, []);
-  useEffect(() => {
-    const driveLink = response?.data?.driveLink;
 
-    if (driveLink) {
-      setDriveLink(driveLink);
-    }
+  useEffect(() => {
+    const link = response?.data?.driveLink;
+    if (link) setDriveLink(link);
   }, [response]);
 
-  // Handle drive link loading
   useEffect(() => {
     setGetDriveLinkLoading(loading);
   }, [loading]);
@@ -97,84 +90,65 @@ const DriveQR = (props: any) => {
     <CContainer p={2} bg={"p.900"} borderRadius={16} gap={3} flex={1}>
       <Text
         fontSize={20}
-        fontWeight={"bold"}
-        color={"white"}
-        textAlign={"center"}
+        fontWeight="bold"
+        color="white"
+        textAlign="center"
         mt={1}
         px={2}
       >
         Scan Me to Download
       </Text>
-      <Center bg={"white"} borderRadius={16} p={5} flex={1}>
-        {loading && (
-          <CContainer justify={"center"} align={"center"} gap={10}>
-            <Spinner size={"xl"} />
-
+      <Center bg="white" borderRadius={16} p={5} flex={1}>
+        {loading ? (
+          <CContainer justify="center" align="center" gap={10}>
+            <Spinner size="xl" />
             <Text fontSize={20}>Sedang menyiapkan Google Drive</Text>
           </CContainer>
-        )}
-
-        {!loading && (
-          <>
-            {error && <FeedbackRetry onRetry={generateDriveLink} />}
-
-            {!error && <QRCodeCanvas value={driveLink} size={300} />}
-          </>
+        ) : error ? (
+          <FeedbackRetry onRetry={generateDriveLink} />
+        ) : (
+          <QRCodeCanvas value={driveLink} size={300} />
         )}
       </Center>
     </CContainer>
   );
 };
 
-const SendEmail = (props: any) => {
-  // Props
-  const { driveLink, driveLinkLoading } = props;
+interface SendEmailProps {
+  driveLink: string;
+  driveLinkLoading: boolean;
+}
 
-  // Hooks
-  const { loading, req } = useRequest({
-    id: "generate-drive-qr",
-  });
-
-  // States
+const SendEmail = ({ driveLink, driveLinkLoading }: SendEmailProps) => {
+  const { loading, req } = useRequest({ id: "generate-drive-qr" });
   const [email, setEmail] = useState("");
 
-  // Utils
   function sendEmail() {
-    const url = `/send-email/go`;
-    const payload = {
-      email: email,
-      driveLink: driveLink,
-    };
-
     req({
       config: {
-        url,
+        url: `/send-email/go`,
         method: "post",
-        data: payload,
+        data: { email, driveLink },
       },
     });
   }
 
   return (
-    <CContainer p={2} bg={"p.900"} borderRadius={16} gap={4}>
-      <Text fontSize={20} fontWeight={"bold"} color={"white"} mt={1} px={2}>
+    <CContainer p={2} bg="p.900" borderRadius={16} gap={4}>
+      <Text fontSize={20} fontWeight="bold" color="white" mt={1} px={2}>
         Email
       </Text>
-
       <StringInput
-        bg={"white"}
+        bg="white"
         placeholder="Enter your email address to send file"
         borderRadius={6}
-        onChangeSetter={(input) => {
-          setEmail(input);
-        }}
+        onChangeSetter={setEmail}
         inputValue={email}
       />
-
       <BButton
-        w={"fit"}
-        colorPalette={"p"}
-        ml={"auto"}
+        w="fit"
+        colorPalette="p"
+        ml="auto"
         onClick={sendEmail}
         loading={loading || driveLinkLoading}
       >
@@ -185,25 +159,18 @@ const SendEmail = (props: any) => {
 };
 
 const Print = () => {
-  // Contexts
   const { template } = useSessionTemplate();
   const { photos } = useSessionPhotos();
   const { resPhotos, setResPhotos } = useSessionResPhotos();
   const { sessionTimeout } = useSessionTimeout();
   const { choosedProduct } = useChoosedProduct();
 
-  // States
-  const LayoutComponent =
+  const layoutData =
     LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
-
-  // Refs
+  const LayoutComponent = layoutData.component;
   const printRef = useRef<HTMLDivElement>(null);
 
-  // Utils
   function handlePrint() {
-    console.log("call handlePrint()");
-    console.log("choosedProduct:", choosedProduct);
-
     const element = document.getElementById("finalResult");
     if (!element) return;
 
@@ -217,21 +184,15 @@ const Print = () => {
       const dataUrl = canvas.toDataURL("image/png");
       const copies = choosedProduct?.qty || 1;
 
-      console.log("Calling print-photo with", copies, dataUrl?.slice(0, 30));
-
-      // Send to main process: base64 image + copies
-      // window.electronAPI.ipcRenderer.invoke("print-photo", dataUrl, copies);
-
       window.electronAPI.printPhoto(dataUrl, copies);
     });
   }
 
-  // Handle auto set res photo
   useEffect(() => {
-    if (!photos || photos.length === 0) return;
+    if (!photos?.length) return;
 
     setResPhotos(() => {
-      const newSlots: any = {
+      const newSlots: Record<1 | 2 | 3 | 4, string | null> = {
         1: null,
         2: null,
         3: null,
@@ -239,7 +200,7 @@ const Print = () => {
       };
 
       for (let i = 0; i < 4; i++) {
-        newSlots[i + 1] = photos[i % photos.length];
+        newSlots[(i + 1) as 1 | 2 | 3 | 4] = photos[i % photos.length];
       }
 
       return newSlots;
@@ -265,14 +226,12 @@ const Print = () => {
           aspectRatio={TEMPLATE_ASPECT_RATIO}
           zIndex={2}
         />
-
         <LayoutComponent
-          zIndex={2}
           resPhotos={resPhotos}
           setResPhotos={setResPhotos}
+          zIndex={2}
         />
       </CContainer>
-
       <BButton
         onClick={handlePrint}
         {...PRESET_MAIN_BUTTON}
@@ -285,42 +244,32 @@ const Print = () => {
 };
 
 const PrintSendPage = () => {
-  // Contexts
-  // TODO handle session data null maka navigate /take-photo
-
-  // States
   const [driveLink, setDriveLink] = useState("");
   const [driveLinkLoading, setGetDriveLinkLoading] = useState<boolean>(false);
 
   return (
     <PageContainer>
       <HStack mb={20}>
-        <Box w={"250px"} />
-
+        <Box w="250px" />
         <Heading>Print & Send</Heading>
-
         <NextButton to="/thankyou" label="FINISH" />
       </HStack>
 
-      <CContainer my={"auto"}>
+      <CContainer my="auto">
         <SimpleGrid
           columns={[1, null, 2]}
           gap={20}
-          w={"full"}
-          maxW={"65%"}
-          mx={"auto"}
+          w="full"
+          maxW="65%"
+          mx="auto"
         >
-          {/* Print */}
           <Print />
-
-          {/* Drive n Send Email */}
           <CContainer gap={8}>
             <DriveQR
               driveLink={driveLink}
               setDriveLink={setDriveLink}
               setGetDriveLinkLoading={setGetDriveLinkLoading}
             />
-
             <SendEmail
               driveLink={driveLink}
               driveLinkLoading={driveLinkLoading}

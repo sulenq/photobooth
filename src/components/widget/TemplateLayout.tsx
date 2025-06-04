@@ -11,11 +11,12 @@ import CContainer from "../ui-custom/CContainer";
 interface Interface__Layout extends StackProps {
   resPhotos?: any;
   setResPhotos?: any;
+  setSlotNumberingMap: (map: Record<string, number>) => void;
 }
 interface DropPhotoSlotProps {
   id: string;
+  numbering: number;
   hNumber: number;
-  // aspectRatio: number;
   orientation?: "portrait" | "landscape";
   rotate?: boolean;
   value?: string | null;
@@ -33,14 +34,17 @@ const LayoutContainer = (props: StackProps) => {
 };
 
 const DropPhotoSlot = (props: DropPhotoSlotProps) => {
+  // Props
   const {
     id,
+    numbering,
     value,
     hNumber,
     orientation = "portrait",
     rotate = false,
   } = props;
 
+  // Hooks
   const { setNodeRef, isOver } = useDroppable({ id });
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const { filter } = useSessionFilter();
@@ -164,7 +168,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
             flexShrink={0}
           >
             <Text className="df" fontSize={32} fontWeight={"bold"} mt={"-8px"}>
-              {id}
+              {numbering}
             </Text>
           </Center>
 
@@ -193,28 +197,28 @@ export const Layout1 = (props: Interface__Layout) => {
       <HStack justify="center" gap={8}>
         <DropPhotoSlot
           id="1"
+          numbering={1}
           value={resPhotos["1"]}
-          // aspectRatio={aspectRatio1}
           hNumber={250}
         />
         <DropPhotoSlot
           id="2"
+          numbering={2}
           value={resPhotos["2"]}
-          // aspectRatio={aspectRatio1}
           hNumber={250}
         />
       </HStack>
       <HStack justify="center" gap={8}>
         <DropPhotoSlot
           id="3"
+          numbering={3}
           value={resPhotos["3"]}
-          // aspectRatio={aspectRatio1}
           hNumber={250}
         />
         <DropPhotoSlot
           id="4"
+          numbering={4}
           value={resPhotos["4"]}
-          // aspectRatio={aspectRatio1}
           hNumber={250}
         />
       </HStack>
@@ -237,16 +241,16 @@ export const Layout2 = (props: Interface__Layout) => {
       <HStack justify="center" gap={8}>
         <DropPhotoSlot
           id="1"
+          numbering={1}
           value={resPhotos["1"]}
-          // aspectRatio={aspectRatio1}
           hNumber={250}
           orientation="landscape"
           rotate
         />
         <DropPhotoSlot
           id="2"
+          numbering={2}
           value={resPhotos["2"]}
-          // aspectRatio={aspectRatio1}
           hNumber={250}
           orientation="landscape"
           rotate
@@ -255,16 +259,16 @@ export const Layout2 = (props: Interface__Layout) => {
       <HStack justify="center" gap={8}>
         <DropPhotoSlot
           id="3"
+          numbering={3}
           value={resPhotos["3"]}
-          // aspectRatio={aspectRatio1}
           hNumber={250}
           orientation="landscape"
           rotate
         />
         <DropPhotoSlot
           id="4"
+          numbering={4}
           value={resPhotos["4"]}
-          // aspectRatio={aspectRatio1}
           hNumber={250}
           orientation="landscape"
           rotate
@@ -289,12 +293,14 @@ export const Layout3 = (props: Interface__Layout) => {
       <HStack justify="center" gap={"12px"}>
         <DropPhotoSlot
           id="1"
+          numbering={1}
           value={resPhotos["1"]}
           hNumber={126}
           orientation="landscape"
         />
         <DropPhotoSlot
           id="2"
+          numbering={2}
           value={resPhotos["2"]}
           hNumber={126}
           orientation="landscape"
@@ -303,28 +309,32 @@ export const Layout3 = (props: Interface__Layout) => {
 
       <HStack justify="center" gap={"12px"}>
         <DropPhotoSlot
-          id="2"
+          id="3"
+          numbering={2}
           value={resPhotos["2"]}
-          hNumber={126}
-          orientation="landscape"
-        />
-        <DropPhotoSlot
-          id="3"
-          value={resPhotos["3"]}
-          hNumber={126}
-          orientation="landscape"
-        />
-      </HStack>
-
-      <HStack justify="center" gap={"12px"}>
-        <DropPhotoSlot
-          id="3"
-          value={resPhotos["3"]}
           hNumber={126}
           orientation="landscape"
         />
         <DropPhotoSlot
           id="4"
+          numbering={3}
+          value={resPhotos["3"]}
+          hNumber={126}
+          orientation="landscape"
+        />
+      </HStack>
+
+      <HStack justify="center" gap={"12px"}>
+        <DropPhotoSlot
+          id="5"
+          numbering={3}
+          value={resPhotos["3"]}
+          hNumber={126}
+          orientation="landscape"
+        />
+        <DropPhotoSlot
+          id="6"
+          numbering={4}
           value={resPhotos["4"]}
           hNumber={120}
           orientation="landscape"

@@ -18,7 +18,7 @@ const ChooseProductPage = () => {
     showSuccessToast: false,
   });
 
-  // States
+  // Contexts
   const { choosedProduct, setChoosedProduct } = useChoosedProduct();
 
   // States
@@ -31,14 +31,14 @@ const ChooseProductPage = () => {
       qty: 1,
     });
   }
-  function getProduct() {
+  function getProducts() {
     const url = `/products/get-public`;
     req({ config: { url } });
   }
 
   // Handle get product on page load
   useEffect(() => {
-    getProduct();
+    getProducts();
   }, []);
 
   return (
@@ -75,7 +75,7 @@ const ChooseProductPage = () => {
             </CContainer>
           )}
 
-          {error && <FeedbackRetry onRetry={getProduct} />}
+          {error && <FeedbackRetry onRetry={getProducts} />}
         </>
       )}
 

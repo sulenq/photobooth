@@ -10,6 +10,7 @@ import {
 } from "@/constants/defaultAttributes";
 import { FILTERS } from "@/constants/filters";
 import { LAYOUT_COMPONENTS } from "@/constants/layoutComponents";
+import { SlotKey } from "@/constants/types";
 import useSessionFilter from "@/context/useSessionFilter";
 import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionResPhotos from "@/context/useSessionResPhotos";
@@ -199,22 +200,35 @@ const EditPhotoPage = () => {
       },
     })
   );
-  const LayoutComponent =
+  const layoutData =
     LAYOUT_COMPONENTS[template.layout.id as keyof typeof LAYOUT_COMPONENTS];
+  const LayoutComponent = layoutData.component;
+  const slotNumberingMap = layoutData.slotNumberingMap;
 
   // Utils
   function handleDragEnd(event: any) {
     const { over, active } = event;
     if (!over || !active) return;
 
-    const droppedSlotId = over.id as string;
+    const droppedSlotId = over.id;
     const draggedSrc = active.data.current?.src;
-    if (draggedSrc) {
-      setResPhotos((prev: any) => ({
-        ...prev,
-        [droppedSlotId]: draggedSrc,
-      }));
-    }
+    if (!draggedSrc || !slotNumberingMap[Number(droppedSlotId) as SlotKey])
+      return;
+
+    const targetNumbering = slotNumberingMap[Number(droppedSlotId) as SlotKey];
+
+    setResPhotos((prev) => {
+      const updated = { ...prev };
+
+      for (const [slotId, numbering] of Object.entries(slotNumberingMap)) {
+        if (numbering === targetNumbering) {
+          const numericId = Number(slotId) as SlotKey;
+          updated[numericId] = draggedSrc;
+        }
+      }
+
+      return updated;
+    });
   }
 
   return (

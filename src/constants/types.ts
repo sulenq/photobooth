@@ -25,6 +25,8 @@ declare global {
   }
 }
 
+export type SlotKey = 1 | 2 | 3 | 4;
+
 export type Type__LanguageOptions = "id" | "en";
 
 export type Type__TimeZoneObject = {

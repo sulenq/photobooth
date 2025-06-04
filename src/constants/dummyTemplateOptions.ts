@@ -7,7 +7,7 @@ export const DUMMY_TEMPLATE_OPTIONS = [
       id: 1,
     },
     templateThumbnail: `${IMAGES_PATH}/templates/thumbnails/2.png`,
-    template: `${IMAGES_PATH}/templates/layouts/2.png`,
+    production: `${IMAGES_PATH}/templates/layouts/2.png`,
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ export const DUMMY_TEMPLATE_OPTIONS = [
       id: 2,
     },
     templateThumbnail: `${IMAGES_PATH}/templates/thumbnails/17.png`,
-    template: `${IMAGES_PATH}/templates/layouts/17.png`,
+    production: `${IMAGES_PATH}/templates/layouts/17.png`,
   },
   {
     id: 3,
@@ -23,7 +23,7 @@ export const DUMMY_TEMPLATE_OPTIONS = [
       id: 3,
     },
     templateThumbnail: `${IMAGES_PATH}/templates/thumbnails/20.png`,
-    template: `${IMAGES_PATH}/templates/layouts/20.png`,
+    production: `${IMAGES_PATH}/templates/layouts/20.png`,
   },
   {
     id: 4,
@@ -31,7 +31,7 @@ export const DUMMY_TEMPLATE_OPTIONS = [
       id: 4,
     },
     templateThumbnail: `${IMAGES_PATH}/templates/thumbnails/25.png`,
-    template: `${IMAGES_PATH}/templates/layouts/25.png`,
+    production: `${IMAGES_PATH}/templates/layouts/25.png`,
   },
   {
     id: 5,
@@ -39,6 +39,6 @@ export const DUMMY_TEMPLATE_OPTIONS = [
       id: 5,
     },
     templateThumbnail: `${IMAGES_PATH}/templates/thumbnails/31.png`,
-    template: `${IMAGES_PATH}/templates/layouts/31.png`,
+    production: `${IMAGES_PATH}/templates/layouts/31.png`,
   },
 ];
