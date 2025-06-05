@@ -77,18 +77,20 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
     return rotate ? 1 / ar : ar;
   })();
   const [isDraggingGlobal, setIsDraggingGlobal] = useState(false);
+  const shouldShowDropHere = isDraggingGlobal && isOver;
+  const draggingOutsideDropZone = !isOver && isDraggingGlobal;
 
   // Refs
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // Monitor dnd
   useDndMonitor({
     onDragStart: () => setIsDraggingGlobal(true),
     onDragEnd: () => setIsDraggingGlobal(false),
     onDragCancel: () => setIsDraggingGlobal(false),
   });
 
-  const shouldShowDropHere = isDraggingGlobal && isOver;
-
+  // handle filter photo
   useEffect(() => {
     if (!value || !canvasRef.current || !window.Caman || isDraggingGlobal)
       return;
@@ -151,9 +153,10 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
     };
   }, [value, filter, orientation, rotate, hNumber, isDraggingGlobal]);
 
+  // Drop here component
   const DropHere = () => {
     return (
-      <VStack gap={numberingGap[size]}>
+      <VStack gap={numberingGap[size]} pos={"absolute"}>
         <Center
           transform={rotate ? "rotate(90deg)" : ""}
           p={2}
@@ -181,6 +184,11 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
     );
   };
 
+  if (numbering === 1) {
+    console.log("isDraggingGlobal", isDraggingGlobal);
+    console.log("isOver", isOver);
+  }
+
   return (
     <Center
       ref={setNodeRef}
@@ -192,18 +200,19 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
       bg={shouldShowDropHere ? "red.400" : "transparent"}
       zIndex={dropPhotoSlotZindex}
       transform="scale(1.05)"
+      pos={"relative"}
     >
-      {!isOver && !isDraggingGlobal && value && (
+      <CContainer opacity={draggingOutsideDropZone ? 0.5 : 1}>
         <canvas
           id={`res-img-${id}`}
           key={value}
           ref={canvasRef}
           style={{ height: "100%", width: "100%" }}
         />
-      )}
+      </CContainer>
 
       {((isOver && isDraggingGlobal) ||
-        (!isOver && isDraggingGlobal) ||
+        draggingOutsideDropZone ||
         (!isOver && !isDraggingGlobal && !value)) && <DropHere />}
     </Center>
   );

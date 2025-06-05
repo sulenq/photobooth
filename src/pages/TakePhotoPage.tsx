@@ -206,8 +206,8 @@ const Camera = (props: any) => {
             aspectRatio={2 / 3}
             h={"full"}
             w={"auto"}
-            borderLeft={"2px dashed {colors.p.500}"}
-            borderRight={"2px dashed {colors.p.500}"}
+            borderLeft={"1px solid white"}
+            borderRight={"1px solid white"}
             pos={"absolute"}
             left={"50%"}
             top={"50%"}

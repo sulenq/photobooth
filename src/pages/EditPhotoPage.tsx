@@ -33,7 +33,10 @@ import {
 } from "@dnd-kit/core";
 import { CSSProperties, useEffect, useRef } from "react";
 
-const DraggablePhoto = ({ id, src, borderRadius, border }: any) => {
+const DraggablePhoto = (props: any) => {
+  // Props
+  const { id, src, borderRadius, border } = props;
+
   // Contexts
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({

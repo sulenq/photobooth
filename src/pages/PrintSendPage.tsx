@@ -152,14 +152,19 @@ const DriveQR = (props: DriveQRProps) => {
 
   // States
   const [videoBase64, setVideoBase64] = useState<string | null>(null);
+  const [loadingGenerateVideo, setLoadingGenerateVideo] =
+    useState<boolean>(false);
 
   // Utils
   async function generateGifVideo() {
     try {
+      setLoadingGenerateVideo(true);
       const videoBase64 = await window.electronAPI.generateVideo(photos);
       setVideoBase64(`data:video/mp4;base64,${videoBase64}`);
     } catch (err) {
       console.error("Gagal generate video:", err);
+    } finally {
+      setLoadingGenerateVideo(false);
     }
   }
   function generateDriveLink() {
@@ -192,7 +197,7 @@ const DriveQR = (props: DriveQRProps) => {
 
   // Handle generate qr drive on page load
   useEffect(() => {
-    if (videoBase64) generateDriveLink();
+    if (videoBase64 && !loadingGenerateVideo) generateDriveLink();
   }, [videoBase64]);
 
   // Handle qr drive response
@@ -218,8 +223,9 @@ const DriveQR = (props: DriveQRProps) => {
       >
         Scan Me to Download
       </Text>
+
       <Center bg="white" borderRadius={16} p={5} flex={1}>
-        {loading && (
+        {(loading || loadingGenerateVideo) && (
           <CContainer justify="center" align="center" gap={10}>
             <Spinner size="xl" />
             <Text fontSize={18} textAlign={"center"}>
