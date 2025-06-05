@@ -182,6 +182,7 @@ const Camera = (props: any) => {
               width: "100%",
               aspectRatio: 3 / 2,
               backgroundColor: "black",
+              overflow: "hidden", // Clip overflow
             }}
           >
             <video
@@ -192,10 +193,9 @@ const Camera = (props: any) => {
                 position: "absolute",
                 top: 0,
                 left: 0,
-                aspectRatio: 3 / 2,
                 width: "100%",
-                height: "fit",
-                transform: "scaleX(-1)", // Mirror
+                height: "100%", // use 100% instead of invalid "fit"
+                transform: "scaleX(-1) scale(1.1)", // correct syntax
                 objectFit: "cover",
               }}
             />

@@ -199,7 +199,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
       overflow="hidden"
       bg={shouldShowDropHere ? "red.400" : "transparent"}
       zIndex={dropPhotoSlotZindex}
-      transform="scale(1.05)"
+      transform="scale(1.1)"
       pos={"relative"}
     >
       <CContainer opacity={draggingOutsideDropZone ? 0.5 : 1}>
