@@ -35,6 +35,7 @@ import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
+import html2pdf from "html2pdf.js";
 
 interface DriveQRProps {
   driveLink: string;
@@ -79,33 +80,65 @@ const Print = () => {
   //     window.electronAPI.printPhoto(dataUrl, copies);
   //   });
   // }
-  function handlePrint() {
+
+  // function handlePrint() {
+  //   const element = document.getElementById("finalResult");
+  //   if (!element) return;
+
+  //   // Ukuran target kertas (misal: 4x6 inch photo = 1200x1800 px @300dpi)
+  //   const targetWidth = 1200;
+  //   const targetHeight = 1800;
+
+  //   html2canvas(element, {
+  //     width: element.offsetWidth,
+  //     height: element.offsetHeight,
+  //     scale: Math.min(
+  //       targetWidth / element.offsetWidth,
+  //       targetHeight / element.offsetHeight
+  //     ),
+  //     useCORS: true,
+  //     backgroundColor: "#FFFFFF",
+  //     scrollX: 0,
+  //     scrollY: 0,
+  //     windowWidth: document.documentElement.offsetWidth,
+  //     windowHeight: document.documentElement.offsetHeight,
+  //   }).then((canvas) => {
+  //     const dataUrl = canvas.toDataURL("image/png");
+  //     const copies = choosedProduct?.qty || 1;
+
+  //     window.electronAPI.printPhoto(dataUrl, copies);
+  //   });
+  // }
+
+  function handleExportThenPrint() {
     const element = document.getElementById("finalResult");
     if (!element) return;
 
-    // Ukuran target kertas (misal: 4x6 inch photo = 1200x1800 px @300dpi)
-    const targetWidth = 1200;
-    const targetHeight = 1800;
+    const options = {
+      margin: 0,
+      filename: "photo.pdf",
+      image: { type: "jpeg", quality: 1 },
+      html2canvas: {
+        scale: 3, // high DPI capture
+        useCORS: true,
+        backgroundColor: "#FFFFFF",
+      },
+      jsPDF: {
+        unit: "pt",
+        format: [288, 432], // 4x6 inch = 288pt x 432pt
+        orientation: "portrait",
+      },
+    };
 
-    html2canvas(element, {
-      width: element.offsetWidth,
-      height: element.offsetHeight,
-      scale: Math.min(
-        targetWidth / element.offsetWidth,
-        targetHeight / element.offsetHeight
-      ),
-      useCORS: true,
-      backgroundColor: "#FFFFFF",
-      scrollX: 0,
-      scrollY: 0,
-      windowWidth: document.documentElement.offsetWidth,
-      windowHeight: document.documentElement.offsetHeight,
-    }).then((canvas) => {
-      const dataUrl = canvas.toDataURL("image/png");
-      const copies = choosedProduct?.qty || 1;
-
-      window.electronAPI.printPhoto(dataUrl, copies);
-    });
+    html2pdf()
+      .set(options)
+      .from(element)
+      .outputPdf("datauristring")
+      .then((dataUri: any) => {
+        const base64 = dataUri.split(",")[1];
+        const copies = choosedProduct?.qty || 1;
+        window.electronAPI.printPhoto(base64, copies);
+      });
   }
 
   // Handle auto assign res photoss
@@ -155,7 +188,7 @@ const Print = () => {
       </CContainer>
 
       <BButton
-        onClick={handlePrint}
+        onClick={handleExportThenPrint}
         {...PRESET_MAIN_BUTTON}
         w="full !important"
         maxW={"400px"}

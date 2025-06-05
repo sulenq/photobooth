@@ -7,3 +7,5 @@ interface Window {
   Caman: any;
   electronAPI: ElectronAPI;
 }
+
+declare module "html2pdf.js";
