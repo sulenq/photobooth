@@ -30,12 +30,12 @@ const PrivateRouteMiddleware = (props: any) => {
   }
 
   useEffect(() => {
-    const invoiceStatus = response;
+    const newInvoiceNumberState = response;
 
     if (!invoiceNumber) {
       getInvoiceNumber();
 
-      setInvoiceNumber(invoiceStatus);
+      setInvoiceNumber(newInvoiceNumberState);
     }
   }, [response]);
 

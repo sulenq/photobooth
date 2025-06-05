@@ -1,15 +1,22 @@
 import Heading from "@/components/widget/Heading";
 import PageContainer from "@/components/widget/PageContainer";
+import useSessionInvoice from "@/context/useSessionInvoice";
 import { Text } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ThankyouPage = () => {
+  // Hooks
   const navigate = useNavigate();
 
+  // Contexts
+  const setInvoiceNumber = useSessionInvoice((s) => s.setInvoiceNumber);
+
+  // Handle navigate countdown 10s
   useEffect(() => {
     setTimeout(() => {
       navigate("/");
+      setInvoiceNumber(null);
     }, 10000);
   }, []);
 
