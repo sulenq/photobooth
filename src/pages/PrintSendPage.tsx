@@ -62,16 +62,44 @@ const Print = () => {
   const printRef = useRef<HTMLDivElement>(null);
 
   // Utils
+  // function handlePrint() {
+  //   const element = document.getElementById("finalResult");
+  //   if (!element) return;
+
+  //   html2canvas(element, {
+  //     width: element.offsetWidth,
+  //     height: element.offsetHeight,
+  //     scale: 3,
+  //     useCORS: true,
+  //     backgroundColor: "#FFFFFF",
+  //   }).then((canvas) => {
+  //     const dataUrl = canvas.toDataURL("image/png");
+  //     const copies = choosedProduct?.qty || 1;
+
+  //     window.electronAPI.printPhoto(dataUrl, copies);
+  //   });
+  // }
   function handlePrint() {
     const element = document.getElementById("finalResult");
     if (!element) return;
 
+    // Ukuran target kertas (misal: 4x6 inch photo = 1200x1800 px @300dpi)
+    const targetWidth = 1200;
+    const targetHeight = 1800;
+
     html2canvas(element, {
       width: element.offsetWidth,
       height: element.offsetHeight,
-      scale: 3,
+      scale: Math.min(
+        targetWidth / element.offsetWidth,
+        targetHeight / element.offsetHeight
+      ),
       useCORS: true,
       backgroundColor: "#FFFFFF",
+      scrollX: 0,
+      scrollY: 0,
+      windowWidth: document.documentElement.offsetWidth,
+      windowHeight: document.documentElement.offsetHeight,
     }).then((canvas) => {
       const dataUrl = canvas.toDataURL("image/png");
       const copies = choosedProduct?.qty || 1;
@@ -80,7 +108,7 @@ const Print = () => {
     });
   }
 
-  // Handle auto assign res photos
+  // Handle auto assign res photoss
   useEffect(() => {
     if (!photos?.length) return;
 
