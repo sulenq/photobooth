@@ -76,7 +76,6 @@ const Print = () => {
   //   }).then((canvas) => {
   //     const dataUrl = canvas.toDataURL("image/png");
   //     const copies = choosedProduct?.qty || 1;
-
   //     window.electronAPI.printPhoto(dataUrl, copies);
   //   });
   // }
@@ -235,11 +234,13 @@ const DriveQR = (props: DriveQRProps) => {
     const element = document.getElementById("finalResult");
     if (!element) return;
 
-    html2canvas(element, {
+    const options = {
       scale: 3,
       useCORS: true,
       backgroundColor: null,
-    }).then((canvas) => {
+    };
+
+    html2canvas(element, { ...options }).then((canvas) => {
       const base64Image = canvas.toDataURL("image/png", 1);
 
       req({
@@ -252,6 +253,45 @@ const DriveQR = (props: DriveQRProps) => {
         },
       });
     });
+
+    // html2pdf()
+    //   .from(element)
+    //   .outputPdf("datauristring")
+    //   .then((dataUri: any) => {
+    //     const base64Pdf = dataUri.split(",")[1];
+
+    //     window.electronAPI
+    //       .convertPdfToImage(base64Pdf)
+    //       .then((imageBase64: string) => {
+    //         req({
+    //           config: {
+    //             url: `/send-drive/go`,
+    //             method: "post",
+    //             data: {
+    //               images: [...photos, videoBase64, imageBase64],
+    //             },
+    //           },
+    //         });
+    //       });
+    //   });
+
+    // toJpeg(element, { quality: 3 })
+    //   .then((dataUrl) => {
+    //     const base64Image = dataUrl.split(",")[1];
+
+    //     req({
+    //       config: {
+    //         url: `/send-drive/go`,
+    //         method: "post",
+    //         data: {
+    //           images: [...photos, parseBase64(base64Image)],
+    //         },
+    //       },
+    //     });
+    //   })
+    //   .catch((err) => {
+    //     console.error("Export error:", err);
+    //   });
   }
 
   // Handle generate video from session Photos

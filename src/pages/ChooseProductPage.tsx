@@ -44,7 +44,7 @@ const ChooseProductPage = () => {
   return (
     <PageContainer gap={10} justify={"space-between"} p={0}>
       <CContainer p={5}>
-        <Header1>Choose Product</Header1>
+        <Header1 backPath="/">Choose Product</Header1>
       </CContainer>
 
       {loading && (

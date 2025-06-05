@@ -184,10 +184,10 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
     );
   };
 
-  if (numbering === 1) {
-    console.log("isDraggingGlobal", isDraggingGlobal);
-    console.log("isOver", isOver);
-  }
+  // if (numbering === 1) {
+  //   console.log("isDraggingGlobal", isDraggingGlobal);
+  //   console.log("isOver", isOver);
+  // }
 
   return (
     <Center

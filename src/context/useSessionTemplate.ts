@@ -9,7 +9,7 @@ interface Props {
 
 const DEFAULT = {
   id: -1,
-  layoutId: 5,
+  layoutId: 3,
   production: `${IMAGES_PATH}/templates/layouts/default.png`,
 };
 

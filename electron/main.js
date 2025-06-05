@@ -13,9 +13,11 @@ function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1024,
     height: 650,
+
     autoHideMenuBar: true,
     resizable: true,
     frame: true,
+    fullscreen: true,
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
@@ -75,6 +77,25 @@ app.whenReady().then(() => {
       console.error("Generate video error:", error);
       throw error;
     }
+  });
+
+  // Handle pdf to img
+  ipcMain.handle("convert-pdf-to-image", async (_, base64) => {
+    const tempDir = require("os").tmpdir();
+    const pdfPath = path.join(tempDir, "temp_input.pdf");
+    const imagePath = path.join(tempDir, "output.jpg");
+
+    fs.writeFileSync(pdfPath, Buffer.from(base64, "base64"));
+
+    return new Promise((resolve, reject) => {
+      const cmd = `magick -density 300 "${pdfPath}" -quality 100 "${imagePath}"`;
+
+      exec(cmd, (error) => {
+        if (error) return reject(error);
+        const imageBuffer = fs.readFileSync(imagePath);
+        resolve(imageBuffer.toString("base64"));
+      });
+    });                      
   });
 
   app.on("activate", function () {
