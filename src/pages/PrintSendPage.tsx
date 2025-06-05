@@ -19,14 +19,17 @@ import useSessionTimeout from "@/context/useSessionTimeout";
 import useRequest from "@/hooks/useRequest";
 import {
   Box,
+  Button,
   Center,
   HStack,
+  Icon,
   Image,
   SimpleGrid,
   Spinner,
   Text,
 } from "@chakra-ui/react";
 import { DndContext } from "@dnd-kit/core";
+import { IconX } from "@tabler/icons-react";
 import html2canvas from "html2canvas";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
@@ -252,7 +255,7 @@ const SendEmail = ({ driveLink, driveLinkLoading }: SendEmailProps) => {
   // Hooks
   const { loading, req } = useRequest({ id: "generate-drive-qr" });
   const [email, setEmail] = useState("");
-  const [focus, setFocus] = useState(false);
+  const [kbOpen, setKbOpen] = useState(false);
 
   // Utils
   function sendEmail() {
@@ -266,7 +269,7 @@ const SendEmail = ({ driveLink, driveLinkLoading }: SendEmailProps) => {
   }
 
   return (
-    <CContainer p={2} bg="p.900" borderRadius={16} gap={4} pos={"relative"}>
+    <CContainer p={2} bg="p.900" borderRadius={16} gap={4}>
       <Text fontSize={20} fontWeight="bold" color="white" mt={1} px={2}>
         Email
       </Text>
@@ -277,18 +280,27 @@ const SendEmail = ({ driveLink, driveLinkLoading }: SendEmailProps) => {
         borderRadius={6}
         onChangeSetter={setEmail}
         inputValue={email}
-        onFocus={() => setFocus(true)}
-        onBlur={() => setFocus(false)}
+        onFocus={() => setKbOpen(true)}
       />
 
-      {focus && (
+      {kbOpen && (
         <CContainer
           w={"fit"}
           pos={"absolute"}
           zIndex={999999}
-          left={"-460px"}
+          left={-4}
           bottom={0}
         >
+          <Button
+            onClick={() => {
+              setKbOpen(false);
+            }}
+          >
+            <Icon>
+              <IconX />
+            </Icon>
+            Close Keyboard
+          </Button>
           <Keyboard onChange={setEmail} />
         </CContainer>
       )}
@@ -327,6 +339,7 @@ const PrintSendPage = () => {
             w="full"
             maxW="65%"
             mx="auto"
+            pos={"relative"}
           >
             <Print />
 
