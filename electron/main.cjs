@@ -17,7 +17,7 @@ function createWindow() {
     resizable: true,
     frame: true,
     webPreferences: {
-      preload: path.join(__dirname, "preload.js"),
+      preload: path.join(__dirname, "preload.cjs"),
       contextIsolation: true,
       nodeIntegration: false,
     },
@@ -28,11 +28,12 @@ function createWindow() {
     return { action: "deny" };
   });
 
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../dist/index.html")}`
-  );
+  if (isDev) {
+    mainWindow.loadURL("http://localhost:3000");
+  } else {
+    mainWindow.loadFile(path.join(__dirname, "../dist/index.html"));
+  }
+
   // Open the DevTools.
   if (isDev) {
     //mainWindow.webContents.openDevTools();

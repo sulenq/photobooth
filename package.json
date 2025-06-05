@@ -1,9 +1,9 @@
 {
   "name": "popbox",
-  "main": "electron/main.js",
+  "main": "electron/main.cjs",
   "private": true,
-  "type": "module",
   "version": "1.0.0",
+  "author": "Labib Habibie",
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
@@ -74,7 +74,7 @@
   },
   "build": {
     "appId": "com.devname.package",
-    "productName": "Project Name",
+    "productName": "POPBOX",
     "copyright": "Copyright © 2023 ${author}",
     "mac": {
       "category": "public.app-category.utilities"
