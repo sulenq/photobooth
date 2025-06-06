@@ -1,14 +1,13 @@
-import { VitePWA } from "vite-plugin-pwa";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
-// import tsconfigPaths from "vite-tsconfig-paths";
+import { VitePWA } from "vite-plugin-pwa";
 
-// https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   logLevel: "info",
   server: {
     port: 3000,
+    strictPort: true,
   },
   resolve: {
     alias: {
@@ -17,42 +16,43 @@ export default defineConfig({
   },
   plugins: [
     react(),
-    // tsconfigPaths(),
     VitePWA({
       registerType: "autoUpdate",
       injectRegister: false,
-
-      pwaAssets: {
-        disabled: false,
-        config: true,
-      },
-
       manifest: {
-        name: "vite-chakra-pwa-template",
-        short_name: "vite-chakra-pwa-template",
-        description: "PWA template with vite n chakra",
+        name: "PopBox",
+        short_name: "PopBox",
+        description: "Self photo booth app",
         theme_color: "#000000",
+        background_color: "#ffffff",
+        display: "standalone",
+        icons: [
+          {
+            src: "favicon.svg",
+            sizes: "192x192",
+            type: "image/svg+xml",
+          },
+        ],
       },
-
       workbox: {
         globPatterns: ["**/*.{js,css,html,svg,png,ico}"],
-        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         cleanupOutdatedCaches: true,
+        maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         clientsClaim: true,
       },
-
       devOptions: {
         enabled: false,
         navigateFallback: "index.html",
-        suppressWarnings: true,
-        type: "module",
       },
     }),
   ],
+  base: "./",
   build: {
-    minify: "esbuild",
+    target: "es2020",
+    outDir: "dist",
+    emptyOutDir: true,
     rollupOptions: {
-      treeshake: true,
+      input: path.resolve(__dirname, "index.html"),
     },
   },
-});
+}));

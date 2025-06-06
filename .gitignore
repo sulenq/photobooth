@@ -11,9 +11,11 @@ lerna-debug.log*
 node_modules/
 
 # Build output
+build/
 dist/
 dist-ssr/
 dev-dist/
+dist-electron/
 dist_electron/
 
 # Local environment files
