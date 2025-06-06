@@ -1,41 +1,53 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
-    "types": ["node"],
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/types",
-      "src/types",
-      "node_modules/@types"
-    ],
-
-    "target": "ES2020",
-    "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "module": "CommonJS",
-    "skipLibCheck": true,
-    "paths": {
-      "@/*": ["./src/*"]
-    },
-    "esModuleInterop": true,
-
-    /* Bundler mode */
-    "moduleResolution": "node",
-    "allowImportingTsExtensions": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
     "jsx": "react-jsx",
-
-    /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "types": ["vite/client", "node"]
   },
   "include": ["src"],
-  "exclude": ["node_modules", "public", "dist", "coverage"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "exclude": ["node_modules", "public", "dist", "coverage", "electron"]
 }
+
+// {
+//   "compilerOptions": {
+//     "types": ["node"],
+//     "typeRoots": [
+//       "./node_modules/@types",
+//       "./src/types",
+//       "src/types",
+//       "node_modules/@types"
+//     ],
+
+//     "target": "ES2020",
+//     "useDefineForClassFields": true,
+//     "lib": ["ES2020", "DOM", "DOM.Iterable"],
+//     "module": "CommonJS",
+//     "skipLibCheck": true,
+//     "paths": {
+//       "@/*": ["./src/*"]
+//     },
+//     "esModuleInterop": true,
+
+//     /* Bundler mode */
+//     "moduleResolution": "node",
+//     "allowImportingTsExtensions": true,
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "noEmit": true,
+//     "jsx": "react-jsx",
+
+//     /* Linting */
+//     "strict": true,
+//     "noUnusedLocals": true,
+//     "noUnusedParameters": true,
+//     "noFallthroughCasesInSwitch": true
+//   },
+//   "include": ["src"],
+//   "exclude": ["node_modules", "public", "dist", "coverage"],
+//   "references": [{ "path": "./tsconfig.node.json" }]
+// }
 
 // {
 //   "compilerOptions": {
