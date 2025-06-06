@@ -33,7 +33,7 @@ function createWindow() {
     mainWindow.loadURL("http://localhost:3000");
     // mainWindow.webContents.openDevTools({ mode: "detach" }); // optional
   } else {
-    const indexPath = resolvePath("dist", "index.html"); // adjust if using dist/renderer/index.html
+    const indexPath = resolvePath("dist", "index.html");
     mainWindow.loadFile(indexPath);
   }
 }

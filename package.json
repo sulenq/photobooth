@@ -1,5 +1,6 @@
 {
   "name": "popbox",
+  "author": "popbox",
   "main": "electron/main.js",
   "private": true,
   "version": "1.0.0",
@@ -75,7 +76,7 @@
   },
   "build": {
     "appId": "com.devname.package",
-    "productName": "Project Name",
+    "productName": "PopBox",
     "copyright": "Copyright © 2023 ${author}",
     "mac": {
       "category": "public.app-category.utilities"
