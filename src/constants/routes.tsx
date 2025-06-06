@@ -52,8 +52,8 @@ export const PRIVATE_ROUTES: Interface__PrivateRoute[] = [
     element: <TakePhotoPage />,
   },
   {
-    path: "/choose-layout",
-    activePath: "/choose-layout",
+    path: "/choose-template",
+    activePath: "/choose-template",
     element: <ChooseTemplatePage />,
   },
   {
