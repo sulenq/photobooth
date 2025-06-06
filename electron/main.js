@@ -1,13 +1,13 @@
 const path = require("path");
-const { app, BrowserWindow, shell } = require("electron"); // tambahkan shell
-const { ipcMain } = require("electron");
 const fs = require("fs");
 const { exec } = require("child_process");
+const { app, BrowserWindow, shell, ipcMain } = require("electron");
 const {
   generateVideoFromBase64Images,
 } = require("./utils/generateVideoFromBase64Images");
 
 const isDev = process.env.IS_DEV === "true";
+const resolvePath = (...args) => path.join(app.getAppPath(), ...args);
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -31,15 +31,10 @@ function createWindow() {
 
   if (isDev) {
     mainWindow.loadURL("http://localhost:3000");
+    // mainWindow.webContents.openDevTools({ mode: "detach" }); // optional
   } else {
-    // path ke index.html hasil build vite di build/renderer/index.html
-    const indexPath = path.resolve(__dirname, "../renderer/index.html");
+    const indexPath = resolvePath("dist", "index.html"); // adjust if using dist/renderer/index.html
     mainWindow.loadFile(indexPath);
-  }
-
-  if (isDev) {
-    // Uncomment kalau mau buka devtools otomatis
-    // mainWindow.webContents.openDevTools();
   }
 }
 
@@ -48,20 +43,23 @@ app.whenReady().then(() => {
 
   createWindow();
 
-  // Handle print photo
   ipcMain.handle("print-photo", async (_event, base64, qty) => {
+    if (!base64 || !qty) return;
+
     const base64Data = base64.replace(/^data:image\/png;base64,/, "");
-    const filePath = path.join(app.getPath("temp"), `photo.png`);
+    const filePath = path.join(app.getPath("temp"), "photo.png");
     fs.writeFileSync(filePath, base64Data, "base64");
 
     for (let i = 0; i < qty; i++) {
       exec(
-        `rundll32.exe C:\\Windows\\System32\\shimgvw.dll,ImageView_PrintTo "${filePath}" "DS-RX1"`
+        `rundll32.exe C:\\Windows\\System32\\shimgvw.dll,ImageView_PrintTo "${filePath}" "DS-RX1"`,
+        (err) => {
+          if (err) console.error("Print failed:", err);
+        }
       );
     }
   });
 
-  // Handle generate video from images (return base64)
   ipcMain.handle("generate-video", async (_event, base64Images) => {
     const outputPath = path.join(app.getPath("temp"), "output.mp4");
 
@@ -80,7 +78,7 @@ app.whenReady().then(() => {
     }
   });
 
-  app.on("activate", function () {
+  app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
   });
 });

@@ -46,6 +46,7 @@ export default defineConfig(({ mode }) => ({
       },
     }),
   ],
+  base: "./",
   build: {
     target: "es2020",
     outDir: "dist",
