@@ -1,5 +1,5 @@
 const path = require("path");
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, shell } = require("electron"); // tambahkan shell
 const { ipcMain } = require("electron");
 const fs = require("fs");
 const { exec } = require("child_process");
@@ -7,13 +7,12 @@ const {
   generateVideoFromBase64Images,
 } = require("./utils/generateVideoFromBase64Images");
 
-const isDev = process.env.IS_DEV == "true" ? true : false;
+const isDev = process.env.IS_DEV === "true";
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
     width: 1024,
     height: 650,
-
     autoHideMenuBar: true,
     resizable: true,
     frame: true,
@@ -30,14 +29,17 @@ function createWindow() {
     return { action: "deny" };
   });
 
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../dist/index.html")}`
-  );
-  // Open the DevTools.
   if (isDev) {
-    //mainWindow.webContents.openDevTools();
+    mainWindow.loadURL("http://localhost:3000");
+  } else {
+    // path ke index.html hasil build vite di build/renderer/index.html
+    const indexPath = path.resolve(__dirname, "../renderer/index.html");
+    mainWindow.loadFile(indexPath);
+  }
+
+  if (isDev) {
+    // Uncomment kalau mau buka devtools otomatis
+    // mainWindow.webContents.openDevTools();
   }
 }
 
@@ -53,7 +55,6 @@ app.whenReady().then(() => {
     fs.writeFileSync(filePath, base64Data, "base64");
 
     for (let i = 0; i < qty; i++) {
-      // ini akan munculin dialog seperti gambar lo
       exec(
         `rundll32.exe C:\\Windows\\System32\\shimgvw.dll,ImageView_PrintTo "${filePath}" "DS-RX1"`
       );

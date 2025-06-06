@@ -1,20 +1,21 @@
 {
   "name": "popbox",
-  "main": "electron/main.js",
+  "main": "build/main/main.js",
   "private": true,
   "version": "1.0.0",
+  "author": "popbox",
   "scripts": {
-  "dev": "vite",
-  "build": "tsc -p tsconfig.json --noEmit && vite build",         
-  "build:electron": "tsc -p tsconfig.electron.json",               
-  "build:for:electron": "npm run build && npm run build:electron", 
-  "serve": "vite preview",
-  "electron": "wait-on tcp:3000 && cross-env IS_DEV=true electron .",
-  "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run electron\"",
-  "electron:builder": "electron-builder",
-  "app:build": "npm run build:for:electron && npm run electron:builder",
-  "l": "node src/locales/_generate.js"
-},
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json --noEmit && vite build",          
+    "build:electron": "tsc -p tsconfig.electron.json",             
+    "build:for:electron": "npm run build && npm run build:electron", 
+    "serve": "vite preview",
+    "electron": "wait-on tcp:3000 && cross-env IS_DEV=true electron .",
+    "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run electron\"",
+    "electron:builder": "electron-builder",
+    "app:build": "npm run build:for:electron && npm run electron:builder",
+    "l": "node src/locales/_generate.js"
+  },
   "dependencies": {
     "@chakra-ui/react": "^3.14.2",
     "@dnd-kit/core": "^6.3.1",
@@ -73,10 +74,15 @@
     "workbox-core": "^7.1.0",
     "workbox-window": "^7.1.0"
   },
-  "build": {
+ "build": {
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico",
+      "forceCodeSigning": false
+    },
     "appId": "com.devname.package",
-    "productName": "Project Name",
-    "copyright": "Copyright © 2023 ${author}",
+    "productName": "PopBox",
+    "copyright": "Copyright © 2023 PopBox",
     "mac": {
       "category": "public.app-category.utilities"
     },
@@ -85,12 +91,14 @@
       "allowToChangeInstallationDirectory": true
     },
     "files": [
-      "dist/**/*",
-      "electron/**/*"
+      "build/renderer/**/*",
+      "build/main/**/*",
+      "node_modules/**/*",
+      "package.json"
     ],
     "directories": {
       "buildResources": "assets",
-      "output": "dist_electron"
+      "output": "build_electron"
     }
   },
   "overrides": {
