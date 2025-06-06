@@ -170,7 +170,7 @@ const Camera = (props: any) => {
     };
   }, []);
 
-  console.log(photos);
+  // console.log(photos);
 
   return (
     <CContainer w={"60%"} mx={"auto"} pos={"relative"}>
@@ -343,6 +343,7 @@ const TakePhotoPage = () => {
                   aspectRatio={3 / 2}
                   src={photos?.[i] || `${IMAGES_PATH}/no_img.png`}
                   borderRadius={12}
+                  transform={"scaleX(1.4) scale(1.1)"}
                 />
 
                 {activeIndex === i && photos?.[i] && (

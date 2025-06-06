@@ -207,7 +207,11 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
           id={`res-img-${id}`}
           key={value}
           ref={canvasRef}
-          style={{ height: "100%", width: "100%" }}
+          style={{
+            height: "100%",
+            width: "100%",
+            transform: "scaleX(1.4) scale(1.1)",
+          }}
         />
       </CContainer>
 
