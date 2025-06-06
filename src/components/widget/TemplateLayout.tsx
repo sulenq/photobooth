@@ -210,7 +210,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
           style={{
             height: "100%",
             width: "100%",
-            transform: "scaleX(1.4) scale(1.1)",
+            transform: "scale(1.1)",
           }}
         />
       </CContainer>
