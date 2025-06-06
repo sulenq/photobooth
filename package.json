@@ -1,18 +1,17 @@
 {
   "name": "popbox",
-  "main": "build/main/main.js",
+  "main": "electron/main.js",
   "private": true,
   "version": "1.0.0",
-  "author": "popbox",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -p tsconfig.json --noEmit && vite build",          
-    "build:electron": "tsc -p tsconfig.electron.json",             
-    "build:for:electron": "npm run build && npm run build:electron", 
+    "build": "tsc --noEmit && vite build",
     "serve": "vite preview",
     "electron": "wait-on tcp:3000 && cross-env IS_DEV=true electron .",
-    "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run electron\"",
+    "electron:pack": "electron-builder --dir",
+    "electron:dev": "concurrently -k \"cross-env BROWSER=none npm run dev\" \"npm run electron\" --enable-logging .",
     "electron:builder": "electron-builder",
+    "build:for:electron": "tsc --noEmit && cross-env ELECTRON=true vite build",
     "app:build": "npm run build:for:electron && npm run electron:builder",
     "l": "node src/locales/_generate.js"
   },
@@ -74,15 +73,10 @@
     "workbox-core": "^7.1.0",
     "workbox-window": "^7.1.0"
   },
- "build": {
-    "win": {
-      "target": "nsis",
-      "icon": "build/icon.ico",
-      "forceCodeSigning": false
-    },
+  "build": {
     "appId": "com.devname.package",
-    "productName": "PopBox",
-    "copyright": "Copyright © 2023 PopBox",
+    "productName": "Project Name",
+    "copyright": "Copyright © 2023 ${author}",
     "mac": {
       "category": "public.app-category.utilities"
     },
@@ -91,14 +85,12 @@
       "allowToChangeInstallationDirectory": true
     },
     "files": [
-      "build/renderer/**/*",
-      "build/main/**/*",
-      "node_modules/**/*",
-      "package.json"
+      "dist/**/*",
+      "electron/**/*"
     ],
     "directories": {
       "buildResources": "assets",
-      "output": "build_electron"
+      "output": "dist_electron"
     }
   },
   "overrides": {
