@@ -18,11 +18,7 @@ import useSessionTimeout from "@/context/useSessionTimeout";
 import useSessionTimer from "@/context/useSessionTimer";
 import useCountdown from "@/hooks/useCountdown";
 import useRequest from "@/hooks/useRequest";
-import {
-  startCamera,
-  startCaptureCardCamera,
-  stopCamera,
-} from "@/utils/camera";
+import { startCaptureCardCamera, stopCamera } from "@/utils/camera";
 import {
   Box,
   HStack,
@@ -131,7 +127,7 @@ const Camera = (props: any) => {
   // Handle open camera on page load
   useEffect(() => {
     if (sessionTimerInitialSeconds) {
-      startCamera(
+      startCaptureCardCamera(
         videoRef,
         streamRef,
         () => {
