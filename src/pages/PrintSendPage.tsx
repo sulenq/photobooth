@@ -451,7 +451,7 @@ const DriveQR = (props: DriveQRProps) => {
       <Center bg="white" borderRadius={16} p={5} flex={1}>
         {(loading || loadingGenerateVideo || !driveLink) && (
           <CContainer justify="center" align="center" gap={10}>
-            <Spinner size="xl" />
+            <Spinner size="xl" mt={6} />
             <Text fontSize={18} textAlign={"center"}>
               Sedang menyiapkan Google Drive
             </Text>
@@ -514,13 +514,20 @@ const SendEmail = ({ driveLink, driveLinkLoading }: SendEmailProps) => {
             onClick={() => {
               setKbOpen(false);
             }}
+            w={"fit"}
+            mb={10}
+            ml={"auto"}
+            mr={"-50px"}
           >
             <Icon>
               <IconX />
             </Icon>
             Close Keyboard
           </Button>
-          <Keyboard onChange={setEmail} />
+
+          <Box transform={"scale(1.25)"}>
+            <Keyboard onChange={setEmail} />
+          </Box>
         </CContainer>
       )}
 
