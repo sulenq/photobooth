@@ -209,7 +209,7 @@ const Camera = (props: any) => {
           </div>
 
           {/* Portrait Guideline */}
-          <Box
+          {/* <Box
             aspectRatio={2 / 3}
             h={"full"}
             w={"auto"}
@@ -219,7 +219,7 @@ const Camera = (props: any) => {
             left={"50%"}
             top={"50%"}
             transform={"translate(-50%, -50%)"}
-          />
+          /> */}
 
           {cameraOpen && (
             <>

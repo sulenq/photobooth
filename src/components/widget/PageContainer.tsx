@@ -9,7 +9,7 @@ const PageContainer = (props: Props) => {
   const { children, borderless = false, ...restProps } = props;
 
   return (
-    <CContainer p={10} minH={"100dvh"} bg={"p.100"} overflowX={"clip"}>
+    <CContainer p={10} h={"100dvh"} bg={"p.100"} overflow={"clip"}>
       <CContainer
         p={borderless ? 0 : 10}
         border={borderless ? "" : "1px solid {colors.p.900}"}

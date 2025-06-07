@@ -22,6 +22,7 @@ import {
 import { useEffect } from "react";
 
 const HOW_TO_PAY_ID = [
+  "Scroll halaman pembayaran sehingga muncul QRIS",
   "Buka aplikasi M-Banking/E-Wallet di smartphone Anda",
   "Pilih menu bayar dengan QRIS",
   "Pindai kode QR pada layar",
@@ -29,6 +30,7 @@ const HOW_TO_PAY_ID = [
   "Pembayaran Berhasil",
 ];
 const HOW_TO_PAY_EN = [
+  "Scroll the payment page until the QRIS appears",
   "Open your M-Banking or E-Wallet app on your smartphone",
   "Select the option to pay with QRIS",
   "Scan the QR code on the screen",
@@ -84,16 +86,21 @@ const PaymentPage = () => {
   }, []);
 
   return (
-    <PageContainer borderless gap={10}>
+    <PageContainer borderless gap={10} flex={1} overflowY={"auto"}>
       <Header1 backLink={"/choose-product"}>PAYMENT</Header1>
 
-      <SimpleGrid columns={[1, null, null, 2]} gap={10} flex={1}>
+      <SimpleGrid
+        columns={[1, null, null, 2]}
+        gap={10}
+        flex={1}
+        overflowY={"auto"}
+      >
         {/* QR Code */}
         <CContainer
           borderRadius={16}
           overflow={"clip"}
           border={"2px solid {colors.pd}"}
-          h={"fit"}
+          flex={1}
         >
           <CContainer p={6} bg={"pd"}>
             <Heading1
@@ -196,15 +203,22 @@ const PaymentPage = () => {
         </CContainer>
 
         {/* Payment Tutor */}
-        <CContainer gap={8}>
-          <CContainer borderRadius={16} overflow={"clip"}>
+        <CContainer gap={8} overflowY={"auto"} flex={1}>
+          <CContainer borderRadius={16} overflowY={"auto"} className="scrollY">
             <CContainer py={4} px={6} bg={"pd"}>
               <Text fontSize={24} fontWeight={"medium"} color={"p.100"}>
                 Cara Pembayaran
               </Text>
             </CContainer>
 
-            <CContainer bg={"white"} flex={1} p={5} gap={4}>
+            <CContainer
+              bg={"white"}
+              flex={1}
+              p={5}
+              gap={4}
+              overflowY={"auto"}
+              className="scrollY"
+            >
               <Text fontSize={18}>
                 Pembayaran melalui <b>M-Banking/E-Wallet</b>
               </Text>
@@ -216,7 +230,9 @@ const PaymentPage = () => {
                       <Text color={"p.100"}>{i + 1}</Text>
                     </Circle>
 
-                    <Text fontSize={18}>{item}</Text>
+                    <Text fontSize={18} fontWeight={i === 0 ? "bold" : ""}>
+                      {item}
+                    </Text>
                   </HStack>
                 ))}
               </CContainer>
@@ -232,7 +248,11 @@ const PaymentPage = () => {
                       <Text color={"p.100"}>{i + 1}</Text>
                     </Circle>
 
-                    <Text fontSize={18} fontStyle={"italic"}>
+                    <Text
+                      fontSize={18}
+                      fontStyle={"italic"}
+                      fontWeight={i === 0 ? "bold" : ""}
+                    >
                       {item}
                     </Text>
                   </HStack>
@@ -241,6 +261,7 @@ const PaymentPage = () => {
             </CContainer>
           </CContainer>
 
+          {/* Payment method */}
           <CContainer gap={4}>
             <Text fontSize={18} fontWeight={"medium"}>
               Mendukung Pembayaran/Support Payment
