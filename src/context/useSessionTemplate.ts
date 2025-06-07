@@ -16,7 +16,7 @@ const DEFAULT = {
 
 const useSessionTemplate = create<Props>((set) => {
   return {
-    template: DEFAULT,
+    template: null,
     defaultTemplate: DEFAULT,
     setTemplate: (newState) => set({ template: newState }),
     clearTemplate: () => set({ template: DEFAULT }),

@@ -74,7 +74,7 @@ const Print = () => {
 
     // Bikin wrapper dengan padding
     const wrapper = document.createElement("div");
-    wrapper.style.padding = "5px 9.5px 6.5px 9.5px";
+    wrapper.style.padding = "3.5px 9.5px 6.5px 9.5px";
     wrapper.style.backgroundColor = "#FFFFFF";
     wrapper.style.position = "fixed";
     wrapper.style.top = "-9999px";
@@ -115,15 +115,17 @@ const Print = () => {
 
   // Handle set default template by choosed product on load
   useEffect(() => {
-    setTemplate({
-      ...template,
-      layoutId:
-        choosedProduct?.defaultTemplateId?.layoutId ||
-        defaultTemplate?.layoutId,
-      production:
-        choosedProduct?.defaultTemplateId?.production ||
-        defaultTemplate?.production,
-    });
+    if (!template) {
+      setTemplate({
+        ...template,
+        layoutId:
+          choosedProduct?.defaultTemplate?.layoutId ||
+          defaultTemplate?.layoutId,
+        production:
+          choosedProduct?.defaultTemplate?.production ||
+          defaultTemplate?.production,
+      });
+    }
   }, []);
 
   // Handle auto assign res photos
