@@ -135,9 +135,9 @@ const useRequest = ({
             // call logout func
             navigate(loginPath);
             break;
-          case 500:
-            navigate("/server-error");
-            break;
+          // case 500:
+          //   navigate("/server-error");
+          //   break;
           case 503:
             navigate("/maintenance");
             break;
