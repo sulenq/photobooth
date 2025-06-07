@@ -206,7 +206,6 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
       overflow="hidden"
       bg={shouldShowDropHere ? "red.400" : "transparent"}
       zIndex={dropPhotoSlotZindex}
-      transform="scale(1)"
       pos={"relative"}
     >
       <CContainer opacity={draggingOutsideDropZone ? 0.5 : 1}>
@@ -967,6 +966,7 @@ export const Layout7 = (props: Interface__Layout) => {
             orientation="landscape"
             rotate
           />
+
           <DropPhotoSlot
             id="2"
             numbering={2}
@@ -1061,10 +1061,11 @@ export const Layout7 = (props: Interface__Layout) => {
             >
               <CContainer
                 w={"calc(207px / 3)"}
-                px={"calc(13px / 3)"}
-                pt={"calc(54px / 3)"}
+                h={"calc(457px / 3)"}
+                px={"calc(15px / 3)"}
+                pt={"calc(58px / 3)"}
                 pb={"calc(15px / 3)"}
-                gap={"calc(15px / 3)"}
+                gap={"calc(20px / 3)"}
                 align={"center"}
               >
                 <DropPhotoSlot
@@ -1084,11 +1085,30 @@ export const Layout7 = (props: Interface__Layout) => {
                   orientation="landscape"
                   size="xs"
                 />
+              </CContainer>
+
+              <CContainer
+                w={"calc(207px / 3)"}
+                h={"calc(457px / 3)"}
+                px={"calc(15px / 3)"}
+                pt={"calc(58px / 3)"}
+                pb={"calc(15px / 3)"}
+                gap={"calc(20px / 3)"}
+                align={"center"}
+              >
+                <DropPhotoSlot
+                  id="10"
+                  numbering={2}
+                  value={resPhotos["2"]}
+                  hNumber={120 / 3}
+                  orientation="landscape"
+                  size="xs"
+                />
 
                 <DropPhotoSlot
                   id="11"
-                  numbering={4}
-                  value={resPhotos["4"]}
+                  numbering={3}
+                  value={resPhotos["3"]}
                   hNumber={120 / 3}
                   orientation="landscape"
                   size="xs"
@@ -1097,10 +1117,11 @@ export const Layout7 = (props: Interface__Layout) => {
 
               <CContainer
                 w={"calc(207px / 3)"}
-                px={"calc(13px / 3)"}
-                pt={"calc(54px / 3)"}
+                h={"calc(457px / 3)"}
+                px={"calc(15px / 3)"}
+                pt={"calc(58px / 3)"}
                 pb={"calc(15px / 3)"}
-                gap={"calc(15px / 3)"}
+                gap={"calc(20px / 3)"}
                 align={"center"}
               >
                 <DropPhotoSlot
@@ -1116,51 +1137,6 @@ export const Layout7 = (props: Interface__Layout) => {
                   id="13"
                   numbering={3}
                   value={resPhotos["3"]}
-                  hNumber={120 / 3}
-                  orientation="landscape"
-                  size="xs"
-                />
-
-                <DropPhotoSlot
-                  id="14"
-                  numbering={4}
-                  value={resPhotos["4"]}
-                  hNumber={120 / 3}
-                  orientation="landscape"
-                  size="xs"
-                />
-              </CContainer>
-
-              <CContainer
-                w={"calc(207px / 3)"}
-                px={"calc(13px / 3)"}
-                pt={"calc(54px / 3)"}
-                pb={"calc(15px / 3)"}
-                gap={"calc(15px / 3)"}
-                align={"center"}
-              >
-                <DropPhotoSlot
-                  id="15"
-                  numbering={2}
-                  value={resPhotos["2"]}
-                  hNumber={120 / 3}
-                  orientation="landscape"
-                  size="xs"
-                />
-
-                <DropPhotoSlot
-                  id="16"
-                  numbering={3}
-                  value={resPhotos["3"]}
-                  hNumber={120 / 3}
-                  orientation="landscape"
-                  size="xs"
-                />
-
-                <DropPhotoSlot
-                  id="17"
-                  numbering={4}
-                  value={resPhotos["4"]}
                   hNumber={120 / 3}
                   orientation="landscape"
                   size="xs"

@@ -1,5 +1,4 @@
 // store/photoStore.ts
-import { dummyPhotos } from "@/constants/dummyPhotos";
 import { create } from "zustand";
 
 interface PhotoStore {

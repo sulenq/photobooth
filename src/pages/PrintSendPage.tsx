@@ -49,7 +49,7 @@ interface SendEmailProps {
 
 const Print = () => {
   // Contexts
-  const { template } = useSessionTemplate();
+  const { defaultTemplate, template, setTemplate } = useSessionTemplate();
   const { photos } = useSessionPhotos();
   const { resPhotos, setResPhotos } = useSessionResPhotos();
   const { sessionTimeout } = useSessionTimeout();
@@ -63,41 +63,6 @@ const Print = () => {
   const printRef = useRef<HTMLDivElement>(null);
 
   // Utils
-  // function handlePrint() {
-  //   setPrinted(true);
-
-  //   const element = document.getElementById("finalResult");
-  //   if (!element) return;
-
-  //   // Create wrapper with padding
-  //   const wrapper = document.createElement("div");
-  //   wrapper.style.padding = "6px 9px";
-  //   wrapper.style.backgroundColor = "#FFFFFF";
-  //   wrapper.style.position = "fixed";
-  //   wrapper.style.top = "-9999px";
-  //   wrapper.style.left = "-9999px";
-  //   wrapper.style.zIndex = "-1";
-
-  //   const clone = element.cloneNode(true) as HTMLElement;
-  //   wrapper.appendChild(clone);
-  //   document.body.appendChild(wrapper);
-
-  //   html2canvas(wrapper, {
-  //     scale: 3,
-  //     useCORS: true,
-  //     backgroundColor: "#FFFFFF",
-  //   })
-  //     .then((canvas) => {
-  //       const dataUrl = canvas.toDataURL("image/png");
-  //       const copies = choosedProduct?.qty || 1;
-  //       window.electronAPI.printPhoto(dataUrl, copies);
-  //       document.body.removeChild(wrapper);
-  //     })
-  //     .catch(() => {
-  //       document.body.removeChild(wrapper);
-  //     });
-  // }
-
   function handlePrint() {
     setPrinted(true);
 
@@ -148,118 +113,20 @@ const Print = () => {
       });
   }
 
-  // function handlePrint() {
-  //   const element = document.getElementById("finalResult");
-  //   if (!element) return;
+  // Handle set default template by choosed product on load
+  useEffect(() => {
+    setTemplate({
+      ...template,
+      layoutId:
+        choosedProduct?.defaultTemplateId?.layoutId ||
+        defaultTemplate?.layoutId,
+      production:
+        choosedProduct?.defaultTemplateId?.production ||
+        defaultTemplate?.production,
+    });
+  }, []);
 
-  //   // Ukuran target kertas (misal: 4x6 inch photo = 1200x1800 px @300dpi)
-  //   const targetWidth = 1200;
-  //   const targetHeight = 1800;
-
-  //   html2canvas(element, {
-  //     width: element.offsetWidth,
-  //     height: element.offsetHeight,
-  //     scale: Math.min(
-  //       targetWidth / element.offsetWidth,
-  //       targetHeight / element.offsetHeight
-  //     ),
-  //     useCORS: true,
-  //     backgroundColor: "#FFFFFF",
-  //     scrollX: 0,
-  //     scrollY: 0,
-  //     windowWidth: document.documentElement.offsetWidth,
-  //     windowHeight: document.documentElement.offsetHeight,
-  //   }).then((canvas) => {
-  //     const dataUrl = canvas.toDataURL("image/png");
-  //     const copies = choosedProduct?.qty || 1;
-
-  //     window.electronAPI.printPhoto(dataUrl, copies);
-  //   });
-  // }
-
-  // function handleExportThenPrint() {
-  //   const element = document.getElementById("finalResult");
-  //   if (!element) return;
-
-  //   const options = {
-  //     margin: 0,
-  //     filename: "photo.pdf",
-  //     image: { type: "jpeg", quality: 1 },
-  //     html2canvas: {
-  //       scale: 3, // high DPI capture
-  //       useCORS: true,
-  //       backgroundColor: "#FFFFFF",
-  //     },
-  //     jsPDF: {
-  //       unit: "pt",
-  //       format: [288, 432], // 4x6 inch = 288pt x 432pt
-  //       orientation: "portrait",
-  //     },
-  //   };
-
-  //   html2pdf()
-  //     .set(options)
-  //     .from(element)
-  //     .outputPdf("datauristring")
-  //     .then((dataUri: any) => {
-  //       const base64 = dataUri.split(",")[1];
-  //       const copies = choosedProduct?.qty || 1;
-  //       window.electronAPI.printPhoto(base64, copies);
-  //     });
-  // }
-
-  // function handleExportThenPrint() {
-  //   setPrinted(false);
-
-  //   const target = document.getElementById("finalResult");
-  //   if (!target) return;
-
-  //   // Create padded wrapper
-  //   const wrapper = document.createElement("div");
-  //   wrapper.style.padding = "40px"; // adjust if needed
-  //   wrapper.style.backgroundColor = "#FFFFFF"; // biar sama kayak PDF
-  //   wrapper.style.position = "fixed";
-  //   wrapper.style.top = "-9999px";
-  //   wrapper.style.left = "-9999px";
-  //   wrapper.style.zIndex = "-1";
-
-  //   // Clone content
-  //   const clone = target.cloneNode(true) as HTMLElement;
-  //   wrapper.appendChild(clone);
-  //   document.body.appendChild(wrapper);
-
-  //   const options = {
-  //     margin: 0,
-  //     filename: "photo.pdf",
-  //     image: { type: "jpeg", quality: 1 },
-  //     html2canvas: {
-  //       scale: 3,
-  //       useCORS: true,
-  //       backgroundColor: "#FFFFFF",
-  //     },
-  //     jsPDF: {
-  //       unit: "pt",
-  //       format: [288, 432], // 4x6 inch
-  //       orientation: "portrait",
-  //     },
-  //   };
-
-  //   html2pdf()
-  //     .set(options)
-  //     .from(wrapper)
-  //     .outputPdf("datauristring")
-  //     .then((dataUri: string) => {
-  //       const base64 = dataUri.split(",")[1];
-  //       const copies = choosedProduct?.qty || 1;
-  //       window.electronAPI.printPhoto(base64, copies);
-  //       document.body.removeChild(wrapper);
-  //     })
-  //     .catch(() => {
-  //       document.body.removeChild(wrapper);
-  //     });
-  // }
-
-  // Handle auto assign res photoss
+  // Handle auto assign res photos
   useEffect(() => {
     if (!photos?.length) return;
 
