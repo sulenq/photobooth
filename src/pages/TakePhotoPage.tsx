@@ -155,11 +155,11 @@ const Camera = (props: any) => {
   useEffect(() => {
     setSessionTimeout(false);
     clearPhotos();
-    setTemplate(defaultTemplate);
+    setTemplate(null);
     setFilter(FILTERS[0]);
     clearResPhotos();
 
-    const seconds = sessionTimerInitialSeconds; // session timer
+    const seconds = 10; // session timer
 
     if (cameraOpen && seconds) {
       clearResPhotos();

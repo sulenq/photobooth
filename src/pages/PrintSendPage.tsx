@@ -117,12 +117,12 @@ const Print = () => {
   useEffect(() => {
     if (!template) {
       setTemplate({
-        ...template,
+        id: -1,
         layoutId:
-          choosedProduct?.defaultTemplate?.layoutId ||
+          choosedProduct?.product?.defaultTemplate?.layoutId ||
           defaultTemplate?.layoutId,
         production:
-          choosedProduct?.defaultTemplate?.production ||
+          choosedProduct?.product?.defaultTemplate?.production ||
           defaultTemplate?.production,
       });
     }
@@ -147,6 +147,8 @@ const Print = () => {
       return newSlots;
     });
   }, [sessionTimeout, photos]);
+
+  console.log(choosedProduct?.product?.defaultTemplate?.production);
 
   return (
     <CContainer align="center" gap={8}>

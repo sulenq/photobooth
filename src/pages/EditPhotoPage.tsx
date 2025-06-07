@@ -164,7 +164,7 @@ const FilterList = () => {
                 style={{
                   borderRadius: 8,
                   background: "#ccc",
-                  transform: "scale(1.1)",
+                  transform: "scale(1.2)",
                 }}
               />
 

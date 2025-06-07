@@ -32,7 +32,7 @@ const ChooseProductPage = () => {
     });
   }
   function getProducts() {
-    const url = `/products/get-public`;
+    const url = `/products/get-public-v2`;
     req({ config: { url } });
   }
 
