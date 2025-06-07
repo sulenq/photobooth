@@ -290,7 +290,7 @@ const EditPhotoPage = () => {
                   top={0}
                   h={`calc(${TEMPLATE_H})`}
                   aspectRatio={TEMPLATE_ASPECT_RATIO}
-                  zIndex={1}
+                  zIndex={2}
                 />
 
                 <LayoutComponent
