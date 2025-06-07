@@ -157,7 +157,10 @@ const OptionList = () => {
                           className="clicky"
                           onClick={() => handleChoose(item)}
                         >
-                          <Image src={item?.production} h={"full"} />
+                          <Image
+                            src={item?.display || item?.production}
+                            h={"full"}
+                          />
                         </CContainer>
                       );
                     })}
