@@ -57,8 +57,12 @@ const Print = () => {
 
   // States
   const [printed, setPrinted] = useState<boolean>(false);
+  const finalLayoutId =
+    template?.layoutId ||
+    choosedProduct?.product?.defaultTemplate?.layoutId ||
+    defaultTemplate?.layoutId;
   const layoutData =
-    LAYOUT_COMPONENTS[template.layoutId as keyof typeof LAYOUT_COMPONENTS];
+    LAYOUT_COMPONENTS[finalLayoutId as keyof typeof LAYOUT_COMPONENTS];
   const LayoutComponent = layoutData.component;
   const printRef = useRef<HTMLDivElement>(null);
 
