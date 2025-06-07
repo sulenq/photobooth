@@ -166,7 +166,8 @@ const PaymentPage = () => {
                     <CContainer p={5}>
                       <CContainer
                         border={"2px solid {colors.pd}"}
-                        p={4}
+                        px={4}
+                        py={2}
                         minW={"400px"}
                         mx={"auto"}
                         borderRadius={8}

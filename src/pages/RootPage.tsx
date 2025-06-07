@@ -20,10 +20,6 @@ const RootPage = () => {
         Welcome to
       </Heading1>
 
-      {/* <Heading1 className="df" fontSize={100} fontWeight={"extrabold"}>
-        POPBOX.
-      </Heading1> */}
-
       <Image src={`${IMAGES_PATH}/logo_dark.png`} />
 
       <NavLink to="/choose-product" align={"center"}>
