@@ -78,7 +78,7 @@ const Print = () => {
 
     // Bikin wrapper dengan padding
     const wrapper = document.createElement("div");
-    wrapper.style.padding = "3.5px 9.5px 6.5px 9.5px";
+    wrapper.style.padding = "0 9.5px 6.5px 9.5px";
     wrapper.style.backgroundColor = "#FFFFFF";
     wrapper.style.position = "fixed";
     wrapper.style.top = "-9999px";
