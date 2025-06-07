@@ -5,6 +5,7 @@ import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import Heading1 from "@/components/ui-custom/Heading1";
 import NextButton from "@/components/widget/NextButton";
 import SessionTimer from "@/components/widget/SessionTimer";
+import useChoosedProduct from "@/context/useChoosedProduct";
 import useSessionTemplate from "@/context/useSessionTemplate";
 import useRequest from "@/hooks/useRequest";
 import { Box, HStack, Icon, Image } from "@chakra-ui/react";
@@ -22,10 +23,10 @@ const OptionList = () => {
 
   // Contexts
   const setTemplate = useSessionTemplate((s) => s.setTemplate);
+  const { choosedProduct } = useChoosedProduct();
 
   // States
   const data = response?.data?.result;
-  // console.log(data);
 
   // Refs
   const carouselContainerRef = useRef<HTMLDivElement>(null);
@@ -45,8 +46,11 @@ const OptionList = () => {
     setTemplate(template);
   }
   function getTemplates() {
-    const url = `/templates/get-public`;
-    req({ config: { url } });
+    const url = `/templates/get-by-productid`;
+    const payload = {
+      productId: choosedProduct?.product?.productId,
+    };
+    req({ config: { url, method: "post", data: payload } });
   }
 
   // Handle get product on page load
