@@ -1,5 +1,6 @@
 import Heading from "@/components/widget/Heading";
 import PageContainer from "@/components/widget/PageContainer";
+import useChoosedProduct from "@/context/useChoosedProduct";
 import useSessionInvoice from "@/context/useSessionInvoice";
 import useCountdown from "@/hooks/useCountdown";
 import { Text } from "@chakra-ui/react";
@@ -14,12 +15,14 @@ const ThankyouPage = () => {
     onTick: () => {},
     onFinished: () => {
       setInvoiceNumber(null);
+      setChoosedProduct(null);
       navigate("/");
     },
   });
 
   // Contexts
   const setInvoiceNumber = useSessionInvoice((s) => s.setInvoiceNumber);
+  const setChoosedProduct = useChoosedProduct((s) => s.setChoosedProduct);
 
   // Handle navigate countdown 10s
   useEffect(() => {
