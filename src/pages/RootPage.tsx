@@ -41,7 +41,7 @@ const RootPage = () => {
 
       <Image src={`${IMAGES_PATH}/logo_dark.png`} />
 
-      <NavLink to="/print-send" align={"center"}>
+      <NavLink to="/choose-product" align={"center"}>
         <BButton mt={10} {...PRESET_MAIN_BUTTON}>
           START PHOTO
         </BButton>
