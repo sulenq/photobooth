@@ -11,7 +11,7 @@ const ThankyouPage = () => {
   // Hooks
   const navigate = useNavigate();
   const { startCountdown, remaining } = useCountdown({
-    initialValue: 10,
+    initialValue: 5,
     onTick: () => {},
     onFinished: () => {
       setInvoiceNumber(null);
