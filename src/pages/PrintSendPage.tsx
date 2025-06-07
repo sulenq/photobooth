@@ -449,7 +449,7 @@ const DriveQR = (props: DriveQRProps) => {
       </Text>
 
       <Center bg="white" borderRadius={16} p={5} flex={1}>
-        {(loading || loadingGenerateVideo) && (
+        {(loading || loadingGenerateVideo || !driveLink) && (
           <CContainer justify="center" align="center" gap={10}>
             <Spinner size="xl" />
             <Text fontSize={18} textAlign={"center"}>
@@ -458,13 +458,11 @@ const DriveQR = (props: DriveQRProps) => {
           </CContainer>
         )}
 
-        {!loading && (
+        {!loading && !loadingGenerateVideo && driveLink && (
           <>
             {error && <FeedbackRetry onRetry={generateGifVideo} />}
 
-            {!error && driveLink && (
-              <QRCodeCanvas value={driveLink} size={300} />
-            )}
+            {!error && <QRCodeCanvas value={driveLink} size={300} />}
           </>
         )}
       </Center>
