@@ -62,24 +62,31 @@ export const startCaptureCardCamera = async (
   onSuccess?: () => void,
   onError?: (err: unknown) => void
 ): Promise<void> => {
-  // const devices = await navigator.mediaDevices.enumerateDevices();
-  // console.log("Capture Devices:", devices);
-
   try {
     const deviceId = await getCaptureCardDeviceId();
     if (!deviceId) throw new Error("Capture card not found");
 
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { deviceId: { exact: deviceId } },
+      video: {
+        deviceId: { exact: deviceId },
+        width: { ideal: 1800 },
+        height: { ideal: 1200 },
+      },
       audio: false,
     });
 
     if (videoRef.current) {
       videoRef.current.srcObject = stream;
+
+      await new Promise<void>((resolve) => {
+        videoRef.current!.onloadedmetadata = () => {
+          videoRef.current!.play();
+          resolve();
+        };
+      });
     }
 
     streamRef.current = stream;
-
     onSuccess?.();
   } catch (err) {
     console.error("[startCaptureCardCamera]", err);

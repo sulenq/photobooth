@@ -106,22 +106,26 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
     img.onload = async () => {
       await img.decode();
 
+      let targetHeight = 600;
       let aspectRatio = orientation === "landscape" ? 3 / 2 : 2 / 3;
       if (rotate) aspectRatio = 1 / aspectRatio;
 
-      let width = hNumber * aspectRatio;
-      let height = hNumber;
-      canvas.width = width;
-      canvas.height = height;
+      const targetWidth = targetHeight * aspectRatio;
 
-      ctx.clearRect(0, 0, width, height);
+      canvas.width = targetWidth;
+      canvas.height = targetHeight;
+
+      ctx.clearRect(0, 0, targetWidth, targetHeight);
 
       if (rotate) {
         ctx.save();
-        ctx.translate(width / 2, height / 2);
+        ctx.translate(targetWidth / 2, targetHeight / 2);
         ctx.rotate(Math.PI / 2);
 
-        const scale = Math.max(height / img.width, width / img.height);
+        const scale = Math.max(
+          targetHeight / img.width,
+          targetWidth / img.height
+        );
         const drawWidth = img.width * scale;
         const drawHeight = img.height * scale;
 
@@ -134,11 +138,14 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
         );
         ctx.restore();
       } else {
-        const scale = Math.max(width / img.width, height / img.height);
+        const scale = Math.max(
+          targetWidth / img.width,
+          targetHeight / img.height
+        );
         const drawWidth = img.width * scale;
         const drawHeight = img.height * scale;
-        const offsetX = (width - drawWidth) / 2;
-        const offsetY = (height - drawHeight) / 2;
+        const offsetX = (targetWidth - drawWidth) / 2;
+        const offsetY = (targetHeight - drawHeight) / 2;
 
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
       }

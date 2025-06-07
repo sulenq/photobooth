@@ -173,7 +173,7 @@ const Camera = (props: any) => {
   // console.log(photos);
 
   return (
-    <CContainer w={"60%"} mx={"auto"} pos={"relative"}>
+    <CContainer w={"calc(60% - 40px)"} mx={"auto"} pos={"relative"}>
       {error && <FeedbackRetry onRetry={getSessionTimer} />}
 
       {!error && (
@@ -198,7 +198,7 @@ const Camera = (props: any) => {
                 aspectRatio: 3 / 2,
                 width: "100%",
                 height: "100%",
-                transform: "scaleX(-1.4) scale(1.1)", // correct syntax
+                transform: "scaleX(-1) scale(1.1)", // correct syntax
                 objectFit: "cover",
               }}
             />
@@ -309,7 +309,9 @@ const TakePhotoPage = () => {
 
   // Handle active index
   useEffect(() => {
-    if (photos?.length > activeIndex) setActiveIndex(photos.length - 1);
+    if (photos?.length > activeIndex) {
+      setActiveIndex(photos.length - 1);
+    }
   }, [photos?.length]);
 
   return (
@@ -329,7 +331,12 @@ const TakePhotoPage = () => {
           remaining={remaining}
         />
 
-        <SimpleGrid columns={[1, 2, 4]} gap={8} maxW={"60%"} mx={"auto"}>
+        <SimpleGrid
+          columns={[1, 2, 4]}
+          gap={8}
+          w={"calc(60% - 40px)"}
+          mx={"auto"}
+        >
           {Array.from({ length: 4 }).map((_, i) => {
             return (
               <CContainer
@@ -343,7 +350,7 @@ const TakePhotoPage = () => {
                   aspectRatio={3 / 2}
                   src={photos?.[i] || `${IMAGES_PATH}/no_img.png`}
                   borderRadius={12}
-                  transform={"scaleX(1.4) scale(1.1)"}
+                  transform={"scale(1.1)"}
                 />
 
                 {activeIndex === i && photos?.[i] && (
