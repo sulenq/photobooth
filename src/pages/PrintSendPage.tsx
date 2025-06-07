@@ -152,8 +152,6 @@ const Print = () => {
     });
   }, [sessionTimeout, photos]);
 
-  console.log(choosedProduct?.product?.defaultTemplate?.production);
-
   return (
     <CContainer align="center" gap={8}>
       <CContainer
