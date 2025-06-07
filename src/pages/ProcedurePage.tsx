@@ -5,8 +5,19 @@ import NavLink from "@/components/ui-custom/NavLink";
 import PageContainer from "@/components/widget/PageContainer";
 import { IMAGES_PATH, SVGS_PATH } from "@/constants/paths";
 import { PRESET_MAIN_BUTTON } from "@/constants/presetProps";
-import { Box, HStack, Icon, Image, SimpleGrid, Text } from "@chakra-ui/react";
+import useRequest from "@/hooks/useRequest";
+import formatDuration from "@/utils/formatDuration";
+import {
+  Box,
+  HStack,
+  Icon,
+  Image,
+  SimpleGrid,
+  Spinner,
+  Text,
+} from "@chakra-ui/react";
 import { IconClock } from "@tabler/icons-react";
+import { useEffect } from "react";
 
 const PROSEDUR = [
   {
@@ -40,7 +51,26 @@ const PROSEDUR = [
 ];
 
 const ProcedurePage = () => {
-  // Fetch timer data
+  // Hooks
+  const { req, response } = useRequest({
+    id: "get-session-timer",
+    showLoadingToast: false,
+    showErrorToast: false,
+    showSuccessToast: false,
+  });
+
+  // States
+  const sessionTimerInitialSeconds = response?.data?.result?.value * 60;
+
+  // Utils
+  function getSessionTimer() {
+    const url = `/rules/photo-duration`;
+    req({ config: { url } });
+  }
+
+  useEffect(() => {
+    getSessionTimer();
+  }, []);
 
   return (
     <PageContainer borderless gap={10}>
@@ -61,7 +91,11 @@ const ProcedurePage = () => {
           </Icon>
 
           <Text color={"p.100"} fontSize={32} fontWeight={"semibold"}>
-            00:07:00
+            {sessionTimerInitialSeconds ? (
+              formatDuration(sessionTimerInitialSeconds, "numeric")
+            ) : (
+              <Spinner mx={8} />
+            )}
           </Text>
         </HStack>
 
