@@ -49,7 +49,7 @@ const PrivateRouteMiddleware = (props: any) => {
 
       {!loading && (
         <>
-          {error && <Navigate to={"/choose-product"} />}
+          {error && <Navigate to={"/"} />}
 
           {!error && <>{children}</>}
         </>

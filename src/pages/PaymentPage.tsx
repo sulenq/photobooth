@@ -150,7 +150,13 @@ const PaymentPage = () => {
                     </CContainer>
 
                     {/* QR code */}
-                    <CContainer justify={"center"} align={"center"}>
+                    <CContainer
+                      justify={"center"}
+                      align={"center"}
+                      overflowY={"auto"}
+                      // h={"400px"}
+                      h={"calc(100dvh - 550px)"}
+                    >
                       {/* <QRCodeCanvas
                         value={response?.data?.result?.response?.payment?.url}
                         size={300}
@@ -162,10 +168,9 @@ const PaymentPage = () => {
                         style={{
                           width: "100%",
                           minHeight: "500px",
-                          height: "calc(100dvh - 550px)",
+                          height: "max-content",
                           border: "none",
                         }}
-                        allowFullScreen
                       />
                     </CContainer>
 

@@ -5,6 +5,7 @@ interface Props {
   template: any;
   defaultTemplate: any;
   setTemplate: (newState: any) => void;
+  clearTemplate: () => void;
 }
 
 const DEFAULT = {
@@ -18,6 +19,7 @@ const useSessionTemplate = create<Props>((set) => {
     template: DEFAULT,
     defaultTemplate: DEFAULT,
     setTemplate: (newState) => set({ template: newState }),
+    clearTemplate: () => set({ template: DEFAULT }),
   };
 });
 

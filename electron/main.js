@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const { exec } = require("child_process");
-const { app, BrowserWindow, shell, ipcMain } = require("electron");
+const { app, BrowserWindow, shell, ipcMain, session } = require("electron");
 const {
   generateVideoFromBase64Images,
 } = require("./utils/generateVideoFromBase64Images");
@@ -22,6 +22,41 @@ function createWindow() {
       contextIsolation: true,
       nodeIntegration: false,
     },
+  });
+
+  // ⛔ Blok semua download
+  session.defaultSession.on("will-download", (event, item) => {
+    event.preventDefault();
+    console.log("Download diblokir:", item.getURL());
+  });
+
+  // ⛔ Cegah navigasi ke file download (misalnya PDF, image)
+  mainWindow.webContents.on("will-navigate", (event, url) => {
+    const fileExtensionsToBlock = [
+      ".pdf",
+      ".zip",
+      ".png",
+      ".jpg",
+      ".docx",
+      ".xlsx",
+      ".mp4",
+    ];
+    if (fileExtensionsToBlock.some((ext) => url.toLowerCase().endsWith(ext))) {
+      console.log("Blokir navigasi ke file:", url);
+      event.preventDefault();
+    }
+  });
+
+  // ⛔ Blok buka tab baru (misalnya dari <a target="_blank">)
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    const blocked = /\.(pdf|zip|jpg|png|docx|xlsx|mp4)$/i.test(url);
+    if (blocked) {
+      console.log("Blokir openExternal:", url);
+      return { action: "deny" };
+    }
+
+    shell.openExternal(url); // masih bisa buka link biasa
+    return { action: "deny" };
   });
 
   mainWindow.webContents.setWindowOpenHandler((edata) => {
