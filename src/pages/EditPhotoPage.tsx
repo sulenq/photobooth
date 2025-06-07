@@ -144,6 +144,7 @@ const FilterList = () => {
               }}
               borderRadius={8}
               boxShadow={active ? "0 0 0 2px {colors.p.500}" : ""}
+              overflow={"clip"}
             >
               {active && (
                 <Center
@@ -160,7 +161,11 @@ const FilterList = () => {
                 ref={(el) => (canvasRefs.current[item.key] = el)}
                 width={100}
                 height={100}
-                style={{ borderRadius: 8, background: "#ccc" }}
+                style={{
+                  borderRadius: 8,
+                  background: "#ccc",
+                  transform: "scale(1.1)",
+                }}
               />
 
               <Box

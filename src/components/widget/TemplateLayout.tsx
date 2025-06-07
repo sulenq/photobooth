@@ -210,16 +210,18 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
       pos={"relative"}
     >
       <CContainer opacity={draggingOutsideDropZone ? 0.5 : 1}>
-        <canvas
-          id={`res-img-${id}`}
-          key={value}
-          ref={canvasRef}
-          style={{
-            height: "100%",
-            width: "100%",
-            transform: "scale(1.1)",
-          }}
-        />
+        {value && (
+          <canvas
+            id={`res-img-${id}`}
+            key={value}
+            ref={canvasRef}
+            style={{
+              height: "100%",
+              width: "100%",
+              transform: "scale(1.1)",
+            }}
+          />
+        )}
       </CContainer>
 
       {((isOver && isDraggingGlobal) ||

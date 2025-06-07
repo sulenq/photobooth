@@ -48,7 +48,7 @@ const OptionList = () => {
   function getTemplates() {
     const url = `/templates/get-by-productid`;
     const payload = {
-      productId: choosedProduct?.product?.productId,
+      productId: choosedProduct?.product?.id,
     };
     req({ config: { url, method: "post", data: payload } });
   }
