@@ -165,7 +165,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
     return (
       <VStack gap={numberingGap[size]} pos={"absolute"}>
         <Center
-          transform={rotate ? "rotate(90deg)" : ""}
+          // transform={rotate ? "rotate(90deg)" : ""}
           p={2}
           bg="white"
           borderRadius="full"
@@ -207,8 +207,11 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
       bg={shouldShowDropHere ? "red.400" : "transparent"}
       zIndex={dropPhotoSlotZindex}
       pos={"relative"}
+      transform={"scale(1.1)"}
     >
-      <CContainer opacity={draggingOutsideDropZone ? 0.5 : 1}>
+      <CContainer
+        opacity={draggingOutsideDropZone ? 0.5 : shouldShowDropHere ? 0 : 1}
+      >
         {value && (
           <canvas
             id={`res-img-${id}`}
@@ -217,7 +220,7 @@ const DropPhotoSlot = (props: DropPhotoSlotProps) => {
             style={{
               height: "100%",
               width: "100%",
-              transform: "scale(1.1)",
+              // transform: "scale(1.1)",
             }}
           />
         )}
@@ -949,7 +952,7 @@ export const Layout7 = (props: Interface__Layout) => {
       aspectRatio={TEMPLATE_ASPECT_RATIO}
       h={TEMPLATE_H}
       w="fit"
-      zIndex={99}
+      // bg={"red"}
     >
       <SimpleGrid columns={2} flex={1}>
         {/* A */}
@@ -1008,8 +1011,8 @@ export const Layout7 = (props: Interface__Layout) => {
 
                 <DropPhotoSlot
                   id="5"
-                  numbering={2}
-                  value={resPhotos["2"]}
+                  numbering={4}
+                  value={resPhotos["4"]}
                   hNumber={190 / 3}
                   orientation="landscape"
                   size="sm"
@@ -1043,8 +1046,8 @@ export const Layout7 = (props: Interface__Layout) => {
 
                 <DropPhotoSlot
                   id="8"
-                  numbering={2}
-                  value={resPhotos["2"]}
+                  numbering={4}
+                  value={resPhotos["4"]}
                   hNumber={190 / 3}
                   orientation="landscape"
                   size="sm"

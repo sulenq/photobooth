@@ -21,8 +21,8 @@ const Routing = () => {
         <Route
           key={path}
           path={path}
-          element={<PrivateRouteMiddleware>{element}</PrivateRouteMiddleware>}
-          // element={element}
+          // element={<PrivateRouteMiddleware>{element}</PrivateRouteMiddleware>}
+          element={element}
         />
       ))}
 

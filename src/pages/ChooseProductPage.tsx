@@ -80,7 +80,10 @@ const ChooseProductPage = () => {
       )}
 
       <CContainer p={5} align={"center"}>
-        <NextButton to={`/payment`} disabled={choosedProduct === null} />
+        <NextButton
+          to={`/choose-template`}
+          disabled={choosedProduct === null}
+        />
       </CContainer>
     </PageContainer>
   );
