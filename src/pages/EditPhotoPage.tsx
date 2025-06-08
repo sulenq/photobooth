@@ -312,11 +312,18 @@ const EditPhotoPage = () => {
                 </HStack> */}
               </CContainer>
 
-              <CContainer bg={"p.500"} borderRadius={8} p={4}>
+              <CContainer bg={"p.500"} borderRadius={8} p={4} gap={4}>
                 <Text fontWeight={"medium"}>
-                  Tips: untuk drag & drop ke tempat yang kecil, drag ke drop
-                  zone hingga drop zone berwarna merah yang artinya foto akan di
-                  drop disitu.
+                  Tips: Untuk meletakkan elemen di area kecil, seret elemen ke
+                  zona drop hingga zona tersebut berubah warna menjadi merah.
+                  Warna merah menandakan bahwa elemen akan ditempatkan di area
+                  tersebut.
+                </Text>
+
+                <Text fontWeight={"medium"} fontStyle={"italic"}>
+                  Tip: To drop an item into a small target area, drag it over
+                  the drop zone until it turns red. The red highlight indicates
+                  that the item will be placed in that spot.
                 </Text>
               </CContainer>
             </CContainer>
