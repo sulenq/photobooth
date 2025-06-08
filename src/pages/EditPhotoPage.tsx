@@ -10,6 +10,7 @@ import {
 } from "@/constants/defaultAttributes";
 import { FILTERS } from "@/constants/filters";
 import { LAYOUT_COMPONENTS } from "@/constants/layoutComponents";
+import useChoosedProduct from "@/context/useChoosedProduct";
 import useSessionFilter from "@/context/useSessionFilter";
 import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionResPhotos from "@/context/useSessionResPhotos";
@@ -130,7 +131,7 @@ const FilterList = () => {
         CHOOSE FILTER
       </Text>
 
-      <SimpleGrid columns={[1, 2, 4]} gap={4} p={5} bg={"#303030"}>
+      <SimpleGrid columns={[1, 2]} gap={4} p={5} bg={"#303030"}>
         {FILTERS.map((item, i) => {
           const active = item?.key === filter?.key;
 
@@ -193,10 +194,11 @@ const FilterList = () => {
 const EditPhotoPage = () => {
   // Contexts
   const { photos } = useSessionPhotos();
-  const { template } = useSessionTemplate();
+  const { defaultTemplate, template } = useSessionTemplate();
   const { resPhotos, setResPhotos } = useSessionResPhotos();
   const setSessionTimeout = useSessionTimeout((s) => s.setSessionTimeout);
   const setFinished = useSessionTimer((s) => s.setFinished);
+  const { choosedProduct } = useChoosedProduct();
 
   // States
   const sensors = useSensors(
@@ -208,8 +210,12 @@ const EditPhotoPage = () => {
       },
     })
   );
+  const finalLayoutId =
+    template?.layoutId ||
+    choosedProduct?.product?.defaultTemplate?.layoutId ||
+    defaultTemplate?.layoutId;
   const layoutData =
-    LAYOUT_COMPONENTS[template.layoutId as keyof typeof LAYOUT_COMPONENTS];
+    LAYOUT_COMPONENTS[finalLayoutId as keyof typeof LAYOUT_COMPONENTS];
   const LayoutComponent = layoutData?.component;
 
   // Utils
@@ -243,14 +249,14 @@ const EditPhotoPage = () => {
 
         <CContainer my={"auto"}>
           <HStack h="full" gap={10} align="start">
-            <CContainer flex={1} gap={10}>
+            <CContainer gap={10}>
               {/* Stock photos  */}
               <CContainer gap={2}>
                 <Text fontSize={20} fontWeight="semibold">
                   CHOOSE & DRAG PHOTO TO YOUR TEMPLATE
                 </Text>
 
-                <HStack>
+                <SimpleGrid columns={[1, 2]} gap={4}>
                   {photos.map((item, i) => (
                     <DraggablePhoto
                       key={i}
@@ -260,7 +266,7 @@ const EditPhotoPage = () => {
                       border={"4px solid {colors.p.500}"}
                     />
                   ))}
-                </HStack>
+                </SimpleGrid>
 
                 {/* <HStack>
                   {Array.from({ length: 4 }).map((_, i) => (
@@ -268,9 +274,6 @@ const EditPhotoPage = () => {
                   ))}
                 </HStack> */}
               </CContainer>
-
-              {/* Filter list */}
-              <FilterList />
 
               <Text fontWeight={"medium"}>
                 Tips: untuk drag & drop ke tempat yang kecil, drag ke drop zone
@@ -291,7 +294,7 @@ const EditPhotoPage = () => {
                 aspectRatio={TEMPLATE_ASPECT_RATIO}
               >
                 <ImageComponent
-                  src={template?.production}
+                  src={template?.production || defaultTemplate?.production}
                   pos="absolute"
                   left={0}
                   top={0}
@@ -318,6 +321,11 @@ const EditPhotoPage = () => {
                   setSessionTimeout(false);
                 }}
               />
+            </CContainer>
+
+            <CContainer>
+              {/* Filter list */}
+              <FilterList />
             </CContainer>
           </HStack>
         </CContainer>

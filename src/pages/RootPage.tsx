@@ -22,6 +22,7 @@ const RootPage = () => {
 
   // Handle reset invoice number & choosed product
   useEffect(() => {
+    setSessionTimeout(false);
     setInvoiceNumber(null);
     setChoosedProduct(null);
     clearPhotos();
