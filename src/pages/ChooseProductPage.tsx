@@ -1,4 +1,5 @@
 import CContainer from "@/components/ui-custom/CContainer";
+import FeedbackNoData from "@/components/ui-custom/FeedbackNoData";
 import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import ChooseProductItem from "@/components/widget/ChooseProductItem";
 import Header1 from "@/components/widget/Header1";
@@ -58,6 +59,8 @@ const ChooseProductPage = () => {
           {!error && (
             <CContainer overflowX={"auto"} className="noScroll">
               <HStack h={"max"} mx={"auto"} gap={10} px={10}>
+                {!data && <FeedbackNoData />}
+
                 {data?.map((item: any, i: number) => {
                   return (
                     <ChooseProductItem

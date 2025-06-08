@@ -73,7 +73,7 @@ const Camera = (props: any) => {
   // Contexts
   const { l } = useLang();
   const { photos, addPhoto, clearPhotos } = useSessionPhotos();
-  const { defaultTemplate, setTemplate } = useSessionTemplate();
+  const { setTemplate } = useSessionTemplate();
   const clearResPhotos = useSessionResPhotos((s) => s.clearResPhotos);
   const { sessionShutterTimer, setSessionShutterTimer } =
     useSessionShutterTimer();

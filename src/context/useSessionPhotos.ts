@@ -1,5 +1,4 @@
 // store/photoStore.ts
-import { dummyPhotos } from "@/constants/dummyPhotos";
 import { create } from "zustand";
 
 interface PhotoStore {
@@ -10,7 +9,7 @@ interface PhotoStore {
 }
 
 const useSessionPhotos = create<PhotoStore>((set) => ({
-  photos: dummyPhotos,
+  photos: [],
   addPhoto: (photo) =>
     set((state) => ({
       photos: state.photos.length < 4 ? [...state.photos, photo] : state.photos,

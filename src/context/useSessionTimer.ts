@@ -18,7 +18,17 @@ const useSessionTimer = create<SessionTimerState>((set, get) => ({
   seconds: 0,
   finished: true,
 
-  setFinished: (finished) => set({ finished }),
+  setFinished: (finished) => {
+    if (finished) {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+      set({ finished: true, seconds: 0 });
+    } else {
+      set({ finished });
+    }
+  },
 
   startTimer: ({ initialSeconds, onFinished }) => {
     if (timer) clearInterval(timer);
@@ -30,6 +40,7 @@ const useSessionTimer = create<SessionTimerState>((set, get) => ({
 
       if (seconds <= 1) {
         clearInterval(timer!);
+        timer = null;
         set({ seconds: 0, finished: true });
         onFinished();
       } else {

@@ -8,11 +8,13 @@ import useChoosedProduct from "@/context/useChoosedProduct";
 import useSessionInvoice from "@/context/useSessionInvoice";
 import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionResPhotos from "@/context/useSessionResPhotos";
+import useSessionTimeout from "@/context/useSessionTimeout";
 import { Image } from "@chakra-ui/react";
 import { useEffect } from "react";
 
 const RootPage = () => {
   // Contexts
+  const setSessionTimeout = useSessionTimeout((s) => s.setSessionTimeout);
   const setInvoiceNumber = useSessionInvoice((s) => s.setInvoiceNumber);
   const setChoosedProduct = useChoosedProduct((s) => s.setChoosedProduct);
   const clearPhotos = useSessionPhotos((s) => s.clearPhotos);

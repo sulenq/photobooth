@@ -15,6 +15,7 @@ import useSessionPhotos from "@/context/useSessionPhotos";
 import useSessionResPhotos from "@/context/useSessionResPhotos";
 import useSessionTemplate from "@/context/useSessionTemplate";
 import useSessionTimeout from "@/context/useSessionTimeout";
+import useSessionTimer from "@/context/useSessionTimer";
 import {
   Box,
   Center,
@@ -195,6 +196,7 @@ const EditPhotoPage = () => {
   const { template } = useSessionTemplate();
   const { resPhotos, setResPhotos } = useSessionResPhotos();
   const setSessionTimeout = useSessionTimeout((s) => s.setSessionTimeout);
+  const setFinished = useSessionTimer((s) => s.setFinished);
 
   // States
   const sensors = useSensors(
@@ -312,6 +314,7 @@ const EditPhotoPage = () => {
                   !Object.values(resPhotos).every((val) => val !== null)
                 }
                 onClick={() => {
+                  setFinished(true);
                   setSessionTimeout(false);
                 }}
               />
