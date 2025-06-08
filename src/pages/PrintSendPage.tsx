@@ -294,7 +294,11 @@ const DriveQR = (props: DriveQRProps) => {
 
   // Handle generate qr drive on video ready
   useEffect(() => {
-    if (videoBase64 && !loadingGenerateVideo) generateDriveLink();
+    if (videoBase64 && !loadingGenerateVideo) {
+      setTimeout(() => {
+        generateDriveLink();
+      }, 1000);
+    }
   }, [videoBase64]);
 
   // Handle qr drive response
