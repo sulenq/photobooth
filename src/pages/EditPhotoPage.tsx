@@ -102,14 +102,47 @@ const FilterList = () => {
       img.src = imgSrc;
 
       img.onload = () => {
-        canvas.width = img.width;
-        canvas.height = img.height;
+        const targetRatio = 3 / 2;
+
+        const origWidth = img.width;
+        const origHeight = img.height;
+        const origRatio = origWidth / origHeight;
+
+        let canvasWidth: number;
+        let canvasHeight: number;
+
+        // Tentukan ukuran canvas fixed, misal width = 600 (bisa disesuaikan)
+        canvasWidth = 600;
+        canvasHeight = canvasWidth / targetRatio; // 600 / 1.5 = 400
+
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
 
         const ctx = canvas.getContext("2d");
         if (!ctx) return;
 
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(img, 0, 0);
+        ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+
+        // Hitung ukuran gambar yang di-scale supaya masuk canvas tanpa stretch
+        let drawWidth: number;
+        let drawHeight: number;
+        let offsetX = 0;
+        let offsetY = 0;
+
+        if (origRatio > targetRatio) {
+          // Gambar lebih lebar, sesuaikan width canvas dan center vertikal
+          drawWidth = canvasWidth;
+          drawHeight = drawWidth / origRatio;
+          offsetY = (canvasHeight - drawHeight) / 2;
+        } else {
+          // Gambar lebih tinggi, sesuaikan height canvas dan center horizontal
+          drawHeight = canvasHeight;
+          drawWidth = drawHeight * origRatio;
+          offsetX = (canvasWidth - drawWidth) / 2;
+        }
+
+        // Gambar tanpa stretch, ditengah canvas
+        ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
 
         if (key !== "original") {
           setTimeout(() => {
@@ -123,6 +156,7 @@ const FilterList = () => {
       };
     });
   }, [imgSrc]);
+
   if (!imgSrc) return null;
 
   return (
@@ -147,6 +181,7 @@ const FilterList = () => {
               borderRadius={8}
               boxShadow={active ? "0 0 0 2px {colors.p.500}" : ""}
               overflow={"clip"}
+              aspectRatio={3 / 2}
             >
               {active && (
                 <Center
@@ -167,6 +202,8 @@ const FilterList = () => {
                   borderRadius: 8,
                   background: "#ccc",
                   transform: "scale(1.2)",
+
+                  // aspectRatio: 3 / 2,
                 }}
               />
 
@@ -248,8 +285,8 @@ const EditPhotoPage = () => {
         </HStack>
 
         <CContainer my={"auto"}>
-          <HStack h="full" gap={10} align="start">
-            <CContainer gap={10}>
+          <HStack h="full" gap={10} align="start" justify={"center"}>
+            <CContainer gap={10} maxW={"500px"}>
               {/* Stock photos  */}
               <CContainer gap={2}>
                 <Text fontSize={20} fontWeight="semibold">
@@ -275,11 +312,13 @@ const EditPhotoPage = () => {
                 </HStack> */}
               </CContainer>
 
-              <Text fontWeight={"medium"}>
-                Tips: untuk drag & drop ke tempat yang kecil, drag ke drop zone
-                hingga drop zone berwarna merah yang artinya foto akan di drop
-                disitu.
-              </Text>
+              <CContainer bg={"p.500"} borderRadius={8} p={4}>
+                <Text fontWeight={"medium"}>
+                  Tips: untuk drag & drop ke tempat yang kecil, drag ke drop
+                  zone hingga drop zone berwarna merah yang artinya foto akan di
+                  drop disitu.
+                </Text>
+              </CContainer>
             </CContainer>
 
             {/* Res photos */}
@@ -323,7 +362,7 @@ const EditPhotoPage = () => {
               />
             </CContainer>
 
-            <CContainer>
+            <CContainer maxW={"500px"}>
               {/* Filter list */}
               <FilterList />
             </CContainer>

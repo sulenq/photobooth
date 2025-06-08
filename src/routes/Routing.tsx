@@ -4,7 +4,6 @@ import MissingPage from "@/pages/_error/MissingPage";
 import ServerErrorPage from "@/pages/_error/ServerErrorPage";
 import { Route, Routes } from "react-router-dom";
 import PublicRouteMiddleware from "./PublicRouteMiddleware";
-import PrivateRouteMiddleware from "./PrivateRouteMiddleware";
 
 const Routing = () => {
   return (
@@ -21,8 +20,8 @@ const Routing = () => {
         <Route
           key={path}
           path={path}
-          element={<PrivateRouteMiddleware>{element}</PrivateRouteMiddleware>}
-          // element={element}
+          // element={<PrivateRouteMiddleware>{element}</PrivateRouteMiddleware>}
+          element={element}
         />
       ))}
 
