@@ -61,7 +61,7 @@ const PaymentStatusPage = () => {
             {error && (
               <FeedbackRetry
                 onRetry={paymentStatus}
-                description="Kalau sudah bayar klik 'Retry', jika belum klik 'Choose Product'"
+                description="Kalau sudah bayar klik 'Retry', jika belum/payment gagal klik 'Choose Product'"
                 addonButton={
                   <>
                     <NavLink to="/choose-product" w={"full"}>
