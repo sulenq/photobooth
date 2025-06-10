@@ -115,7 +115,7 @@ const Camera = (props: any) => {
 
     // Flip canvas horizontally (mirror effect)
     ctx.translate(canvas.width, 0);
-    ctx.scale(-1, 1);
+    ctx.scale(-1.1, 1.1);
 
     // Draw the mirrored image
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);

@@ -187,7 +187,7 @@ const ChooseTemplatePage = () => {
 
           <CContainer h={"full"} w={"fit"}>
             <Image
-              src={template?.production}
+              src={template?.display || template?.production}
               h={"full"}
               objectFit={"contain"}
             />
