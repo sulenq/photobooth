@@ -7,6 +7,27 @@ export const FILTERS = [
     },
   },
   {
+    key: "bw",
+    label: "B/W",
+    filter(this: any) {
+      this.greyscale().contrast(1);
+    },
+  },
+  {
+    key: "retro",
+    label: "Retro",
+    filter(this: any) {
+      this.sepia(60).brightness(-7);
+    },
+  },
+  {
+    key: "foodie",
+    label: "Foodie",
+    filter(this: any) {
+      this.channels({ red: 10, green: 5, blue: -10 }).saturation(15).contrast(7).brightness(-1);
+    },
+  },
+  {
     key: "vivid",
     label: "Vivid",
     filter(this: any) {
@@ -20,27 +41,7 @@ export const FILTERS = [
       this.brightness(15);
     },
   },
-  {
-    key: "bw",
-    label: "B/W",
-    filter(this: any) {
-      this.greyscale().contrast(20);
-    },
-  },
-  {
-    key: "sepia",
-    label: "Sepia",
-    filter(this: any) {
-      this.sepia(60);
-    },
-  },
-  {
-    key: "warm",
-    label: "Warm",
-    filter(this: any) {
-      this.channels({ red: 30, green: 10, blue: -10 });
-    },
-  },
+
   {
     key: "cool",
     label: "Cool",
