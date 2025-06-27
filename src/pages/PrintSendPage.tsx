@@ -3,7 +3,6 @@ import CContainer from "@/components/ui-custom/CContainer";
 import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import StringInput from "@/components/ui-custom/StringInput";
 import Heading from "@/components/widget/Heading";
-import NextButton from "@/components/widget/NextButton";
 import PageContainer from "@/components/widget/PageContainer";
 import {
   TEMPLATE_ASPECT_RATIO,
@@ -47,7 +46,10 @@ interface SendEmailProps {
   driveLinkLoading: boolean;
 }
 
-const Print = () => {
+const Print = (props: any) => {
+  // Props
+  const { driveLink } = props;
+
   // Contexts
   const { defaultTemplate, template, setTemplate } = useSessionTemplate();
   const { photos } = useSessionPhotos();
@@ -152,6 +154,8 @@ const Print = () => {
     });
   }, [sessionTimeout, photos]);
 
+  // console.log(driveLink);
+
   return (
     <CContainer align="center" gap={8}>
       <CContainer
@@ -179,13 +183,13 @@ const Print = () => {
       </CContainer>
 
       <BButton
-        disabled={printed}
+        disabled={!driveLink && printed}
         onClick={handlePrint}
         {...PRESET_MAIN_BUTTON}
         w="full !important"
         maxW={"400px"}
       >
-        PRINT
+        PRINT & FINISH
       </BButton>
     </CContainer>
   );
@@ -430,9 +434,9 @@ const PrintSendPage = () => {
     <DndContext>
       <PageContainer>
         <HStack mb={20}>
-          <Box w="250px" />
+          {/* <Box w="250px" /> */}
           <Heading>Print & Send</Heading>
-          <NextButton to="/thankyou" label="FINISH" />
+          {/* <NextButton to="/thankyou" label="FINISH" /> */}
         </HStack>
 
         <CContainer my="auto">
@@ -444,7 +448,7 @@ const PrintSendPage = () => {
             mx="auto"
             pos={"relative"}
           >
-            <Print />
+            <Print driveLink={driveLink} />
 
             <CContainer gap={8}>
               <DriveQR
