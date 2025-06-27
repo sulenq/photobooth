@@ -32,6 +32,7 @@ import { IconX } from "@tabler/icons-react";
 import html2canvas from "html2canvas";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 
@@ -49,6 +50,9 @@ interface SendEmailProps {
 const Print = (props: any) => {
   // Props
   const { driveLink } = props;
+
+  // Hooks
+  const navigate = useNavigate();
 
   // Contexts
   const { defaultTemplate, template, setTemplate } = useSessionTemplate();
@@ -117,6 +121,8 @@ const Print = (props: any) => {
         }
         document.body.removeChild(wrapper);
       });
+
+    navigate("/thankyou");
   }
 
   // Handle set default template by choosed product on load
