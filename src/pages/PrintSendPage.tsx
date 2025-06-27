@@ -189,7 +189,7 @@ const Print = (props: any) => {
       </CContainer>
 
       <BButton
-        disabled={!driveLink && printed}
+        disabled={!driveLink || printed}
         onClick={handlePrint}
         {...PRESET_MAIN_BUTTON}
         w="full !important"
