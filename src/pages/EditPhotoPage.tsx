@@ -1,5 +1,4 @@
 import CContainer from "@/components/ui-custom/CContainer";
-import BackButton from "@/components/widget/BackButton";
 import Heading from "@/components/widget/Heading";
 import NextButton from "@/components/widget/NextButton";
 import PageContainer from "@/components/widget/PageContainer";
@@ -225,9 +224,7 @@ const EditPhotoPage = () => {
     <DndContext sensors={sensors} onDragEnd={handleDragEnd}>
       <PageContainer h="100dvh" borderless gap={10}>
         <HStack>
-          <Box w="250px">
-            <BackButton />
-          </Box>
+          <Box w="250px">{/* <BackButton /> */}</Box>
 
           <Heading>Edit Photo</Heading>
 
