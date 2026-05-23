@@ -3,7 +3,6 @@ import CContainer from "@/components/ui-custom/CContainer";
 import FeedbackRetry from "@/components/ui-custom/FeedbackRetry";
 import StringInput from "@/components/ui-custom/StringInput";
 import Heading from "@/components/widget/Heading";
-import NextButton from "@/components/widget/NextButton";
 import PageContainer from "@/components/widget/PageContainer";
 import {
   TEMPLATE_ASPECT_RATIO,
@@ -33,6 +32,7 @@ import { IconX } from "@tabler/icons-react";
 import html2canvas from "html2canvas";
 import { QRCodeCanvas } from "qrcode.react";
 import { useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Keyboard from "react-simple-keyboard";
 import "react-simple-keyboard/build/css/index.css";
 
@@ -54,6 +54,8 @@ const Print = () => {
   const { resPhotos, setResPhotos } = useSessionResPhotos();
   const { sessionTimeout } = useSessionTimeout();
   const { choosedProduct } = useChoosedProduct();
+
+  const navigate = useNavigate();
 
   // States
   const [printed, setPrinted] = useState<boolean>(false);
@@ -137,6 +139,8 @@ const Print = () => {
           originalParent.appendChild(element);
         }
         document.body.removeChild(wrapper);
+
+        navigate("/thankyou");
       })
       .catch(() => {
         if (originalNextSibling) {
@@ -312,7 +316,7 @@ const Print = () => {
         w="full !important"
         maxW={"400px"}
       >
-        PRINT
+        PRINT & FINISH
       </BButton>
     </CContainer>
   );
@@ -550,7 +554,7 @@ const PrintSendPage = () => {
         <HStack mb={20}>
           <Box w="250px" />
           <Heading>Print & Send</Heading>
-          <NextButton to="/thankyou" label="FINISH" />
+          {/* <NextButton to="/thankyou" label="FINISH" /> */}
         </HStack>
 
         <CContainer my="auto">
